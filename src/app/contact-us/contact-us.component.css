@@ -29,30 +29,40 @@
     max-width: 100%;
 }  
 
-#info{
-    
-    position: absolute;
-    left: 50%;
-    margin-top: 25%;
-    padding: 5%;
+#ceos{
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto auto;
     transform: translate(-50%, -50%);
-    text-align: justify;
-    font-size: x-small;
-
+    background-color: #f8f3ea00;
+    border: none;
+    left: 50%;
+    margin-top: 10%;
 }
+
+.integrantes{
+    width: 80px;
+    background-color:#f8f3ea00;
+    border: none;
+    display: -webkit-box;
+}
+
 .text{
     width: 100px;
 }
 
-span{
-    color: #9eccfa;
+#socialmedia{
+    position: absolute;
+    left: 50%;
+    padding: 5%;
+    transform: translate(-50%, -50%);
+    display: block;
 }
-
+ 
 a{
     text-decoration: none;
     color: #0b1853;
 }
-
 
 /*RESPONSIVE*/
 @media screen and (max-width: 390px){
