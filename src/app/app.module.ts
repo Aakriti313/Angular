@@ -7,6 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { EnigmaOfMurdersComponent } from './enigma-of-murders/enigma-of-murders.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     HeaderComponent,
     FooterComponent,
     AboutUsComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    EnigmaOfMurdersComponent
   ],
   imports: [
     BrowserModule,
