@@ -1,40 +1,15 @@
 <app-header></app-header>
 
-<form id="signupForm" action="" method="post" class="text-center" style="position: relative; top: 450px;">
-    <div>
-    <p style="color: white;">Bienvenido detective!!</p>
-    <input type="text" name="user_nombre" id="user_nombre" placeholder="Username" class="mb-2"><br>
-    <input type="password" name="user_password" id="user_password" placeholder="Password" class="mb-2"><br>
-    <button type="submit">Sing up</button>
+<div style="position: relative;">
+    <div class="text-center mt-5 mb-5">
+        <div>
+            <canvas id="canvas" width="1000" height="600" style="border: 2px solid black;">
+                Canvas not supported by your browser.
+            </canvas>
+        </div>
     </div>
-    <div class="mt-4">
-    <p style="color: white;font-size: xx-small;">Todavía no tienes cuenta?</p>
-    <button type="button" onclick="">Log in</button>
-</div>
 
-<!-- <form id="signupForm" action="" method="post" class="text-center" style="position: relative; top: 450px;">
-    <div>
-    <p style="color: white;">Bienvenido detective!!</p>
-    <input type="text" name="user_nombre" id="user_nombre" placeholder="Username" class="mb-2"><br>
-    <input type="text" name="user_apellido" id="user_apellido" placeholder="Surname" class="mb-2"><br>
-    <input type="password" name="user_nickname" id="user_nickname" placeholder="Nickname" class="mb-2"><br>
-    <input type="date" name="user_edad" id="user_edad" placeholder="Edad" class="mb-2"><br>
-    <input type="text" name="user_email" id="user_email" placeholder="Email" class="mb-2"><br>
-    <input type="text" name="user_telfono" id="user_telefono" placeholder="Teléfono" class="mb-2"><br>
-    <input type="password" name="user_password" id="user_password" placeholder="Password" class="mb-2"><br>
-    <input type="password" name="repeat_password" id="user_password" placeholder="Password" class="mb-2"><br>
-    <button type="submit">Sing up</button>
-    </div>
-</div> -->
-
-</form>
-
-<div class="text-center mt-5 mb-5">
-    <div>
-        <canvas id="mapa" width="1000" height="600" style="border:2px solid black;">
-        Canvas not supported by your browser.
-        </canvas>
-    </div>
+    <app-forms style="position: absolute; top: 20%; left: 3%; width: 100%; height: 100%;"></app-forms>
 </div>
 
 <router-outlet></router-outlet>

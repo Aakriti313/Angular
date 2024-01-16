@@ -1,0 +1,31 @@
+<div class="text-center bg-light p-3" style="position: relative; width: fit-content; left: 38%;">
+    <div *ngIf="isLogInFormVisible">
+        <form [formGroup]="logInForm" (ngSubmit)="onSubmitLogIn()">
+            <div>
+                <p style="color: black;">Bienvenido detective!!</p>
+                <input formControlName="user_nombre" placeholder="Username" type="text" class="mb-2" required><br>
+                <input formControlName="user_password" placeholder="Password" type="password" class="mb-2" required><br>
+                <button type="submit" [disabled]="!logInForm.valid" (onclick)="hideForm()">Log in</button>
+            </div>
+            <div class="mt-4">
+                <p style="color: black;font-size: xx-small;">Todavía no tienes cuenta?</p>
+                <button type="button" (click)="showSignUpForm()">Sign up</button>
+            </div>
+        </form>
+    </div>
+
+    <div *ngIf="isSignUpFormVisible">
+        <form [formGroup]="signUpForm" (ngSubmit)="onSubmitSignUp()">
+            <p style="color: black;">Bienvenido detective!!</p>
+            <input formControlName="user_nombre" placeholder="Username" type="text" class="mb-2" required><br>
+            <input formControlName="user_apellido" placeholder="Surname" type="text" class="mb-2" required><br>
+            <input formControlName="user_nickname" placeholder="Nickname" type="text" class="mb-2" required><br>
+            <input formControlName="user_edad" placeholder="Edad" type="number" min="1" class="mb-2" required><br>
+            <input formControlName="user_email" placeholder="Email" type="email" class="mb-2" required><br>
+            <input formControlName="user_telefono" placeholder="Teléfono" type="number" class="mb-2" required><br>
+            <input formControlName="user_password" placeholder="Password" type="password" class="mb-2" required><br>
+            <input formControlName="repeat_password" placeholder="Password" type="password" class="mb-2" required><br>
+            <button type="submit" [disabled]="!signUpForm.valid" (click)="showLogInForm()">Sign up</button>
+        </form>
+    </div>
+</div>
