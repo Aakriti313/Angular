@@ -13,7 +13,7 @@ window.onload = function () {
             //Limpiar el canvas después de 3 segundos
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             //Llamar a otra función después de que la imagen haya desaparecido
-            paint(ctx);
+            // paint(ctx);
         }, 3000);
     }
 }
