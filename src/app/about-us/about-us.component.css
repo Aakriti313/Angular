@@ -1,11 +1,10 @@
-.container {  
-    max-width: 100%;
-    min-width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-  }
+.about-us{
+    padding: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .row {  
     display: -ms-flexbox;  
@@ -29,17 +28,6 @@
     max-width: 100%;
 }  
 
-#info{
-    
-    position: absolute;
-    left: 50%;
-    margin-top: 25%;
-    padding: 5%;
-    transform: translate(-50%, -50%);
-    text-align: justify;
-    font-size: x-small;
-
-}
 .text{
     width: 100px;
 }

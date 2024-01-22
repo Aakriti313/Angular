@@ -1,22 +1,25 @@
-<h4>Contáctanos</h4>
-<div class="card col-12" id="ceos">
-    <div *ngFor="let ceoInfo of ceosInfo;index as i">
-        <div class="integrantes">
-            <img class="card-img-top" [src]="ceoInfo['imagen']" alt="perfil">
-            <div class="card-body ">
-                <p class="text"><span>{{ceoInfo['nombre']}}</span></p>
-                <p class="text">{{ceoInfo['cargo']}}</p>
-                <p class="text">{{ceoInfo['especialidad']}}</p>
+
+<div class="contact-us container-fluid flex-row flex-wrap">
+    <h4 class="col-md-12">Contáctanos</h4>
+    <div class="seccion1 col-md-6" id="ceos">
+        <div *ngFor="let ceoInfo of ceosInfo;index as i" id="person">
+            <div class="integrantes col-6 col-md-auto">
+                <img class="card-img-top" [src]="ceoInfo['imagen']" alt="perfil">
+                <div class="info">
+                    <p class="text"><span>{{ceoInfo['nombre']}}</span></p>
+                    <p class="text">{{ceoInfo['cargo']}}</p>
+                    <p class="text">{{ceoInfo['especialidad']}}</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="col-12" id="socialmedia">
-    <h6><u>SOCIAL MEDIA</u></h6>
-    <div *ngFor="let socialMedia of socialMedias;index as i">
-        <div class="card-body">
-            <a *ngFor="let link of socialMedia['link']" href="{{link['url']}}" class="card-link">{{link['text']}}</a>
+    
+    <div class="seccion2 col-md-6" id="socialmedia">
+        <h6><u>SOCIAL MEDIA</u></h6>
+        <div *ngFor="let socialMedia of socialMedias;index as i">
+            <div class="col-6 col-md-auto">
+                <a *ngFor="let link of socialMedia['link']" href="{{link['url']}}" class="card-link">{{link['text']}}</a>
+            </div>
         </div>
     </div>
 </div>
