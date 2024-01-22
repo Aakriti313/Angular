@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
-  styleUrl: './contact-us.component.css'
+  styleUrl: './contact-us.component.css',
 })
 export class ContactUsComponent {
   title = 'Enigma Of Murders';
@@ -27,7 +27,7 @@ export class ContactUsComponent {
       especialidad: "Back-End"
     },
     {
-      nombre: "Aakriti",
+      nombre: "Aakriti Guerrero",
       imagen: "assets/img/aakritiAvatar.png",
       cargo: "CEO",
       especialidad: "Front-End"
@@ -36,11 +36,11 @@ export class ContactUsComponent {
   socialMedias = [
     {
       red: "IG",
-      link: [{text:"@studio_vila", url:"https://www.instagram.com/"}]
+      link: [{text:"@studio_vila", url:"https://www.instagram.com/studio_vila?igsh=ZndsOXl5ZzBkM3Z6"}]
     },
     {
       red: "Gmail",
-      link: [{text:"studiovila@gmail.com", url:"https://www.google.com/intl/es/gmail/about/"}]
+      link: [{text:"studioovila@gmail.com", url:"mailto:studioovila@gmail.com"}]
     }
   ]
 }
