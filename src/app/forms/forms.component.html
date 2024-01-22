@@ -5,7 +5,7 @@
                 <p style="color: black;">Bienvenido detective!!</p>
                 <input formControlName="user_nombre" placeholder="Username" type="text" class="mb-2" required><br>
                 <input formControlName="user_password" placeholder="Password" type="password" class="mb-2" required><br>
-                <button type="submit" [disabled]="!logInForm.valid" (onclick)="hideForm()">Log in</button>
+                <button type="submit" [disabled]="!logInForm.valid" onclick="hideForm()">Log in</button>
             </div>
             <div class="mt-4">
                 <p style="color: black;font-size: xx-small;">Todavía no tienes cuenta?</p>
@@ -20,12 +20,12 @@
             <input formControlName="user_nombre" placeholder="Username" type="text" class="mb-2" required><br>
             <input formControlName="user_apellido" placeholder="Surname" type="text" class="mb-2" required><br>
             <input formControlName="user_nickname" placeholder="Nickname" type="text" class="mb-2" required><br>
-            <input formControlName="user_edad" placeholder="Edad" type="number" min="1" class="mb-2" required><br>
+            <input formControlName="user_edad" placeholder="Edad" type="number" class="mb-2" required><br>
             <input formControlName="user_email" placeholder="Email" type="email" class="mb-2" required><br>
             <input formControlName="user_telefono" placeholder="Teléfono" type="number" class="mb-2" required><br>
             <input formControlName="user_password" placeholder="Password" type="password" class="mb-2" required><br>
             <input formControlName="repeat_password" placeholder="Password" type="password" class="mb-2" required><br>
-            <button type="submit" [disabled]="!signUpForm.valid" (click)="showLogInForm()">Sign up</button>
+            <button type="submit" [disabled]="!signUpForm.valid">Sign up</button>
         </form>
     </div>
 </div>
