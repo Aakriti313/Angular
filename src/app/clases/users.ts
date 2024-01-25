@@ -2,26 +2,26 @@ export class User {
 
     private static nextId: number = 1;
 
-    id: number = 0;
-    nombre: string = "";
-    apellido: string = "";
-    nickname: string = "";
-    edad: number = 0;
-    email: string = "";
-    telefono: number = 0;
+    id_user: number = 0;
+    name_user: string = "";
+    surname_user: string = "";
+    nickname_user: string = "";
+    age_user: number = 0;
+    email_user: string = "";
+    phone_user: number = 0;
     password: string = "";
     //imagen opcional
-    imagen?: URL | string = "";
+    image_user?: Blob;
 
-    constructor(nombre: string, apellido: string, nickname: string, edad: number, email: string, telefono: number, password: string, imagen?: URL | string) {
-        this.id = User.nextId++;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.nickname = nickname;
-        this.edad = edad;
-        this.email = email;
-        this.telefono = telefono;
+    constructor(name_user: string, surname_user: string, nickname_user: string, age_user: number, email_user: string, phone_user: number, password: string, image_user?: Blob) {
+        this.id_user = User.nextId++;
+        this.name_user = name_user;
+        this.surname_user = surname_user;
+        this.nickname_user = nickname_user;
+        this.age_user = age_user;
+        this.email_user = email_user;
+        this.phone_user = phone_user;
         this.password = password;
-        this.imagen = imagen;
+        this.image_user = image_user;
     }
 }

@@ -1,6 +1,7 @@
 body{
     background-color: #f8f3ea;
     font-family: 'Press Start 2P', cursive!important;
+    overflow-x: hidden;
 }
 
 @font-face {

@@ -26,25 +26,25 @@ export class FormsComponent {
   constructor(private fb: FormBuilder, private userService: UserService) {}
 
   logInForm = this.fb.group({
-    user_nombre: ['', Validators.required],
-    user_password: ['', Validators.required],
+    name_user: ['', Validators.required],
+    password_user: ['', Validators.required],
   });
 
   signUpForm = this.fb.group({
-      user_nombre: ['', Validators.required],
-      user_apellido: ['', Validators.required],
-      user_nickname: ['', Validators.required],
-      user_edad: ['', Validators.required],
-      user_email: ['', [Validators.required, Validators.min(0), Validators.email]],
-      user_telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
-      user_password: ['', Validators.required],
-      repeat_password: ['', Validators.required],
+      name_user: ['', Validators.required],
+      surname_user: ['', Validators.required],
+      nickname_user: ['', Validators.required],
+      age_user: ['', Validators.required],
+      email_user: ['', [Validators.required, Validators.min(0), Validators.email]],
+      phone_user: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
+      password_user: ['', Validators.required],
+      repeat_password_user: ['', Validators.required],
     });
 
   onSubmitLogIn(){
     if (this.logInForm.valid) {
-      let username = this.logInForm.value.user_nombre as string;
-      let password = this.logInForm.value.user_password as string;
+      let username = this.logInForm.value.name_user as string;
+      let password = this.logInForm.value.password_user as string;
   
       if (this.userService.logInValidation(username, password)) {
         this.isLogInFormVisible = false;
@@ -59,15 +59,15 @@ export class FormsComponent {
 
   onSubmitSignUp(){
     if (this.signUpForm.valid) {
-      if (this.signUpForm.value.user_password === this.signUpForm.value.repeat_password) {
+      if (this.signUpForm.value.password_user === this.signUpForm.value.repeat_password_user) {
         let newUser = new User(
-          this.signUpForm.value.user_nombre as string,
-          this.signUpForm.value.user_apellido as string,
-          this.signUpForm.value.user_nickname as string,
-          parseInt(this.signUpForm.value.user_edad as string, 10) || 0,
-          this.signUpForm.value.user_email as string,
-          parseInt(this.signUpForm.value.user_edad as string, 10) || 0,
-          this.signUpForm.value.user_password as string
+          this.signUpForm.value.name_user as string,
+          this.signUpForm.value.surname_user as string,
+          this.signUpForm.value.nickname_user as string,
+          parseInt(this.signUpForm.value.age_user as string, 10) || 0,
+          this.signUpForm.value.email_user as string,
+          parseInt(this.signUpForm.value.age_user as string, 10) || 0,
+          this.signUpForm.value.password_user as string
         );
 
         this.userService.addUser(newUser);

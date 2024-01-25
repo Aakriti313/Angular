@@ -9,37 +9,37 @@ export class ContactUsComponent {
   title = 'Enigma Of Murders';
   ceosInfo = [
     {
-      nombre: "Laura Ortiz",
-      imagen: "assets/img/lauraAvatar.png",
-      cargo: "CEO",
-      especialidad: "Front-End"
+      name: "Laura Ortiz",
+      image: "assets/img/lauraAvatar.png",
+      range: "CEO",
+      especiality: "Front-End"
     },
     {
-      nombre: "Isabel Arellano",
-      imagen: "assets/img/valeryAvatar.png",
-      cargo: "CEO",
-      especialidad: "Back-End"
+      name: "Isabel Arellano",
+      image: "assets/img/valeryAvatar.png",
+      range: "CEO",
+      especiality: "Back-End"
     },
     {
-      nombre: "Valery Rodriguez",
-      imagen: "assets/img/isabelAvatar.png",
-      cargo: "CEO",
-      especialidad: "Back-End"
+      name: "Valery Rodriguez",
+      image: "assets/img/isabelAvatar.png",
+      range: "CEO",
+      especiality: "Back-End"
     },
     {
-      nombre: "Aakriti Guerrero",
-      imagen: "assets/img/aakritiAvatar.png",
-      cargo: "CEO",
-      especialidad: "Front-End"
+      name: "Aakriti Guerrero",
+      image: "assets/img/aakritiAvatar.png",
+      range: "CEO",
+      especiality: "Front-End"
     }
   ]
   socialMedias = [
     {
-      red: "IG",
+      media: "IG",
       link: [{text:"@studio_vila", url:"https://www.instagram.com/studio_vila?igsh=ZndsOXl5ZzBkM3Z6"}]
     },
     {
-      red: "Gmail",
+      media: "Gmail",
       link: [{text:"studioovila@gmail.com", url:"mailto:studioovila@gmail.com"}]
     }
   ]

@@ -10,7 +10,7 @@ export class PostService {
   constructor(private http: HttpClient) {}
 
   postUsers(user:User):Observable<any> {
-    let url = "/server/contact";
+    let url = "/server/user/create";
     return this.http.post(url, user);
   }
 }

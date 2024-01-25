@@ -1,20 +1,20 @@
 
 <div class="contact-us container-fluid flex-row flex-wrap">
     <h4 class="col-md-12">Contáctanos</h4>
-    <div class="seccion1 col-md-6" id="ceos">
+    <div class="section1 col-md-6" id="ceos">
         <div *ngFor="let ceoInfo of ceosInfo;index as i" id="person">
-            <div class="integrantes col-6 col-md-auto">
-                <img class="card-img-top" [src]="ceoInfo['imagen']" alt="perfil">
+            <div class="integrants col-6 col-md-auto">
+                <img class="card-img-top" [src]="ceoInfo['image']" alt="perfil">
                 <div class="info">
-                    <p class="text"><span>{{ceoInfo['nombre']}}</span></p>
-                    <p class="text">{{ceoInfo['cargo']}}</p>
-                    <p class="text">{{ceoInfo['especialidad']}}</p>
+                    <p class="text"><span>{{ceoInfo['name']}}</span></p>
+                    <p class="text">{{ceoInfo['range']}}</p>
+                    <p class="text">{{ceoInfo['especiality']}}</p>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="seccion2 col-md-6" id="socialmedia">
+    <div class="section2 col-md-6" id="socialmedia">
         <h6><u>SOCIAL MEDIA</u></h6>
         <div *ngFor="let socialMedia of socialMedias;index as i">
             <div class="col-6 col-md-auto">

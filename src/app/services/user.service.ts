@@ -6,14 +6,14 @@ import { User } from '../clases/users';
   providedIn: 'root'
 })
 export class UserService {
-  private usuarios: User[] = [];
+  private users: User[] = [];
 
   addUser(user: User) {
-    this.usuarios.push(user);
+    this.users.push(user);
   }
 
   getUsers() {
-    return this.usuarios;
+    return this.users;
   }
 
   //Creamos una instancia que recoje el usuario actual, este será o tipo user o null.
@@ -24,9 +24,9 @@ export class UserService {
   constructor() {}
 
   //Validación de los usuarios. Busca dentro del array de users al usuario actual y su contraseña.
-  logInValidation(username: string, password: string): boolean {
-    let user = this.usuarios.find(
-      (u) => u.nombre === username && u.password === password
+  logInValidation(nickname_user: string, password_user: string): boolean {
+    let user = this.users.find(
+      (u) => u.nickname_user === nickname_user && u.password === password_user
     );
 
     //Si encuentra al usuario lo actualiza a través de BehaviorSubject.

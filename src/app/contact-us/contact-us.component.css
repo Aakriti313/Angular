@@ -5,7 +5,7 @@
     align-items: center;
 }
 
-.seccion1, .seccion2{
+.section1, .section2{
     padding-top: 2%;
 }
 
@@ -16,7 +16,7 @@
     background-color: #f8f3ea00;
     border: none;
 }
-.integrantes{
+.integrants{
     width: 80px;
     background-color:#f8f3ea00;
     border: none;
@@ -37,9 +37,4 @@ a{
 
 span{
     color: #9eccfa;
-}
-
-/*RESPONSIVE*/
-@media screen and (max-width: 390px){
-
 }
