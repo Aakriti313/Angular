@@ -38,7 +38,7 @@ export class PostService {
   constructor(private http: HttpClient) {}
 
   postUser(user:User):Observable<any> {
-    let url = "/server/user/create";
+    let url = "/server/user/register";
     return this.http.post(url, user, 
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }

@@ -57,6 +57,8 @@ export class FormsComponent {
   }
 
   onSubmitSignUp(){
+    //this.postService.postUser(new User()).subscribe((result) => {console.log(result)});
+
     if (this.signUpForm.valid) {
       if (this.signUpForm.value.password_user === this.signUpForm.value.repeat_password_user) {
         let newUser = new User(
@@ -69,12 +71,7 @@ export class FormsComponent {
           this.signUpForm.value.password_user as string
         );
         
-        this.postService
-        .postUser(newUser)
-        .subscribe(
-        (result) => {
-        console.log(result)
-        } );
+        this.postService.postUser(newUser).subscribe((result) => {console.log(result)});
 
         console.log(this.signUpForm.value);
         this.isLogInFormVisible = true;

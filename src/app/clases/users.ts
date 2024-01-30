@@ -13,7 +13,7 @@ export class User {
     //imagen opcional
     image_user?: Blob;
 
-    constructor(name_user: string, surname_user: string, nickname_user: string, age_user: number, email_user: string, phone_user: number, password: string, image_user?: Blob) {
+    constructor(name_user: string="", surname_user: string="", nickname_user: string="", age_user: number=0, email_user: string="", phone_user: number=0, password: string="", image_user?: Blob) {
         this.id_user = User.nextId++;
         this.name_user = name_user;
         this.surname_user = surname_user;
