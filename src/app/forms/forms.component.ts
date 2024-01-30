@@ -1,9 +1,8 @@
 import { Component} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 
 import { User } from '../clases/users';
-import { UserService } from '../services/user.service';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-forms',
@@ -23,7 +22,7 @@ export class FormsComponent {
   }
 
   //Formularios
-  constructor(private fb: FormBuilder, private userService: UserService) {}
+  constructor(private fb: FormBuilder, private postService: PostService) {}
 
   logInForm = this.fb.group({
     name_user: ['', Validators.required],
@@ -46,7 +45,7 @@ export class FormsComponent {
       let username = this.logInForm.value.name_user as string;
       let password = this.logInForm.value.password_user as string;
   
-      if (this.userService.logInValidation(username, password)) {
+      if (this.postService.logInValidation(username, password)) {
         this.isLogInFormVisible = false;
         this.isSignUpFormVisible = false;
         alert('Inicio de sesión');
@@ -69,8 +68,13 @@ export class FormsComponent {
           parseInt(this.signUpForm.value.age_user as string, 10) || 0,
           this.signUpForm.value.password_user as string
         );
-
-        this.userService.addUser(newUser);
+        
+        this.postService
+        .postUser(newUser)
+        .subscribe(
+        (result) => {
+        console.log(result)
+        } );
 
         console.log(this.signUpForm.value);
         this.isLogInFormVisible = true;

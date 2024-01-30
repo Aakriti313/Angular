@@ -1,5 +1,5 @@
-<div class="text-center bg-light p-3" style="position: relative; width: fit-content; left: 38%;">
-    <div *ngIf="isLogInFormVisible">
+<div class="text-center p-5">
+    <div id="background1" *ngIf="isLogInFormVisible">
         <form [formGroup]="logInForm" (ngSubmit)="onSubmitLogIn()">
             <div>
                 <p style="color: black;">Bienvenido detective!!</p>
