@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-contact-us',
@@ -33,6 +33,7 @@ export class ContactUsComponent {
       especiality: "Front-End"
     }
   ]
+
   socialMedias = [
     {
       media: "IG",
@@ -43,4 +44,13 @@ export class ContactUsComponent {
       link: [{text:"studioovila@gmail.com", url:"mailto:studioovila@gmail.com"}]
     }
   ]
+  
+  // SCROLL 
+  constructor(private el:ElementRef){}
+  ngOnInit(): void {
+    this.scrollToView();
+  }
+  scrollToView(){
+    this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest"});
+  }
 }

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, ElementRef} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { User } from '../clases/users';
@@ -22,7 +22,7 @@ export class FormsComponent {
   }
 
   //Formularios
-  constructor(private fb: FormBuilder, private postService: PostService) {}
+  constructor(private fb: FormBuilder, private postService: PostService, private el:ElementRef) {}
 
   logInForm = this.fb.group({
     name_user: ['', Validators.required],
@@ -89,4 +89,11 @@ export class FormsComponent {
 
   //Contraseña segura
 
+  // SCROLL 
+  ngOnInit(): void {
+    this.scrollToView();
+  }
+  scrollToView(){
+    this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest"});
+  }
 }
