@@ -1,13 +1,13 @@
-.contact-us{
+/* .contact-us{
     padding: 2%;
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} */
 
-.section1, .section2{
+/* .section1, .section2{
     padding-top: 2%;
-}
+} */
 
 #ceos{
     display: grid;
@@ -16,6 +16,7 @@
     background-color: #f8f3ea00;
     border: none;
 }
+
 .integrants{
     width: 80px;
     background-color:#f8f3ea00;
@@ -24,6 +25,7 @@
 }
 .info{
     padding: 10%;
+    padding-right: 50%;
 }
 
 .text{
@@ -37,4 +39,8 @@ a{
 
 span{
     color: #9eccfa;
+}
+
+#socialmedia{
+    text-align: right;
 }

@@ -11,11 +11,11 @@ import { PostService } from '../services/post.service';
 })
 
 export class FormsComponent {
-
-  //Mostrar SignUpForm
+  
   isLogInFormVisible = true;
   isSignUpFormVisible = false;
   
+  //Mostrar SignUpForm
   showSignUpForm() {
     this.isLogInFormVisible = false;
     this.isSignUpFormVisible = true;
@@ -25,7 +25,7 @@ export class FormsComponent {
   constructor(private fb: FormBuilder, private postService: PostService, private el:ElementRef) {}
 
   logInForm = this.fb.group({
-    name_user: ['', Validators.required],
+    nickname_user: ['', Validators.required],
     password_user: ['', Validators.required],
   });
 
@@ -40,12 +40,13 @@ export class FormsComponent {
       repeat_password_user: ['', Validators.required],
     });
 
+  //LogIn
   onSubmitLogIn(){
     if (this.logInForm.valid) {
-      let username = this.logInForm.value.name_user as string;
+      let nickname = this.logInForm.value.nickname_user as string;
       let password = this.logInForm.value.password_user as string;
   
-      if (this.postService.logInValidation(username, password)) {
+      if (this.postService.logInValidation(nickname, password)) {
         this.isLogInFormVisible = false;
         this.isSignUpFormVisible = false;
         alert('Inicio de sesión');
@@ -56,9 +57,8 @@ export class FormsComponent {
     }
   }
 
+  //SignUp
   onSubmitSignUp(){
-    //this.postService.postUser(new User()).subscribe((result) => {console.log(result)});
-
     if (this.signUpForm.valid) {
       if (this.signUpForm.value.password_user === this.signUpForm.value.repeat_password_user) {
         let newUser = new User(

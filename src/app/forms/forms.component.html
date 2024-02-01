@@ -1,9 +1,9 @@
 <div class="text-center p-5">
-    <div id="background1" *ngIf="isLogInFormVisible">
+    <div id="background1" *ngIf="isLogInFormVisible" novalidate>
         <form [formGroup]="logInForm" (ngSubmit)="onSubmitLogIn()">
             <div>
                 <p style="color: black;">Bienvenido detective!!</p>
-                <input formControlName="name_user" placeholder="Username" type="text" class="mb-2" required><br>
+                <input formControlName="nickname_user" placeholder="Nickname" type="text" class="mb-2" required><br>
                 <input formControlName="password_user" placeholder="Password" type="password" class="mb-2" required><br>
                 <button type="submit" [disabled]="!logInForm.valid">Log in</button>
             </div>
@@ -13,8 +13,8 @@
             </div>
         </form>
     </div>
-   
-    <div *ngIf="isSignUpFormVisible">
+
+    <div *ngIf="isSignUpFormVisible" novalidate>
         <form [formGroup]="signUpForm" (ngSubmit)="onSubmitSignUp()">
             <p style="color: black;">Bienvenido detective!!</p>
             <input formControlName="name_user" placeholder="Username" type="text" class="mb-2" required><br>
