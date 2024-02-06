@@ -1,0 +1,12 @@
+#profile{
+    background: #f8f3ea;
+    box-shadow: 18px 18px 30px #ede8de, -18px -18px 30px #ede8de;
+    margin: 2%;
+    padding: 2%;
+    border-radius: 15px;
+}
+input{
+    background: none;
+    border: none;
+    border-bottom: solid 1px black;
+}

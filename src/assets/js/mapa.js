@@ -29,20 +29,19 @@ function intro(logo) {
     logo.src = 'assets/img/Logo_svg.svg';
     logo.onload = function () {
     ctx.drawImage(logo, 35, 40);
-
     setTimeout(function () {
         // Limpiar el canvas después de 3 segundos
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawMap(map_image);
     }, 3000);
-    
     };
-    drawMap(map_image);
+    
 }
 
 function drawMap(map_image) {
     map_image.src = 'assets/img/mapaJuegoMurderofCrime.svg';
     map_image.onload = function () {
-        ctx.drawImage(map_image, 35, 40);
+        ctx.drawImage(map_image, 0, 0);
     };
 }
 

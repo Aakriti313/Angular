@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrl: './enigma-of-murders.component.css'
 })
 export class EnigmaOfMurdersComponent {
-
+  close() {
+    let close = document.getElementById('divEofM');
+    if (close) {
+      close.style.display = 'none';
+    }
+  }
 }

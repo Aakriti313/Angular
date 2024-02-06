@@ -1,20 +1,54 @@
-<!-- <div>
-    <div>
-        <img class="card-img-top" [src]="userInfo['image']" alt="profile_image">
-        <input type="button" value="profile">
-        <input type="button" value="ajustes">
+ <!-- <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Surname </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="weight">
+    <th mat-header-cell *matHeaderCellDef> Nickname </th>
+    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="symbol">
+    <th mat-header-cell *matHeaderCellDef> Age</th>
+    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+  </ng-container> -->
+
+  <div id="profile">
+    <div class="row">
+        <div class="col-md-6">
+            <img class="card-img-top" src="../../assets/img/lauraAvatar.png" style="width: 10%;" alt="profile_image">
+            <input type="button" value="profile">
+            <input type="button" value="ajustes">
+        </div>
+        <div id="info" class="col-md-6">
+            <form class="row">
+                <label for="name_user" class="col-md-2">Name:</label>
+                <input formControlName="name_user" placeholder="name" type="text" class="col-md-2" required><br>
+                <button type="button" class="col-md-2">Edit</button>
+                <label for="name_user" class="col-md-2">Surname:</label>
+                <input formControlName="surname_user" placeholder="Surname" type="text" class="col-md-2" required><br>
+                <button type="button" class="col-md-2">Edit</button>
+                <label for="name_user" class="col-md-2">Nickname:</label>
+                <input formControlName="nickname_user" placeholder="Nickname" type="text" class="col-md-2" required><br>
+                <button type="button" class="col-md-2">Edit</button>
+                <label for="name_user" class="col-md-2">Age:</label>
+                <input formControlName="age_user" placeholder="Edad" type="number" class="col-md-2" required><br>
+                <button type="button" class="col-md-2">Edit</button>
+                <label for="name_user" class="col-md-2">Email:</label>
+                <input formControlName="email_user" placeholder="Email" type="email" class="col-md-2" required><br>
+                <button type="button" class="col-md-2">Edit</button>
+                <label for="name_user" class="col-md-2">Phone Number:</label>
+                <input formControlName="phone_user" placeholder="Teléfono" type="number" class="col-md-2" required><br>
+                <button type="button" class="col-md-2">Edit</button>
+                <label for="name_user" class="col-md-2">Password:</label>
+                <input formControlName="password_user" placeholder="Password" type="password" class="col-md-2" required><br>
+                <button type="button" class="col-md-2">Edit</button>
+            </form>
+        </div>
     </div>
-    <div id="info">
-        <form>
-            <input formControlName="name_user" placeholder="{{userInfo['name_user']}}" type="text" class="mb-2" required><br>
-            <input formControlName="surname_user" placeholder="Surname" type="text" class="mb-2" required><br>
-            <input formControlName="nickname_user" placeholder="Nickname" type="text" class="mb-2" required><br>
-            <input formControlName="age_user" placeholder="Edad" type="number" class="mb-2" required><br>
-            <input formControlName="email_user" placeholder="Email" type="email" class="mb-2" required><br>
-            <input formControlName="phone_user" placeholder="Teléfono" type="number" class="mb-2" required><br>
-            <input formControlName="password_user" placeholder="Password" type="password" class="mb-2" required><br>
-            <input formControlName="repeat_password_user" placeholder="Password" type="password" class="mb-2" required><br>
-            <button type="submit" [disabled]="!signUpForm.valid">Sign up</button>
-        </form>
-    </div>
-</div> -->
+  </div>

@@ -17,14 +17,47 @@
     <div *ngIf="isSignUpFormVisible" novalidate>
         <form [formGroup]="signUpForm" (ngSubmit)="onSubmitSignUp()">
             <p style="color: black;">Bienvenido detective!!</p>
-            <input formControlName="name_user" placeholder="Username" type="text" class="mb-2" required><br>
-            <input formControlName="surname_user" placeholder="Surname" type="text" class="mb-2" required><br>
-            <input formControlName="nickname_user" placeholder="Nickname" type="text" class="mb-2" required><br>
+            <input ngModel formControlName="name_user" placeholder="Username" type="text" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('name_user')?.errors?.['required']">
+                <p class="message">Es obligatorio rellenar el campo.</p>
+            </span>
+            <input ngModel formControlName="surname_user" placeholder="Surname" type="text" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('surname_user')?.errors?.['required']">
+                <p>Es obligatorio rellenar el campo.</p>
+            </span>
+            <input ngModel formControlName="nickname_user" placeholder="Nickname" type="text" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('nickname_user')?.errors?.['required']">
+                <p>Es obligatorio rellenar el campo.</p>
+            </span>
             <input formControlName="age_user" placeholder="Edad" type="number" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('age_user')?.errors?.['required']">
+                <p>Es obligatorio rellenar el campo.</p>
+            </span>
+            <span *ngIf="this.signUpForm.get('age_user')?.errors?.['minlength']">
+                El usuario debe tener como mínimo 12 años.
+              </span>
             <input formControlName="email_user" placeholder="Email" type="email" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('email_user')?.errors?.['required']">
+                <p>Es obligatorio rellenar el campo.</p>
+              </span>
+              <span *ngIf="this.signUpForm.get('email_user')?.errors?.['email']">
+                <p>El formato del email no es válido.</p>
+              </span>
             <input formControlName="phone_user" placeholder="Teléfono" type="number" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('phone_user')?.errors?.['required']">
+                <p>Es obligatorio rellenar el campo.</p>
+              </span>
+            <span *ngIf="this.signUpForm.get('phone_user')?.errors?.['pattern']">
+                <p>Debe tener 9 caracteres.</p>
+              </span>
             <input formControlName="password_user" placeholder="Password" type="password" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('password_user')?.errors?.['required']">
+                <p>Es obligatorio rellenar el campo.</p>
+            </span>
             <input formControlName="repeat_password_user" placeholder="Password" type="password" class="mb-2" required><br>
+            <span *ngIf="this.signUpForm.get('repeat_password_user')?.errors?.['required']">
+                <p>Es obligatorio rellenar el campo.</p>
+            </span>
             <button type="submit" [disabled]="!signUpForm.valid">Sign up</button>
         </form>
     </div>
