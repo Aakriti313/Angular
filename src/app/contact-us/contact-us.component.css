@@ -1,13 +1,11 @@
-/* .contact-us{
-    padding: 2%;
+
+.container-fluid{
     display: flex;
     justify-content: center;
     align-items: center;
-} */
-
-/* .section1, .section2{
-    padding-top: 2%;
-} */
+    flex-wrap: wrap;
+    padding: 5%;
+}
 
 #ceos{
     display: grid;
@@ -21,22 +19,27 @@
     width: 80px;
     background-color:#f8f3ea00;
     border: none;
-    display: -webkit-box;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    
 }
+
 .info{
     padding: 10%;
     padding-right: 50%;
 }
-
-.text{
-    width: 500px;
+div.info{
+    width: 50%;
 }
 
+p.text{
+    width: 500px;
+}
 a{
     text-decoration: none;
     color: #0b1853;
 }
-
 span{
     color: #9eccfa;
 }

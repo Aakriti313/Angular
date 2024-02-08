@@ -5,4 +5,6 @@ nav{
 .footer{
     background-color: #f8f3ea !important;
     margin: 0;
+    box-shadow: -2px -2px 20px 3px rgb(196 192 187);
+
 }
