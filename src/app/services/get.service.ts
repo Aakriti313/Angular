@@ -14,8 +14,9 @@ export class GetService {
   //   return this.http.get(url); 
   // }
 
+  //devolver info del usuario
   getUsersInfo(): Observable<any> {
-    const url = "/server/user/login/";
+    const url = "/server/user/login";
     return this.http.get(url);
   }
 

@@ -45,7 +45,7 @@ export class ContactUsComponent {
     }
   ]
   
-  // SCROLL 
+  //Scroll
   constructor(private el:ElementRef){}
   ngOnInit(): void {
     this.scrollToView();

@@ -35,21 +35,21 @@
             </span>
             <span *ngIf="this.signUpForm.get('age_user')?.errors?.['minlength']">
                 El usuario debe tener como mínimo 12 años.
-              </span>
+            </span>
             <input formControlName="email_user" placeholder="Email" type="email" class="mb-2" required><br>
             <span *ngIf="this.signUpForm.get('email_user')?.errors?.['required']">
                 <p>Es obligatorio rellenar el campo.</p>
-              </span>
-              <span *ngIf="this.signUpForm.get('email_user')?.errors?.['email']">
+            </span>
+            <span *ngIf="this.signUpForm.get('email_user')?.errors?.['email']">
                 <p>El formato del email no es válido.</p>
-              </span>
+            </span>
             <input formControlName="phone_user" placeholder="Teléfono" type="number" class="mb-2" required><br>
             <span *ngIf="this.signUpForm.get('phone_user')?.errors?.['required']">
                 <p>Es obligatorio rellenar el campo.</p>
-              </span>
+            </span>
             <span *ngIf="this.signUpForm.get('phone_user')?.errors?.['pattern']">
                 <p>Debe tener 9 caracteres.</p>
-              </span>
+            </span>
             <input formControlName="password_user" placeholder="Password" type="password" class="mb-2" required><br>
             <span *ngIf="this.signUpForm.get('password_user')?.errors?.['required']">
                 <p>Es obligatorio rellenar el campo.</p>

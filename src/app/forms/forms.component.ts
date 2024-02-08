@@ -46,14 +46,23 @@ export class FormsComponent {
       let nickname = this.logInForm.value.nickname_user as string;
       let password = this.logInForm.value.password_user as string;
   
-      if (this.postService.logInValidation(nickname, password)) {
-        this.isLogInFormVisible = false;
-        this.isSignUpFormVisible = false;
-        alert('Inicio de sesión');
-        console.log(this.logInForm.value);
-      } else {
-        alert('Usuario o contraseña incorrectos.');
-      }
+      let user: User = {
+        nickname_user: nickname,
+        password: password
+      };
+
+      this.postService.postUserLogIn(user).subscribe((result) => {
+        if (result = "Inicio de sesión exitoso") {
+          this.isLogInFormVisible = false;
+          this.isSignUpFormVisible = false;
+          alert(result);
+          console.log(this.logInForm.value);
+        } else if(result = "Usuario no encontrado") {
+          alert(result);
+        } else if(result = "Credenciales inválidas") {
+          alert(result);
+        }
+      });
     }
   }
 
@@ -71,8 +80,8 @@ export class FormsComponent {
           this.signUpForm.value.password_user as string
         );
         
-        this.postService.postUser(newUser).subscribe((result) => {console.log(result)});
-
+        this.postService.postUserSignUp(newUser).subscribe((result) => {console.log(result)});
+        
         console.log(this.signUpForm.value);
         this.isLogInFormVisible = true;
         this.isSignUpFormVisible = false;
@@ -86,7 +95,7 @@ export class FormsComponent {
 
   //Contraseña segura
 
-  // SCROLL 
+  //Scroll
   ngOnInit(): void {
     this.scrollToView();
   }

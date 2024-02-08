@@ -6,7 +6,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   styleUrl: './about-us.component.css'
 })
 export class AboutUsComponent implements OnInit{
-  // SCROLL
+  //Scroll
   constructor(private el:ElementRef){}
   scrollToView(){
     this.el.nativeElement.scrollIntoView({  behavior: "smooth", block: "start", inline: "nearest"});
@@ -14,6 +14,4 @@ export class AboutUsComponent implements OnInit{
   ngOnInit(): void {
     this.scrollToView();
   }
-
-  
 }

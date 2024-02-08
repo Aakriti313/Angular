@@ -2,15 +2,14 @@ export class User {
 
     private static nextId: number = 1;
 
-    id_user: number = 0;
-    name_user: string = "";
-    surname_user: string = "";
-    nickname_user: string = "";
-    age_user: number = 0;
-    email_user: string = "";
-    phone_user: number = 0;
-    password: string = "";
-    //imagen opcional
+    id_user?: number = 0;
+    name_user?: string = "";
+    surname_user?: string = "";
+    nickname_user?: string = "";
+    age_user?: number = 0;
+    email_user?: string = "";
+    phone_user?: number = 0;
+    password?: string = "";
     image_user?: Blob;
 
     constructor(name_user: string="", surname_user: string="", nickname_user: string="", age_user: number=0, email_user: string="", phone_user: number=0, password: string="", image_user?: Blob) {

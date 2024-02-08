@@ -5,8 +5,15 @@
     padding: 2%;
     border-radius: 15px;
 }
-input{
+.profset{
+    align-items: center;
+    text-align: center;
+}
+#info input{
     background: none;
     border: none;
     border-bottom: solid 1px black;
+}
+#info button{
+    width: fit-content;
 }
