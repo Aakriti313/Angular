@@ -2,7 +2,7 @@ import { Component, ElementRef } from '@angular/core';
 import { GetService } from "../services/get.service";
 import { PostService } from '../services/post.service';
 import { FormBuilder, Validators } from '@angular/forms';
-
+import { User } from '../clases/users';
 
 @Component({
   selector: 'app-profile',
@@ -27,22 +27,38 @@ export class ProfileComponent {
     password_user: [{value: '', disabled: !this.isEditable}, Validators.required],
   });
 
+
+  //Datos user
+    datos= JSON.parse(localStorage.getItem("currentUser")||"{}");
+
   edit() {
     this.isEditable = true;
     this.UserForm.enable();
   }
 
   save() {
-    this.postService.updateUser(this.userData).subscribe((result ) => {
-      console.log('Datos actualizados correctamente:', result);
-      this.isEditable = false;
-      this.UserForm.disable();
-    },
-    (error) => {
-      console.error('Error al actualizar los datos:', error);
-    });
+    const updatedUserData = this.UserForm.value;
+    this.postService.updateUser(updatedUserData).subscribe(
+        (result) => {
+            console.log('Datos actualizados correctamente:', result);
+            // Actualizamos los datos locales del usuario
+            this.datos = { ...this.datos, ...updatedUserData };
+            localStorage.setItem("currentUser", JSON.stringify(this.datos));
+            this.isEditable = false;
+            this.UserForm.disable();
+        },
+        (error) => {
+            console.error('Error al actualizar los datos:', error);
+        }
+    );
   }
 
+  delete(){
+    let currentUser:User = JSON.parse(localStorage.getItem("currentUser")||JSON.stringify(new User()));
+    console.log(currentUser)
+
+    this.postService.deleteUser(currentUser.nickname_user||"").subscribe((result) => {console.log(result)});
+  }
   ngOnInit(): void {
     this._GetService.getUsersInfo().subscribe((data: any) => {
       this.userData = data;

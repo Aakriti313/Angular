@@ -22,9 +22,16 @@ export class PostService {
   }
 
   //Editar usuario actual
-  updateUser(user: User): Observable<any> {
-    let url = "/server/user/edit";
-    return this.http.put(url, user,
+  updateUser(userData: any): Observable<any> {
+    const nickname = userData.nickname_user;
+    let url = "/server/user/edit/"+nickname;
+    return this.http.put(url, userData,
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
+
+  deleteUser(nickname: string): Observable<any> {
+    let url = "/server/user/delete/"+nickname;
+    return this.http.delete(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
+  }
+  
 }

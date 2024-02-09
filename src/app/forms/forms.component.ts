@@ -52,11 +52,15 @@ export class FormsComponent {
       };
 
       this.postService.postUserLogIn(user).subscribe((result) => {
-        if (result = "Inicio de sesión exitoso") {
+        console.log(result)
+        if (result["message"] == "Inicio de sesión exitoso") {
           this.isLogInFormVisible = false;
           this.isSignUpFormVisible = false;
-          alert(result);
+          alert(result["message"]);
           console.log(this.logInForm.value);
+          
+          localStorage.setItem('currentUser',JSON.stringify(result["user"]));
+          localStorage.setItem('nickname_user',result["user"]["nickname_user"]);
         } else if(result = "Usuario no encontrado") {
           alert(result);
         } else if(result = "Credenciales inválidas") {
