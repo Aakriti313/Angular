@@ -19,7 +19,8 @@ class Player{
         this.width = 100;
         this.height = 100;
         this.sides = {
-            bottom: this.position.y + this.height
+            bottom: this.position.y + this.height,
+            right: this.position.x + this.width,
         }
     }
 
@@ -29,15 +30,31 @@ class Player{
     }
 
     update(){
-        
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
-        this.sides.bottom = this.position.y + this.height;
+        if (this.position.x + this.velocity.x >= 0 && this.sides.right + this.velocity.x <= canvas.width) {
+            this.position.x += this.velocity.x;
+            this.sides.right = this.position.x + this.width;
+        }
 
-        if(this.sides.bottom + this.velocity.y < canvas.height){
-        }else this.velocity.y = 0;
+        if (this.position.y + this.velocity.y >= 0 && this.sides.bottom + this.velocity.y <= canvas.height) {
+            this.position.y += this.velocity.y;
+            this.sides.bottom = this.position.y + this.height;
+        }
     }
 }
+
+//Clase sprites
+class Sprite{
+    constructor(position){
+        this.position = position;
+        this.image = new this.Image();
+        this.image.src = './assets/img/logo_pantalla_completa.png'
+    }
+
+    draw(){
+        ctx.drawImage(this.image, this.position.x, this.position.y);
+    }
+}
+
 
 //Al iniciar
 function init () {
@@ -50,8 +67,6 @@ function init () {
     const iconSize = 80;
     playIcon(455 - iconSize / 2, 250 - iconSize / 2, iconSize);
     canvas.addEventListener("click", startGame);
-
-    animate()
 }
 
 //Creación del botón
@@ -109,9 +124,9 @@ function startGame(event) {
 //Intro
 function intro(logo) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    logo.src = 'assets/img/Logo_svg.svg';
+    logo.src = 'assets/img/logo_pantalla_completa.png';
     logo.onload = function () {
-    ctx.drawImage(logo, 35, 40);
+    ctx.drawImage(logo, 0, 0);
     setTimeout(function () {
         // Limpiar el canvas después de 3 segundos
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -126,65 +141,57 @@ function drawMap(map_image) {
     map_image.src = 'assets/img/mapaJuegoMurderofCrime.svg';
     map_image.onload = function () {
         ctx.drawImage(map_image, 0, 0);
-        paint(ctx);
+        startPlayerAnimation();
     };  
 }
 
-let player = new Player();
+function startPlayerAnimation() {
+    // Crear una instancia del jugador
+    let player = new Player();
 
-const keys = {
-    w:{
-        pressed: false
-    },
-    a:{
-        pressed: false
-    },
-    d:{
-        pressed: false
-    },
-    s:{
-        pressed: false
-    },
-}
-
-//Funcion animacion
-function animate(){
-    window.requestAnimationFrame(animate)
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    player.draw();
-    player.update();
-}
-
-window.addEventListener('keydown', (event) => {
-    switch(event.key){
-        case 'w':
-            player.velocity.y = -2;
-            break;
-        case 'a':
-            player.velocity.x = -2;
-            break;
-        case 'd':
-            player.velocity.x = 2;
-            break;
-        case 's':
-            player.velocity.y = 2;
-            break;
+    // Función de animación del jugador
+    function animate() {
+        window.requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        player.draw();
+        player.update();
     }
-})
-window.addEventListener('keyup', (event) => {
-    switch(event.key){
-        case 'w':
-            player.velocity.y = 0;
-            break;
-        case 'a':
-            player.velocity.x = 0;
-            break;
-        case 'd':
-            player.velocity.x = 0;
-            break;
-        case 's':
-            player.velocity.y = 0;
-            break;
-    }
-})
+
+    // Agregar los eventos de teclado para el jugador
+    window.addEventListener('keydown', (event) => {
+        switch (event.key) {
+            case 'w':
+                player.velocity.y = -3;
+                break;
+            case 'a':
+                player.velocity.x = -3;
+                break;
+            case 'd':
+                player.velocity.x = 3;
+                break;
+            case 's':
+                player.velocity.y = 3;
+                break;
+        }
+    })
+
+    window.addEventListener('keyup', (event) => {
+        switch (event.key) {
+            case 'w':
+                player.velocity.y = 0;
+                break;
+            case 'a':
+                player.velocity.x = 0;
+                break;
+            case 'd':
+                player.velocity.x = 0;
+                break;
+            case 's':
+                player.velocity.y = 0;
+                break;
+        }
+    })
+
+    // Iniciar la animación del jugador
+    animate();
+}
