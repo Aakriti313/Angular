@@ -1,19 +1,19 @@
-//Variables a utilizar
-var logo = new Image(), canvas = null, ctx = null, map_image = new Image();
+// Variables a utilizar
+var canvas = null, ctx = null, logo = new Image(), game_image = new Image(), map_image = new Image();
 
 window.addEventListener("load", init);
 
-//Clase Player
-class Player{
-    constructor(){
+// Clase Player
+class Player {
+    constructor() {
         this.position = {
-            x:100,
-            y:100,
+            x: 100,
+            y: 100,
         }
 
         this.velocity = {
-            x:0,
-            y:0,
+            x: 0,
+            y: 0,
         }
 
         this.width = 100;
@@ -24,12 +24,12 @@ class Player{
         }
     }
 
-    draw(){
+    draw() {
         ctx.fillStyle = 'red';
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 
-    update(){
+    update() {
         if (this.position.x + this.velocity.x >= 0 && this.sides.right + this.velocity.x <= canvas.width) {
             this.position.x += this.velocity.x;
             this.sides.right = this.position.x + this.width;
@@ -42,107 +42,93 @@ class Player{
     }
 }
 
-//Clase sprites
-class Sprite{
-    constructor(position){
-        this.position = position;
-        this.image = new this.Image();
-        this.image.src = './assets/img/logo_pantalla_completa.png'
-    }
-
-    draw(){
-        ctx.drawImage(this.image, this.position.x, this.position.y);
-    }
-}
-
-
-//Al iniciar
-function init () {
+// Al iniciar
+function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#F8F3EA';
-    roundedRect(350, 150, 200, 200, 20);
-
-    ctx.fillStyle = '#C4C4C4';
-    const iconSize = 80;
-    playIcon(455 - iconSize / 2, 250 - iconSize / 2, iconSize);
-    canvas.addEventListener("click", startGame);
+    logo.src = 'assets/img/logo_pantalla_completa.png';
+    logo.onload = function () {
+        ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
+        canvas.addEventListener("click", startGame);
+    };
 }
 
-//Creación del botón
-function roundedRect(x, y, width, height, radius) {
-
-    //Poner sombra
-    ctx.shadowColor = 'white'; //Sombra exterior
-    ctx.shadowBlur = 20;
-    ctx.shadowOffsetX = 0; //Desplazamiento horizontal
-    ctx.shadowOffsetY = 0; //Desplazamiento vertical
-    
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.arcTo(x + width, y, x + width, y + radius, radius);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
-    ctx.lineTo(x + radius, y + height);
-    ctx.arcTo(x, y + height, x, y + height - radius, radius);
-    ctx.lineTo(x, y + radius);
-    ctx.arcTo(x, y, x + radius, y, radius);
-    ctx.closePath();
-    ctx.fill();
-
-     //Restablecer sombra en 0
-    ctx.shadowColor = 'rgba(0, 0, 0, 0)'; //Sombra interior
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetX = 0;  //Desplazamiento horizontal
-    ctx.shadowOffsetY = 0; //Desplazamiento vertical
-}
-
-//Creación del triángulo
-function playIcon(x, y, size) {
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + size, y + size / 2);
-    ctx.lineTo(x, y + size);
-    ctx.closePath();
-    ctx.fill();
-}
-
-//Comprobar que se ha dado dentro del boton play
+// Comprobar que se ha dado dentro del boton play
 function startGame(event) {
-    //Obtener coordenadas del clic.
+    canvas.removeEventListener("click", startGame);
+    // Obtener coordenadas del clic.
     var x = event.clientX - canvas.offsetLeft;
     var y = event.clientY - canvas.offsetTop;
 
-    //Verificar que el clic se ha hecho dentro del rectángulo blanco.
-    if (x >= 400 && x <= 600 && y >= 200 && y <= 400) {
-        //Llamar a la función
-        intro(logo);
+    // Verificar que el clic se ha hecho dentro del canvas.
+    if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
+        intro(game_image);
     }
 }
 
-//Intro
-function intro(logo) {
+// Intro
+function intro(game_image) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    logo.src = 'assets/img/logo_pantalla_completa.png';
-    logo.onload = function () {
-    ctx.drawImage(logo, 0, 0);
-    setTimeout(function () {
-        // Limpiar el canvas después de 3 segundos
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawMap(map_image);
-    }, 2000);
+    game_image.src = 'assets/img/PortadaEnigmaOfMurders.png';
+    game_image.onload = function () {
+        ctx.drawImage(game_image, 0, 0, canvas.width, canvas.height);
+        setTimeout(function () {
+            // Limpiar el canvas después de 3 segundos
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            menuGame();
+        }, 3000);
     };
-    
 }
 
-//Mapa juego
+// Menu Game
+function menuGame() {
+    // ctx.fillStyle = 'red';
+    // ctx.fillText("ENIGMA OF MURDERS",10,50);
+    // ctx.
+    //cuadradoplay
+    ctx.fillStyle = '#F8F3EA';
+    roundedRect(350, 150, 200, 200, 20);
+    //triangulo
+    ctx.fillStyle = '#C4C4C4';
+    const playSize = 80;
+    playIcon(455 - playSize / 2, 250 - playSize / 2, playSize);
+    //cuadradosetting
+    ctx.fillStyle = '#F8F3EA';
+    roundedRect(150, 180, 150, 150, 20);
+    //sett
+    ctx.fillStyle = '#C4C4C4';
+    const settSize = 80;
+    playIcon(455 - settSize / 2, 250 - settSize / 2, settSize);
+    //cuadradoranking
+    ctx.fillStyle = '#F8F3EA';
+    roundedRect(600, 180, 150, 150, 20);
+    //ranking
+    ctx.fillStyle = '#C4C4C4';
+    const rankingSize = 80;
+    playIcon(455 - rankingSize / 2, 250 - rankingSize / 2, rankingSize);
+
+    canvas.addEventListener("click", playGame);
+}
+
+function playGame(event) {
+    // Obtener coordenadas del clic.
+    var x = event.clientX - canvas.offsetLeft;
+    var y = event.clientY - canvas.offsetTop;
+
+    //Verificar que el clic se ha hecho dentro del playgame.
+    if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
+        drawMap(map_image);
+    }
+}
+
+// Mapa juego
 function drawMap(map_image) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     map_image.src = 'assets/img/mapaJuegoMurderofCrime.svg';
     map_image.onload = function () {
-        ctx.drawImage(map_image, 0, 0);
+        ctx.drawImage(map_image, 0, 0, canvas.width, canvas.height);
         startPlayerAnimation();
-    };  
+    };
 }
 
 function startPlayerAnimation() {
@@ -194,4 +180,42 @@ function startPlayerAnimation() {
 
     // Iniciar la animación del jugador
     animate();
+}
+
+// Creación del botón
+function roundedRect(x, y, width, height, radius) {
+    // Poner sombra
+    ctx.shadowColor = 'white'; // Sombra exterior
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetX = 0; // Desplazamiento horizontal
+    ctx.shadowOffsetY = 0; // Desplazamiento vertical
+    
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.arcTo(x + width, y, x + width, y + radius, radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+    ctx.lineTo(x + radius, y + height);
+    ctx.arcTo(x, y + height, x, y + height - radius, radius);
+    ctx.lineTo(x, y + radius);
+    ctx.arcTo(x, y, x + radius, y, radius);
+    ctx.closePath();
+    ctx.fill();
+
+    // Restablecer sombra en 0
+    ctx.shadowColor = 'rgba(0, 0, 0, 0)'; // Sombra interior
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;  // Desplazamiento horizontal
+    ctx.shadowOffsetY = 0; // Desplazamiento vertical
+}
+
+// Creación del triángulo
+function playIcon(x, y, size) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + size, y + size / 2);
+    ctx.lineTo(x, y + size);
+    ctx.closePath();
+    ctx.fill();
 }
