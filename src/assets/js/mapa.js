@@ -123,7 +123,7 @@ function playGame(event) {
 
 // Mapa juego
 function drawMap(map_image) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
     map_image.src = 'assets/img/mapaJuegoMurderofCrime.svg';
     map_image.onload = function () {
         ctx.drawImage(map_image, 0, 0, canvas.width, canvas.height);
@@ -138,7 +138,7 @@ function startPlayerAnimation() {
     // Función de animación del jugador
     function animate() {
         window.requestAnimationFrame(animate);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
         player.draw();
         player.update();
     }
@@ -179,7 +179,8 @@ function startPlayerAnimation() {
     })
 
     // Iniciar la animación del jugador
-    animate();
+   // animate();
+   window.requestAnimationFrame(animate);
 }
 
 // Creación del botón
