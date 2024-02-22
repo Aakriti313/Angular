@@ -2,8 +2,8 @@
     <div class="container-fluid col-md-12">
         <h4 class="col-md-12 mb-5">Contáctanos</h4>
         <div class="col-md-6" id="ceos">
-            <div *ngFor="let ceoInfo of ceosInfo;index as i">
-                <div class="integrants">
+            <div *ngFor="let ceoInfo of ceosInfo;index as i" class="grid-content">
+                <div class="integrants container">
                     <img class="card-img-top" [src]="ceoInfo['image']" alt="profile_image">
                     <div class="info">
                         <p class="text"><span>{{ceoInfo['name']}}</span></p>

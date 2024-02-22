@@ -22,7 +22,14 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.grid-content{
+    margin: 1%;
+    width: 400px;
 }
 
 .info{
