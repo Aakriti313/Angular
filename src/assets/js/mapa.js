@@ -1,7 +1,26 @@
 // Variables a utilizar
-var canvas = null, ctx = null, logo = new Image(), game_image = new Image(), map_image = new Image();
+var canvas = null, ctx = null, pause = true, logo = new Image(), game_image = new Image(), map_image = new Image();
 
 window.addEventListener("load", init);
+
+// Clase Fondo
+class Sprite{
+    constructor({position}) {
+        this.position = position;
+        this.image = new Image();
+        this.image.src = 'assets/img/logo_pantalla_completa.png';
+    }
+    draw() {
+        canvas.drawImage(this.image, this.position.x, this.position.y)
+    }
+}
+
+let backgroundLevel1 = new Sprite({
+    position: {
+        x:0,
+        y:0
+    }
+})
 
 // Clase Player
 class Player {
@@ -18,10 +37,13 @@ class Player {
 
         this.width = 100;
         this.height = 100;
-        this.sides = {
-            bottom: this.position.y + this.height,
-            right: this.position.x + this.width,
-        }
+        this.margin = {
+            top: 62,
+            bottom: 32,
+            left: 12,
+            right: 6,
+        };
+        this.updateSides();
     }
 
     draw() {
@@ -29,15 +51,25 @@ class Player {
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 
+    updateSides() {
+        this.sides = {
+            top: this.position.y - this.margin.top,
+            bottom: this.position.y + this.height + this.margin.bottom,
+            left: this.position.x - this.margin.left,
+            right: this.position.x + this.width + this.margin.right,
+        };
+    }
+
+    //Evitar que salga del marco
     update() {
-        if (this.position.x + this.velocity.x >= 0 && this.sides.right + this.velocity.x <= canvas.width) {
+        if (this.position.x + this.velocity.x >= 0 + this.margin.left && this.sides.right + this.velocity.x <= canvas.width - this.margin.right) {
             this.position.x += this.velocity.x;
-            this.sides.right = this.position.x + this.width;
+            this.updateSides();
         }
 
-        if (this.position.y + this.velocity.y >= 0 && this.sides.bottom + this.velocity.y <= canvas.height) {
+        if (this.position.y + this.velocity.y >= 0 + this.margin.top && this.sides.bottom + this.velocity.y <= canvas.height - this.margin.bottom) {
             this.position.y += this.velocity.y;
-            this.sides.bottom = this.position.y + this.height;
+            this.updateSides();
         }
     }
 }
@@ -46,6 +78,7 @@ class Player {
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    canvas.style.cursor = "pointer";
     logo.src = 'assets/img/logo_pantalla_completa.png';
     logo.onload = function () {
         ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
@@ -69,6 +102,7 @@ function startGame(event) {
 // Intro
 function intro(game_image) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.cursor = "wait";
     game_image.src = 'assets/img/PortadaEnigmaOfMurders.png';
     game_image.onload = function () {
         ctx.drawImage(game_image, 0, 0, canvas.width, canvas.height);
@@ -82,9 +116,13 @@ function intro(game_image) {
 
 // Menu Game
 function menuGame() {
-    // ctx.fillStyle = 'red';
-    // ctx.fillText("ENIGMA OF MURDERS",10,50);
-    // ctx.
+    canvas.style.cursor = "default";
+
+    ctx.font = '30px "Press Start 2P"'
+    ctx.fillStyle = 'red';
+    ctx.textAlign = "center";
+    ctx.fillText("ENIGMA OF MURDERS", canvas.width / 2, 80);
+
     //cuadradoplay
     ctx.fillStyle = '#F8F3EA';
     roundedRect(350, 150, 200, 200, 20);
@@ -107,7 +145,21 @@ function menuGame() {
     const rankingSize = 80;
     playIcon(455 - rankingSize / 2, 250 - rankingSize / 2, rankingSize);
 
+    canvas.addEventListener("mousemove", function(event) {
+        var x = event.clientX - canvas.offsetLeft;
+        var y = event.clientY - canvas.offsetTop;
+
+        if ((x >= 350 && x <= 550 && y >= 150 && y <= 350) ||
+            (x >= 150 && x <= 300 && y >= 180 && y <= 330) ||
+            (x >= 600 && x <= 750 && y >= 180 && y <= 330)) {
+            canvas.style.cursor = "pointer"; // Cambiar cursor a pointer
+        } else {
+            canvas.style.cursor = "default"; // Cambiar cursor a su estado predeterminado
+        }
+    });
+
     canvas.addEventListener("click", playGame);
+    
 }
 
 function playGame(event) {
@@ -138,9 +190,10 @@ function startPlayerAnimation() {
     // Función de animación del jugador
     function animate() {
         window.requestAnimationFrame(animate);
-        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //ctx.fillRect(0, 0, canvas.width, canvas.height);
         player.draw();
         player.update();
+        backgroundLevel1.draw();
     }
 
     // Agregar los eventos de teclado para el jugador
@@ -180,7 +233,7 @@ function startPlayerAnimation() {
 
     // Iniciar la animación del jugador
    // animate();
-   window.requestAnimationFrame(animate);
+    window.requestAnimationFrame(animate);
 }
 
 // Creación del botón
