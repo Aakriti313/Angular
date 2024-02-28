@@ -3,38 +3,39 @@ var canvas = null, ctx = null, pause = true, logo = new Image(), game_image = ne
 
 window.addEventListener("load", init);
 
-// Clase Fondo
+
+//Class Sprite
 class Sprite{
-    constructor({position}) {
+    constructor({position, imageSrc}){
         this.position = position;
         this.image = new Image();
-        this.image.src = 'assets/img/logo_pantalla_completa.png';
+        this.image.src = imageSrc;
     }
-    draw() {
-        canvas.drawImage(this.image, this.position.x, this.position.y)
+    draw(){
+        ctx.drawImage(this.image, this.position.x, this.position.y)
     }
 }
 
-let backgroundLevel1 = new Sprite({
+let background1 = new Sprite({
     position: {
-        x:0,
-        y:0
-    }
+        x: 0,
+        y: 0,
+    },
+    imageSrc: 'assets/img/mapaJuegoMurderofCrime.svg',
 })
 
 // Clase Player
-class Player {
-    constructor() {
+class Player extends Sprite{
+    constructor({imageSrc}) {
+        super({imageSrc})
         this.position = {
-            x: 100,
-            y: 100,
+            x: 50,
+            y: 50,
         }
-
         this.velocity = {
             x: 0,
             y: 0,
         }
-
         this.width = 100;
         this.height = 100;
         this.margin = {
@@ -47,8 +48,7 @@ class Player {
     }
 
     draw() {
-        ctx.fillStyle = 'red';
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
     }
 
     updateSides() {
@@ -94,7 +94,7 @@ function startGame(event) {
     var y = event.clientY - canvas.offsetTop;
 
     // Verificar que el clic se ha hecho dentro del canvas.
-    if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
+    if (x >= 0 && x <= 900 && y >= 0 && y <= 500) {
         intro(game_image);
     }
 }
@@ -152,9 +152,9 @@ function menuGame() {
         if ((x >= 350 && x <= 550 && y >= 150 && y <= 350) ||
             (x >= 150 && x <= 300 && y >= 180 && y <= 330) ||
             (x >= 600 && x <= 750 && y >= 180 && y <= 330)) {
-            canvas.style.cursor = "pointer"; // Cambiar cursor a pointer
+            canvas.style.cursor = "pointer";
         } else {
-            canvas.style.cursor = "default"; // Cambiar cursor a su estado predeterminado
+            canvas.style.cursor = "default";
         }
     });
 
@@ -169,31 +169,25 @@ function playGame(event) {
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
-        drawMap(map_image);
+        drawMap();
     }
 }
 
 // Mapa juego
-function drawMap(map_image) {
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
-    map_image.src = 'assets/img/mapaJuegoMurderofCrime.svg';
-    map_image.onload = function () {
-        ctx.drawImage(map_image, 0, 0, canvas.width, canvas.height);
-        startPlayerAnimation();
-    };
+function drawMap() {
+    startPlayerAnimation();
 }
 
 function startPlayerAnimation() {
     // Crear una instancia del jugador
-    let player = new Player();
+    let player = new Player({ imageSrc: '/assets/img/fantasma.gif'});
 
     // Función de animación del jugador
     function animate() {
-        window.requestAnimationFrame(animate);
-        //ctx.fillRect(0, 0, canvas.width, canvas.height);
+        background1.draw();
         player.draw();
         player.update();
-        backgroundLevel1.draw();
+        window.requestAnimationFrame(animate);
     }
 
     // Agregar los eventos de teclado para el jugador
