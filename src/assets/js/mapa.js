@@ -29,8 +29,8 @@ class Player extends Sprite{
     constructor({imageSrc}) {
         super({imageSrc})
         this.position = {
-            x: 50,
-            y: 50,
+            x: 100,
+            y: 100,
         }
         this.velocity = {
             x: 0,
