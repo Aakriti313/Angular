@@ -180,10 +180,11 @@ function drawMap() {
 
 function startPlayerAnimation() {
     // Crear una instancia del jugador
-    let player = new Player({ imageSrc: '/assets/img/fantasma.gif'});
+    let player = new Player({ imageSrc: 'assets/img/muerto.png'});
 
     // Función de animación del jugador
     function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         background1.draw();
         player.draw();
         player.update();
