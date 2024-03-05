@@ -168,8 +168,25 @@ function playGame(event) {
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
+        fantasma();
+    }
+}
+
+//Fantasma
+let background2 = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    },
+    imageSrc: 'assets/img/textoFantasma.gif',
+    onLoad: function() {
         drawMap();
     }
+})
+
+function fantasma() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    background2.draw();
 }
 
 // Mapa juego
