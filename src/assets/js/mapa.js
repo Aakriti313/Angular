@@ -3,7 +3,6 @@ var canvas = null, ctx = null, pause = true, logo = new Image(), game_image = ne
 
 window.addEventListener("load", init);
 
-
 //Class Sprite
 class Sprite{
     constructor({position, imageSrc}){
@@ -21,7 +20,7 @@ let background1 = new Sprite({
         x: 0,
         y: 0,
     },
-    imageSrc: 'assets/img/mapaJuegoMurderofCrime.svg',
+    imageSrc: 'assets/img/mapaJuegoMurderofCrime.png',
 })
 
 // Clase Player
@@ -175,6 +174,7 @@ function playGame(event) {
 
 // Mapa juego
 function drawMap() {
+    //background1.draw();
     startPlayerAnimation();
 }
 
@@ -184,7 +184,7 @@ function startPlayerAnimation() {
 
     // Función de animación del jugador
     function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
         background1.draw();
         player.draw();
         player.update();
@@ -227,8 +227,8 @@ function startPlayerAnimation() {
     })
 
     // Iniciar la animación del jugador
-   // animate();
-    window.requestAnimationFrame(animate);
+    //background1.draw();
+    animate();
 }
 
 // Creación del botón

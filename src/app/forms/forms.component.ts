@@ -14,6 +14,7 @@ export class FormsComponent {
   
   isLogInFormVisible = true;
   isSignUpFormVisible = false;
+  isLogued: boolean = false;
   
   //Mostrar SignUpForm
   showSignUpForm() {
@@ -56,6 +57,7 @@ export class FormsComponent {
         if (result["message"] == "Inicio de sesión exitoso") {
           this.isLogInFormVisible = false;
           this.isSignUpFormVisible = false;
+          this.isLogued = true;
           alert(result["message"]);
           console.log(this.logInForm.value);
           
