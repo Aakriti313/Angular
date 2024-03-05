@@ -2,6 +2,9 @@ nav{
     background-color: #f8f3ea !important;
 
 }
+nav>li{
+    margin-right: 20px;
+}
 .footer{
     background-color: #f8f3ea !important;
     margin: 0;

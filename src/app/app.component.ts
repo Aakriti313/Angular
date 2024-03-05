@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IsLogued } from './services/logued.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   copyright = '@copyright Studio VILA';
-  
-//   isUserLoggedIn(): boolean {
-//     return this.isLoggedIn;
-// }
+  title = '';
 
+  constructor(private formsComponent: IsLogued) {}
+
+  // Método para verificar si el usuario está logueado
+  isLogued(): boolean {
+    return this.formsComponent.getIsLogued();
+  }
+  
 }
