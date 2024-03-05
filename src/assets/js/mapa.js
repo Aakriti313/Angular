@@ -5,13 +5,48 @@ window.addEventListener("load", init);
 
 //Class Sprite
 class Sprite{
-    constructor({position, imageSrc}){
+    constructor({position, imageSrc, frameRate= 1}){
         this.position = position;
         this.image = new Image();
+        this.image.onload = () => {
+            this.loaded = true;
+            this.width = this.image.width / this.frameRate;
+            this.height = this.image.height;
+        }
         this.image.src = imageSrc;
+        this.loaded = false;
+        this.frameRate = frameRate;
+        this.currentframe = 0;
+        this.elapsedFrame = 0;
+        this.frameBuffer = 2;
     }
     draw(){
-        ctx.drawImage(this.image, this.position.x, this.position.y)
+        if (! this.loaded) return
+        let cropbox = {
+            position: {
+                x: this.width * this.currentframe,
+                y:0,
+            },
+            width: this.width,
+            height: this.height,
+        }
+
+        ctx.drawImage(
+            this.image, 
+            cropbox.position.x, cropbox.position.y, cropbox.width, cropbox.height, 
+            this.position.x, this.position.y, this.width, this.height
+        )
+
+        this.updateFrames()
+    }
+
+    updateFrames(){
+        this.elapsedFrame++;
+
+        if(this.elapsedFrame % this.frameBuffer === 0){
+        if(this.currentframe < this.frameRate - 1) this.currentframe++
+            else this.currentframe = 0;
+        }
     }
 }
 
@@ -25,8 +60,8 @@ let background1 = new Sprite({
 
 // Clase Player
 class Player extends Sprite{
-    constructor({imageSrc}) {
-        super({imageSrc})
+    constructor({imageSrc, frameRate}) {
+        super({imageSrc, frameRate})
         this.position = {
             x: 100,
             y: 100,
@@ -61,6 +96,7 @@ class Player extends Sprite{
 
     //Evitar que salga del marco
     update() {
+        ctx.fillStyle = 'blue';
         if (this.position.x + this.velocity.x >= 0 + this.margin.left && this.sides.right + this.velocity.x <= canvas.width - this.margin.right) {
             this.position.x += this.velocity.x;
             this.updateSides();
@@ -168,36 +204,38 @@ function playGame(event) {
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
-        fantasma();
-    }
-}
-
-//Fantasma
-let background2 = new Sprite({
-    position: {
-        x: 0,
-        y: 0,
-    },
-    imageSrc: 'assets/img/textoFantasma.gif',
-    onLoad: function() {
         drawMap();
     }
-})
-
-function fantasma() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    background2.draw();
 }
+
+// //Fantasma
+// let background2 = new Sprite({
+//     position: {
+//         x: 0,
+//         y: 0,
+//     },
+//     imageSrc: 'assets/img/textoFantasma.gif',
+//     onLoad: function() {
+//         drawMap();
+//     }
+// })
+
+// function fantasma() {
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
+//     background2.draw();
+// }
 
 // Mapa juego
 function drawMap() {
-    //background1.draw();
     startPlayerAnimation();
 }
 
 function startPlayerAnimation() {
     // Crear una instancia del jugador
-    let player = new Player({ imageSrc: 'assets/img/muerto.png'});
+    let player = new Player({
+        imageSrc: 'assets/img/muerto-Sheet.png',
+        frameRate: 5,
+    });
 
     // Función de animación del jugador
     function animate() {
