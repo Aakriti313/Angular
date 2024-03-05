@@ -102,7 +102,7 @@ function startGame(event) {
 function intro(game_image) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.style.cursor = "wait";
-    game_image.src = 'assets/img/PortadaEnigmaOfMurders.png';
+    game_image.src = 'assets/img/IntroMurderOfCrime.png';
     game_image.onload = function () {
         ctx.drawImage(game_image, 0, 0, canvas.width, canvas.height);
         setTimeout(function () {
