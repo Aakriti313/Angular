@@ -38,10 +38,10 @@ class Player extends Sprite{
         this.width = 100;
         this.height = 100;
         this.margin = {
-            top: 62,
-            bottom: 32,
-            left: 12,
-            right: 6,
+            top: 0,
+            bottom: 23,
+            left: -18,
+            right: -9,
         };
         this.updateSides();
     }
