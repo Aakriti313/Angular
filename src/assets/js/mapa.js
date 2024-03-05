@@ -96,7 +96,6 @@ class Player extends Sprite{
 
     //Evitar que salga del marco
     update() {
-        ctx.fillStyle = 'blue';
         if (this.position.x + this.velocity.x >= 0 + this.margin.left && this.sides.right + this.velocity.x <= canvas.width - this.margin.right) {
             this.position.x += this.velocity.x;
             this.updateSides();
@@ -233,7 +232,7 @@ function drawMap() {
 function startPlayerAnimation() {
     // Crear una instancia del jugador
     let player = new Player({
-        imageSrc: 'assets/img/muerto-Sheet.png',
+        imageSrc: 'assets/img/fantasmaSheet.png',
         frameRate: 5,
     });
 
