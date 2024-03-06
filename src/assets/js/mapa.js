@@ -5,7 +5,7 @@ window.addEventListener("load", init);
 
 //Class Sprite
 class Sprite{
-    constructor({position, imageSrc, frameRate= 1}){
+    constructor({position, imageSrc, frameRate= 1, frameBuffer = 2,}){
         this.position = position;
         this.image = new Image();
         this.image.onload = () => {
@@ -18,7 +18,7 @@ class Sprite{
         this.frameRate = frameRate;
         this.currentframe = 0;
         this.elapsedFrame = 0;
-        this.frameBuffer = 2;
+        this.frameBuffer = frameBuffer;
     }
     draw(){
         if (! this.loaded) return
@@ -137,7 +137,7 @@ function startGame(event) {
 function intro(game_image) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.style.cursor = "wait";
-    game_image.src = 'assets/img/IntroMurderOfCrime.png';
+    game_image.src = 'assets/img/IntroEnigmaOfMurders.png';
     game_image.onload = function () {
         ctx.drawImage(game_image, 0, 0, canvas.width, canvas.height);
         setTimeout(function () {
@@ -232,8 +232,8 @@ function drawMap() {
 function startPlayerAnimation() {
     // Crear una instancia del jugador
     let player = new Player({
-        imageSrc: 'assets/img/fantasmaSheet.png',
-        frameRate: 5,
+        imageSrc: 'assets/img/muerto.png',
+        frameRate: 1,
     });
 
     // Función de animación del jugador
