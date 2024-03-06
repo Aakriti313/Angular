@@ -74,9 +74,9 @@ class Player extends Sprite{
         this.height = 100;
         this.margin = {
             top: 0,
-            bottom: 23,
-            left: -18,
-            right: -9,
+            bottom: 26,
+            left: -7,
+            right: -3,
         };
         this.updateSides();
     }
@@ -107,6 +107,10 @@ class Player extends Sprite{
         }
     }
 }
+
+// class Player extends Sprite{
+//     constructor
+// }
 
 // Al iniciar
 function init() {
@@ -203,26 +207,26 @@ function playGame(event) {
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
-        drawMap();
+        fantasma();
     }
 }
 
-// //Fantasma
-// let background2 = new Sprite({
-//     position: {
-//         x: 0,
-//         y: 0,
-//     },
-//     imageSrc: 'assets/img/textoFantasma.gif',
-//     onLoad: function() {
-//         drawMap();
-//     }
-// })
+//Fantasma
+let background2 = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    },
+    imageSrc: 'assets/img/pergamino.png',
+    onLoad: function() {
+        drawMap();
+    }
+})
 
-// function fantasma() {
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     background2.draw();
-// }
+function fantasma() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    background2.draw();
+}
 
 // Mapa juego
 function drawMap() {
@@ -232,8 +236,7 @@ function drawMap() {
 function startPlayerAnimation() {
     // Crear una instancia del jugador
     let player = new Player({
-        imageSrc: 'assets/img/muerto.png',
-        frameRate: 1,
+        imageSrc: 'assets/img/fantasma.png',
     });
 
     // Función de animación del jugador
