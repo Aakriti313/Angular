@@ -5,7 +5,7 @@ window.addEventListener("load", init);
 
 //Class Sprite
 class Sprite{
-    constructor({position, imageSrc, frameRate= 1}){
+    constructor({position, imageSrc, frameRate= 1, frameBuffer = 2,}){
         this.position = position;
         this.image = new Image();
         this.image.onload = () => {
@@ -18,7 +18,7 @@ class Sprite{
         this.frameRate = frameRate;
         this.currentframe = 0;
         this.elapsedFrame = 0;
-        this.frameBuffer = 2;
+        this.frameBuffer = frameBuffer;
     }
     draw(){
         if (! this.loaded) return
@@ -74,9 +74,9 @@ class Player extends Sprite{
         this.height = 100;
         this.margin = {
             top: 0,
-            bottom: 23,
-            left: -18,
-            right: -9,
+            bottom: 26,
+            left: -7,
+            right: -3,
         };
         this.updateSides();
     }
@@ -108,6 +108,10 @@ class Player extends Sprite{
     }
 }
 
+// class Player extends Sprite{
+//     constructor
+// }
+
 // Al iniciar
 function init() {
     canvas = document.getElementById('canvas');
@@ -137,7 +141,7 @@ function startGame(event) {
 function intro(game_image) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.style.cursor = "wait";
-    game_image.src = 'assets/img/IntroMurderOfCrime.png';
+    game_image.src = 'assets/img/IntroEnigmaOfMurders.png';
     game_image.onload = function () {
         ctx.drawImage(game_image, 0, 0, canvas.width, canvas.height);
         setTimeout(function () {
@@ -203,26 +207,26 @@ function playGame(event) {
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
-        drawMap();
+        fantasma();
     }
 }
 
-// //Fantasma
-// let background2 = new Sprite({
-//     position: {
-//         x: 0,
-//         y: 0,
-//     },
-//     imageSrc: 'assets/img/textoFantasma.gif',
-//     onLoad: function() {
-//         drawMap();
-//     }
-// })
+//Fantasma
+let background2 = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    },
+    imageSrc: 'assets/img/pergamino.png',
+    onLoad: function() {
+        drawMap();
+    }
+})
 
-// function fantasma() {
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     background2.draw();
-// }
+function fantasma() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    background2.draw();
+}
 
 // Mapa juego
 function drawMap() {
@@ -232,8 +236,7 @@ function drawMap() {
 function startPlayerAnimation() {
     // Crear una instancia del jugador
     let player = new Player({
-        imageSrc: 'assets/img/fantasmaSheet.png',
-        frameRate: 5,
+        imageSrc: 'assets/img/fantasma.png',
     });
 
     // Función de animación del jugador
