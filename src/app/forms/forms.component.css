@@ -2,4 +2,19 @@
     background-image: url("../../assets/img/fondoSULI1.png");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;
+    height: 100vh; /* Establece la altura del contenedor al 100% del viewport height */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form_text{
+    position: absolute; /* Posiciona el texto absolutamente dentro del contenedor */
+    top: 50%; /* Lo coloca en el 50% del contenedor verticalmente */
+    left: 50%; /* Lo coloca en el 50% del contenedor horizontalmente */
+    transform: translate(-50%, -50%); /* Centra el texto correctamente */
+    color: white; /* Cambia el color del texto según sea necesario */
+    text-align: center; /* Alinea el texto al centro */
 }
