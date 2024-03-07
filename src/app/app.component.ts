@@ -16,5 +16,7 @@ export class AppComponent {
   isLogued(): boolean {
     return this.formsComponent.getIsLogued();
   }
+
+  
   
 }

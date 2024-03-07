@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { User } from '../clases/users';
 import { PostService } from '../services/post.service';
+import { IsLogued } from '../services/logued.service';
+
 
 @Component({
   selector: 'app-forms',
@@ -14,7 +16,8 @@ export class FormsComponent {
   
   isLogInFormVisible = true;
   isSignUpFormVisible = false;
-  isLogued: boolean = false;
+  
+  isLogued :any;
   
   //Mostrar SignUpForm
   showSignUpForm() {
@@ -23,7 +26,7 @@ export class FormsComponent {
   }
 
   //Formularios
-  constructor(private fb: FormBuilder, private postService: PostService, private el:ElementRef) {}
+  constructor(private fb: FormBuilder, private postService: PostService, private el:ElementRef, private logued : IsLogued) {}
 
   logInForm = this.fb.group({
     nickname_user: ['', Validators.required],
@@ -46,7 +49,8 @@ export class FormsComponent {
     if (this.logInForm.valid) {
       let nickname = this.logInForm.value.nickname_user as string;
       let password = this.logInForm.value.password_user as string;
-  
+      
+      this.isLogued = this.logued.setIsLogued(true);
       let user: User = {
         nickname_user: nickname,
         password: password
@@ -55,12 +59,11 @@ export class FormsComponent {
       this.postService.postUserLogIn(user).subscribe((result) => {
         console.log(result)
         if (result["message"] == "Inicio de sesión exitoso") {
+          
           this.isLogInFormVisible = false;
           this.isSignUpFormVisible = false;
-          this.isLogued = true;
           alert(result["message"]);
           console.log(this.logInForm.value);
-          
           localStorage.setItem('currentUser',JSON.stringify(result["user"]));
           localStorage.setItem('nickname_user',result["user"]["nickname_user"]);
         } else if(result = "Usuario no encontrado") {
