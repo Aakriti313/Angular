@@ -3,7 +3,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    height: 100vh; /* Establece la altura del contenedor al 100% del viewport height */
+    height: 70vh; /* Establece la altura del contenedor al 70% del viewport height */
     position: relative;
     display: flex;
     align-items: center;
