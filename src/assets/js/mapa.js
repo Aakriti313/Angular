@@ -256,7 +256,7 @@ function drawMap() {
 function startPlayerAnimation() {
     // Crear una instancia del jugador
     let player = new Player({
-        imageSrc: 'assets/img/fantasma.png',
+        imageSrc: 'assets/img/fantasma1.png',
     });
 
     //Crear un objeto aleatorio
@@ -316,7 +316,7 @@ function startPlayerAnimation() {
     //Función recoger item
     function findItem() {
         if (player.position.x === item.position.x && player.position.y === item.position.y) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'red';
         }
     }
 }
