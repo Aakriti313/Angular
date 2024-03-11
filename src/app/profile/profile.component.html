@@ -6,18 +6,20 @@
             <!-- <input type="file" name="changeImage"> -->
             <button type="button" name="profset" class="btn btn_settings">⚙️​ Settings</button>
             <br><br>
-            <button type="button" (click)="delete()" class="btn btn_delete">Delete</button>
+            <button type="button" (click)="delete()" class="btn btn_delete">Cerrar sesión</button>
+            <br><br>
+            <button type="button" (click)="delete()" class="btn btn_delete">Eliminar cuenta</button>
             <br><br>
         </div>
         <div id="info" class="col-md-6">
             <form class="row" [formGroup]="UserForm" id="user">
               <div class="form-group col-md-12 mb-3">
-                <label for="name_user" class="col-md-4">Name:</label>
+                <label for="name_user" class="col-md-4">Nombre:</label>
                 <input formControlName="name_user" [(ngModel)]="datos.name_user" [disabled]="!isEditable" type="text" class="col-md-6" required>
 
               </div>
               <div class="form-group col-md-12 mb-3">
-                <label for="surname_user" class="col-md-4">Surname:</label>
+                <label for="surname_user" class="col-md-4">Apellido:</label>
                 <input formControlName="surname_user" [(ngModel)]="datos.surname_user" [disabled]="!isEditable" type="text" class="col-md-6" required>
 
               </div>
@@ -27,7 +29,7 @@
 
               </div>
               <div class="form-group col-md-12 mb-3">
-                <label for="age_user" class="col-md-4">Age:</label>
+                <label for="age_user" class="col-md-4">Edad:</label>
                 <input formControlName="age_user" [(ngModel)]="datos.age_user" [disabled]="!isEditable" type="number" class="col-md-6" required>
 
               </div>
@@ -37,17 +39,17 @@
 
               </div>
               <div class="form-group col-md-12 mb-3">
-                <label for="phone_user" class="col-md-4">Telephone:</label>
+                <label for="phone_user" class="col-md-4">Teléfono:</label>
                 <input formControlName="phone_user" [(ngModel)]="datos.phone_user" [disabled]="!isEditable" type="number" class="col-md-6" required>
 
               </div>
               <div class="form-group col-md-12 mb-3">
-                <label for="password_user" class="col-md-4">Password:</label>
+                <label for="password_user" class="col-md-4">Contraseña:</label>
                 <input formControlName="password_user" [(ngModel)]="datos.password" [disabled]="!isEditable" type="password" class="col-md-6" required>
               </div>
               <div class="form-group col-md-12 mb-3">
-                <button type="button" class="col-md-2 btn btn_isEditable" (click)="edit()" *ngIf="!isEditable">Edit ✍️</button>
-                <button type="button" class="col-md-2 btn btn_isEditable" (click)="save()" *ngIf="isEditable">Save ✔</button>
+                <button type="button" class="col-md-2 btn btn_isEditable" (click)="edit()" *ngIf="!isEditable">Editar ✍️</button>
+                <button type="button" class="col-md-2 btn btn_isEditable" (click)="save()" *ngIf="isEditable">Guardar ✔</button>
               </div>
             </form>
         </div>
