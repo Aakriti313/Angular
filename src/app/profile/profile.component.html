@@ -1,55 +1,53 @@
   <div id="profile">
-    <div class="row">
+    <div class="row d-flex justify-content-between">
         <div class="col-md-4 text-center">
             <img class="card-img-top" src="../../assets/img/lauraAvatar.png" style="width: 60%;" alt="profile_image">
             <br><br>
             <!-- <input type="file" name="changeImage"> -->
-            <input name="profset" type="button" value="⚙️​settings"><br>
-            <input type="button" value="delete" (click)="delete()">
+            <button type="button" name="profset" class="btn btn_settings">⚙️​ Settings</button>
+            <br><br>
+            <button type="button" (click)="delete()" class="btn btn_delete">Delete</button>
+            <br><br>
         </div>
         <div id="info" class="col-md-6">
             <form class="row" [formGroup]="UserForm" id="user">
               <div class="form-group col-md-12 mb-3">
                 <label for="name_user" class="col-md-4">Name:</label>
                 <input formControlName="name_user" [(ngModel)]="datos.name_user" [disabled]="!isEditable" type="text" class="col-md-6" required>
-                <button type="button" class="col-md-2" (click)="edit()" *ngIf="!isEditable">✍️</button>
-                <button type="button" class="col-md-2" (click)="save()" *ngIf="isEditable">✔</button>
+
               </div>
               <div class="form-group col-md-12 mb-3">
                 <label for="surname_user" class="col-md-4">Surname:</label>
                 <input formControlName="surname_user" [(ngModel)]="datos.surname_user" [disabled]="!isEditable" type="text" class="col-md-6" required>
-                <button type="button" class="col-md-2" (click)="edit()" *ngIf="!isEditable">​✍️</button>
-                <button type="button" class="col-md-2" (click)="save()" *ngIf="isEditable">✔</button>
+
               </div>
               <div class="form-group col-md-12 mb-3">
                 <label for="nickname_user" class="col-md-4">Nickname:</label>
                 <input formControlName="nickname_user" [(ngModel)]="datos.nickname_user" [disabled]="!isEditable" type="text" class="col-md-6" required>
-                <button type="button" class="col-md-2" (click)="edit()" *ngIf="!isEditable">✍️​</button>
-                <button type="button" class="col-md-2" (click)="save()" *ngIf="isEditable">✔</button>
+
               </div>
               <div class="form-group col-md-12 mb-3">
                 <label for="age_user" class="col-md-4">Age:</label>
                 <input formControlName="age_user" [(ngModel)]="datos.age_user" [disabled]="!isEditable" type="number" class="col-md-6" required>
-                <button type="button" class="col-md-2" (click)="edit()" *ngIf="!isEditable">✍️</button>
-                <button type="button" class="col-md-2" (click)="save()" *ngIf="isEditable">✔</button>
+
               </div>
               <div class="form-group col-md-12 mb-3">
                 <label for="email_user" class="col-md-4">Email:</label>
                 <input formControlName="email_user" [(ngModel)]="datos.email_user" [disabled]="!isEditable" type="email" class="col-md-6" required>
-                <button type="button" class="col-md-2" (click)="edit()" *ngIf="!isEditable">✍️</button>
-                <button type="button" class="col-md-2" (click)="save()" *ngIf="isEditable">✔</button>
+
               </div>
               <div class="form-group col-md-12 mb-3">
                 <label for="phone_user" class="col-md-4">Telephone:</label>
                 <input formControlName="phone_user" [(ngModel)]="datos.phone_user" [disabled]="!isEditable" type="number" class="col-md-6" required>
-                <button type="button" class="col-md-2" (click)="edit()" *ngIf="!isEditable">✍️</button>
-                <button type="button" class="col-md-2" (click)="save()" *ngIf="isEditable">✔</button>
+
               </div>
               <div class="form-group col-md-12 mb-3">
                 <label for="password_user" class="col-md-4">Password:</label>
                 <input formControlName="password_user" [(ngModel)]="datos.password" [disabled]="!isEditable" type="password" class="col-md-6" required>
-                <button type="button" class="col-md-2" (click)="edit()" *ngIf="!isEditable">✍️</button>
-                <button type="button" class="col-md-2" (click)="save()" *ngIf="isEditable">✔</button>
+              </div>
+              <div class="form-group col-md-12 mb-3">
+                <button type="button" class="col-md-2 btn btn_isEditable" (click)="edit()" *ngIf="!isEditable">Edit ✍️</button>
+                <button type="button" class="col-md-2 btn btn_isEditable" (click)="save()" *ngIf="isEditable">Save ✔</button>
               </div>
             </form>
         </div>

@@ -1,23 +1,38 @@
 #profile{
+    display: flex;
+    justify-content: center;
     background: #f8f3ea;
     box-shadow: 18px 18px 30px #ede8de, -18px -18px 30px #ede8de;
     margin: 2%;
     padding: 2%;
-    border-radius: 15px;
+    border-radius: 25px;
 }
+
 .profset{
     align-items: center;
     text-align: center;
 }
+
 #info input{
+    justify-self: unset;
     background: none;
     border: none;
+    width: 60%;
     border-bottom: solid 1px black;
 }
-#info button{
-    margin-left: 2%;
+
+.btn{
+    text-align: center;
+    margin-right: 2%;
     width: fit-content;
-    border: none;
-    background-color: #f8f3ea;
-    text-shadow: 5px 5px 5px #b8b6b6;
+    color: #0B1957;
+    background-color: #9ECCFA;
+    box-shadow: 2px 2px rgb(11 25 87 / 29%);;
+
+}
+
+.btn:active{
+    background-color: #9ECCFA;
+    box-shadow: 1px 1px #666;
+    transform: translateY(1px);
 }
