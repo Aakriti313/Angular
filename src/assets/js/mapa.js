@@ -126,9 +126,11 @@ class Item extends Sprite{
         update() {
         }
 }
-// class Player extends Sprite{
-//     constructor
-// }
+
+// let item = new Item({
+//     imageSrc: 'assets/img/items/item1_carta.png',
+// });
+
 
 // Al iniciar
 function init() {
@@ -257,9 +259,11 @@ function startPlayerAnimation() {
         imageSrc: 'assets/img/fantasma.png',
     });
 
-    let item = new ItemPlayer({
+    //Crear un objeto aleatorio
+    let item = new Item({
         imageSrc: 'assets/img/items/item1_carta.png',
     });
+
     // Función de animación del jugador
     function animate() {
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -267,7 +271,8 @@ function startPlayerAnimation() {
         player.draw();
         player.update();
         window.requestAnimationFrame(animate);
-        item.draw
+        item.draw();
+        findItem();
     }
 
     // Agregar los eventos de teclado para el jugador
@@ -306,8 +311,14 @@ function startPlayerAnimation() {
     })
 
     // Iniciar la animación del jugador
-    //background1.draw();
     animate();
+
+    //Función recoger item
+    function findItem() {
+        if (player.position.x === item.position.x && player.position.y === item.position.y) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
 }
 
 // Creación del botón
