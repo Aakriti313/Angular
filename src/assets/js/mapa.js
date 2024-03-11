@@ -135,6 +135,7 @@ class Item extends Sprite{
 // Al iniciar
 function init() {
     canvas = document.getElementById('canvas');
+    canvas.setAttribute('tabindex', 0);
     ctx = canvas.getContext('2d');
     canvas.style.cursor = "pointer";
     logo.src = 'assets/img/logo_pantalla_completa.png';
@@ -315,10 +316,72 @@ function startPlayerAnimation() {
 
     //Función recoger item
     function findItem() {
-        if (player.position.x === item.position.x && player.position.y === item.position.y) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Manejar eventos de teclado
+    canvas.addEventListener('keydown', (event) => {
+        if (event.key === ' ') {
+            spacePressed = true;
+            event.preventDefault();
+        }
+    });
+    
+    canvas.addEventListener('keyup', (event) => {
+        if (event.key === ' ') {
+            spacePressed = false;
+            event.preventDefault();
+        }
+    });
+    
+
+        // Calcular la distancia entre el jugador y el item
+    var distanceX = Math.abs(player.position.x - item.position.x);
+    var distanceY = Math.abs(player.position.y - item.position.y);
+    var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+    if (distance < 30) { // Cambia este valor según qué tan cerca quieres que esté el jugador del item para resaltarlo
+        // Guardar el estado actual del contexto
+        ctx.save();
+
+        // Configurar el efecto de resplandor
+        ctx.shadowColor = 'gold'; // Cambia el color del resplandor según sea necesario
+        ctx.shadowBlur = 20; // Cambia el valor del desenfoque del resplandor según sea necesario
+
+        // Dibujar el item con el efecto de resplandor
+        item.draw();
+
+        // Restaurar el estado del contexto
+        ctx.restore();
+    } else {
+        // Dibujar el item con su apariencia normal
+        item.draw();
+    }
+
+        if (player.position.x < item.position.x + item.width &&
+            player.position.x + player.width > item.position.x &&
+            player.position.y < item.position.y + item.height &&
+            player.position.y + player.height > item.position.y) {
+            playerNearItem = true;
+            if (spacePressed) {
+                // Eliminar el item
+                item = null;
+    
+                // Limpiar el canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+                // Redibujar el fondo y los elementos del juego
+                background1.draw();
+                player.draw();
+                player.update();
+                if (item) {
+                    item.draw();
+                }
+            }
+        } else {
+            playerNearItem = false;
         }
     }
+    
+
 }
 
 // Creación del botón
