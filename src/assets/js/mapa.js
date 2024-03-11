@@ -108,6 +108,24 @@ class Player extends Sprite{
     }
 }
 
+//Clase objeto
+class Item extends Sprite{
+    constructor({imageSrc, frameRate}) {
+        super({imageSrc, frameRate})
+        this.position = {
+            x: Math.floor(Math.random() * canvas.width) + 1,
+            y: Math.floor(Math.random() * canvas.height) + 1,
+        }
+        this.width = 100;
+        this.height = 100;
+    }
+        draw() {
+            ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+        }
+
+        update() {
+        }
+}
 // class Player extends Sprite{
 //     constructor
 // }
@@ -207,26 +225,26 @@ function playGame(event) {
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
-        fantasma();
-    }
-}
-
-//Fantasma
-let background2 = new Sprite({
-    position: {
-        x: 0,
-        y: 0,
-    },
-    imageSrc: 'assets/img/pergamino.png',
-    onLoad: function() {
         drawMap();
     }
-})
-
-function fantasma() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    background2.draw();
 }
+
+// //Fantasma
+// let background2 = new Sprite({
+//     position: {
+//         x: 0,
+//         y: 0,
+//     },
+//     imageSrc: 'assets/img/pergamino.png',
+//     onLoad: function() {
+//         drawMap();
+//     }
+// })
+
+// function tutorial() {
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
+//     background2.draw();
+// }
 
 // Mapa juego
 function drawMap() {
@@ -239,6 +257,9 @@ function startPlayerAnimation() {
         imageSrc: 'assets/img/fantasma.png',
     });
 
+    let item = new ItemPlayer({
+        imageSrc: 'assets/img/items/item1_carta.png',
+    });
     // Función de animación del jugador
     function animate() {
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -246,6 +267,7 @@ function startPlayerAnimation() {
         player.draw();
         player.update();
         window.requestAnimationFrame(animate);
+        item.draw
     }
 
     // Agregar los eventos de teclado para el jugador
