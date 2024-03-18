@@ -141,12 +141,14 @@ function init() {
     logo.src = 'assets/img/logo_pantalla_completa.png';
     logo.onload = function () {
         ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
+        canvas.removeEventListener("click", init);
         canvas.addEventListener("click", startGame);
     };
 }
 
 // Comprobar que se ha dado dentro del boton play
 function startGame(event) {
+    canvas.removeEventListener("click", startGame);
     // Obtener coordenadas del clic.
     var x = event.clientX - canvas.offsetLeft;
     var y = event.clientY - canvas.offsetTop;
@@ -221,13 +223,14 @@ function menuGame() {
 }
 
 function playGame(event) {
+    canvas.removeEventListener("click", playGame);
     // Obtener coordenadas del clic.
     var x = event.clientX - canvas.offsetLeft;
     var y = event.clientY - canvas.offsetTop;
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
-        start();
+        tutorial1();
     }
 }
     
@@ -240,6 +243,17 @@ function tutorial1() {
         ctx.drawImage(tutorial1_image, 0, 0, canvas.width, canvas.height);
         canvas.removeEventListener("click", tutorial1);
         canvas.addEventListener("click", tutorial2);
+
+        // canvas.addEventListener("mousemove", function(event) {
+        //     var x = event.clientX - canvas.offsetLeft;
+        //     var y = event.clientY - canvas.offsetTop;
+    
+        //     if ((x >= 600 && x <= 750 && y >= 180 && y <= 330)) {
+        //         canvas.style.cursor = "pointer";
+        //     } else {
+        //         canvas.style.cursor = "default";
+        //     }
+        // });
     };
 }
 
@@ -249,7 +263,7 @@ function tutorial2() {
     tutorial2_image.onload = function () {
         ctx.drawImage(tutorial2_image, 0, 0, canvas.width, canvas.height);
         canvas.removeEventListener("click", tutorial2);
-        canvas.addEventListener("click", start);
+        canvas.addEventListener("click", drawMap);
     };
 }
 
@@ -293,10 +307,16 @@ function startPlayerAnimation() {
         imageSrc: 'assets/img/items/item1_carta.png',
     });
 
+    let maletin = new Item({
+        itemName: 'maletin',
+        imageSrc: 'assets/img/items/maletin.png',
+    });
+
     // Función de animación del jugador
     function animate() {
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         background1.draw();
+        
         player.draw();
         player.update();
         window.requestAnimationFrame(animate);
@@ -394,18 +414,8 @@ function startPlayerAnimation() {
             if (spacePressed) {
                 // Eliminar el item
                 player.collectItem(item.itemName);
-                item.draw(0,0,canvas.width, canvas.height);
-
-                // Limpiar el canvas
-                // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-                // // Redibujar el fondo y los elementos del juego
-                // background1.draw();
-                // player.draw();
-                // player.update();
-                // if (item) {
-                //     item.draw();
-                // }
+                item = null
+                //item.draw(10,50,canvas.width, canvas.height);
             }
         } else {
             playerNearItem = false;
