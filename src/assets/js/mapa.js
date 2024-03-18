@@ -1,5 +1,6 @@
 // Variables a utilizar
-var canvas = null, ctx = null, pause = true, logo = new Image(), game_image = new Image(), map_image = new Image();
+var canvas = null, ctx = null, pause = true, logo = new Image(), game_image = new Image(),
+map_image = new Image(), spacePressed = false, tutorial1_image = new Image(), tutorial2_image = new Image();
 
 window.addEventListener("load", init);
 
@@ -79,6 +80,7 @@ class Player extends Sprite{
             right: -3,
         };
         this.updateSides();
+        this.items = [];
     }
 
     draw() {
@@ -106,11 +108,16 @@ class Player extends Sprite{
             this.updateSides();
         }
     }
+
+    collectItem(itemName) { 
+        this.items.push(itemName); 
+        console.log(`Item encontrado: ${itemName}`);
+    }
 }
 
 //Clase objeto
 class Item extends Sprite{
-    constructor({imageSrc, frameRate}) {
+    constructor({imageSrc, frameRate, itemName}) {
         super({imageSrc, frameRate})
         this.position = {
             x: Math.floor(Math.random() * canvas.width) + 1,
@@ -118,19 +125,12 @@ class Item extends Sprite{
         }
         this.width = 100;
         this.height = 100;
+        this.itemName = itemName;
     }
         draw() {
             ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
         }
-
-        update() {
-        }
 }
-
-// let item = new Item({
-//     imageSrc: 'assets/img/items/item1_carta.png',
-// });
-
 
 // Al iniciar
 function init() {
@@ -147,7 +147,6 @@ function init() {
 
 // Comprobar que se ha dado dentro del boton play
 function startGame(event) {
-    canvas.removeEventListener("click", startGame);
     // Obtener coordenadas del clic.
     var x = event.clientX - canvas.offsetLeft;
     var y = event.clientY - canvas.offsetTop;
@@ -208,7 +207,7 @@ function menuGame() {
         var x = event.clientX - canvas.offsetLeft;
         var y = event.clientY - canvas.offsetTop;
 
-        if ((x >= 350 && x <= 550 && y >= 150 && y <= 350) ||
+        if ((x >= 350 && x <= 550 && y >= 200 && y <= 400) ||
             (x >= 150 && x <= 300 && y >= 180 && y <= 330) ||
             (x >= 600 && x <= 750 && y >= 180 && y <= 330)) {
             canvas.style.cursor = "pointer";
@@ -228,26 +227,54 @@ function playGame(event) {
 
     //Verificar que el clic se ha hecho dentro del playgame.
     if (x >= 350 && x <= 550 && y >= 150 && y <= 350) {
-        drawMap();
+        start();
+    }
+}
+    
+//Tutorial
+function tutorial1() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.cursor = "default";
+    tutorial1_image.src = 'assets/img/tutorial1.png';
+    tutorial1_image.onload = function () {
+        ctx.drawImage(tutorial1_image, 0, 0, canvas.width, canvas.height);
+        canvas.removeEventListener("click", tutorial1);
+        canvas.addEventListener("click", tutorial2);
+    };
+}
+
+function tutorial2() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    tutorial2_image.src = 'assets/img/tutorial2.png';
+    tutorial2_image.onload = function () {
+        ctx.drawImage(tutorial2_image, 0, 0, canvas.width, canvas.height);
+        canvas.removeEventListener("click", tutorial2);
+        canvas.addEventListener("click", start);
+    };
+}
+
+//Función para pasar al siguiente tutorial o al mapa de juego
+function nextTutorial(event) {
+    // Obtener coordenadas del clic.
+    var x = event.clientX - canvas.offsetLeft;
+    var y = event.clientY - canvas.offsetTop;
+
+    // Verificar que el clic se ha hecho dentro del área del botón siguiente.
+    if (x >= canvas.width - 100 && y >= canvas.height - 50) {
+        tutorial2();
     }
 }
 
-// //Fantasma
-// let background2 = new Sprite({
-//     position: {
-//         x: 0,
-//         y: 0,
-//     },
-//     imageSrc: 'assets/img/pergamino.png',
-//     onLoad: function() {
-//         drawMap();
-//     }
-// })
+function start(event) {
+    // Obtener coordenadas del clic.
+    var x = event.clientX - canvas.offsetLeft;
+    var y = event.clientY - canvas.offsetTop;
 
-// function tutorial() {
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     background2.draw();
-// }
+    // Verificar que el clic se ha hecho dentro del área del botón siguiente.
+    if (x >= canvas.width - 100 && y >= canvas.height - 50) {
+        drawMap();
+    }
+}
 
 // Mapa juego
 function drawMap() {
@@ -257,11 +284,12 @@ function drawMap() {
 function startPlayerAnimation() {
     // Crear una instancia del jugador
     let player = new Player({
-        imageSrc: 'assets/img/fantasma1.png',
+        imageSrc: 'assets/img/fantasma.png',
     });
 
     //Crear un objeto aleatorio
     let item = new Item({
+        itemName: 'carta',
         imageSrc: 'assets/img/items/item1_carta.png',
     });
 
@@ -272,8 +300,12 @@ function startPlayerAnimation() {
         player.draw();
         player.update();
         window.requestAnimationFrame(animate);
-        item.draw();
-        findItem();
+        if (item) {
+            item.draw();
+            findItem();
+            checkAllItemsCollected();
+        }
+        
     }
 
     // Agregar los eventos de teclado para el jugador
@@ -316,9 +348,7 @@ function startPlayerAnimation() {
 
     //Función recoger item
     function findItem() {
-
-
-            // Manejar eventos de teclado
+    // Manejar eventos de teclado
     canvas.addEventListener('keydown', (event) => {
         if (event.key === ' ') {
             spacePressed = true;
@@ -333,8 +363,7 @@ function startPlayerAnimation() {
         }
     });
     
-
-        // Calcular la distancia entre el jugador y el item
+    // Calcular la distancia entre el jugador y el item
     var distanceX = Math.abs(player.position.x - item.position.x);
     var distanceY = Math.abs(player.position.y - item.position.y);
     var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
@@ -364,21 +393,54 @@ function startPlayerAnimation() {
             playerNearItem = true;
             if (spacePressed) {
                 // Eliminar el item
-                item = null;
-    
+                player.collectItem(item.itemName);
+                item.draw(0,0,canvas.width, canvas.height);
+
                 // Limpiar el canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-                // Redibujar el fondo y los elementos del juego
-                background1.draw();
-                player.draw();
-                player.update();
-                if (item) {
-                    item.draw();
-                }
+                // // Redibujar el fondo y los elementos del juego
+                // background1.draw();
+                // player.draw();
+                // player.update();
+                // if (item) {
+                //     item.draw();
+                // }
             }
         } else {
             playerNearItem = false;
+        }
+    }
+    
+    function checkAllItemsCollected() {
+        // Verificar si item es null antes de intentar acceder a itemName
+        if (item !== null && typeof item !== 'undefined') {
+            //Lista de todos los nombres de los items
+            const allItemNames = [item.itemName]; 
+        
+            //Verificar si todos los items han sido recogidos
+            const allItemsCollected = allItemNames.every(itemName => player.items.includes(itemName));
+        
+            //Si todos los items han sido recogidos
+            if (allItemsCollected) {
+                //Calcular la distancia entre el jugador y la puerta final
+                const doorX = canvas.width - 50; //Posición X de la puerta final
+                const doorY = canvas.height / 2 - 50; //Posición Y de la puerta final
+                const distanceX = Math.abs(player.position.x - doorX);
+                const distanceY = Math.abs(player.position.y - doorY);
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        
+                //Si el jugador está cerca de la puerta final
+                if (distance < 30) {
+                    // Iluminar la puerta final
+                    ctx.save();
+                    ctx.shadowColor = 'gold';
+                    ctx.shadowBlur = 20;
+                    ctx.fillRect(doorX - 50, doorY - 50, 100, 100);
+                    ctx.restore();
+                    console.log('hi');
+                }
+            }
         }
     }
     
