@@ -138,7 +138,7 @@ function init() {
     canvas.setAttribute('tabindex', 0);
     ctx = canvas.getContext('2d');
     canvas.style.cursor = "pointer";
-    logo.src = 'assets/img/logo_pantalla_completa.png';
+    logo.src = 'assets/img/logo_pantalla_completa_dark.png';
     logo.onload = function () {
         ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
         canvas.addEventListener("click", startGame);
@@ -257,7 +257,7 @@ function drawMap() {
 function startPlayerAnimation() {
     // Crear una instancia del jugador
     let player = new Player({
-        imageSrc: 'assets/img/fantasma1.png',
+        imageSrc: 'assets/img/fantasma.png',
     });
 
     //Crear un objeto aleatorio
