@@ -243,17 +243,6 @@ function tutorial1() {
         ctx.drawImage(tutorial1_image, 0, 0, canvas.width, canvas.height);
         canvas.removeEventListener("click", tutorial1);
         canvas.addEventListener("click", tutorial2);
-
-        // canvas.addEventListener("mousemove", function(event) {
-        //     var x = event.clientX - canvas.offsetLeft;
-        //     var y = event.clientY - canvas.offsetTop;
-    
-        //     if ((x >= 600 && x <= 750 && y >= 180 && y <= 330)) {
-        //         canvas.style.cursor = "pointer";
-        //     } else {
-        //         canvas.style.cursor = "default";
-        //     }
-        // });
     };
 }
 
@@ -307,16 +296,14 @@ function startPlayerAnimation() {
         imageSrc: 'assets/img/items/item1_carta.png',
     });
 
-    let maletin = new Item({
-        itemName: 'maletin',
-        imageSrc: 'assets/img/items/maletin.png',
-    });
-
+    let doorPosition = {x:885, y:170};
     // Función de animación del jugador
     function animate() {
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         background1.draw();
-        
+        door(doorPosition.x, doorPosition.y);
+        paredvertical1();
+        paredvertical2();
         player.draw();
         player.update();
         window.requestAnimationFrame(animate);
@@ -325,7 +312,7 @@ function startPlayerAnimation() {
             findItem();
             checkAllItemsCollected();
         }
-        
+        checkDoorProximity(player);
     }
 
     // Agregar los eventos de teclado para el jugador
@@ -391,14 +378,11 @@ function startPlayerAnimation() {
     if (distance < 30) { // Cambia este valor según qué tan cerca quieres que esté el jugador del item para resaltarlo
         // Guardar el estado actual del contexto
         ctx.save();
-
         // Configurar el efecto de resplandor
         ctx.shadowColor = 'gold'; // Cambia el color del resplandor según sea necesario
         ctx.shadowBlur = 20; // Cambia el valor del desenfoque del resplandor según sea necesario
-
         // Dibujar el item con el efecto de resplandor
         item.draw();
-
         // Restaurar el estado del contexto
         ctx.restore();
     } else {
@@ -414,47 +398,50 @@ function startPlayerAnimation() {
             if (spacePressed) {
                 // Eliminar el item
                 player.collectItem(item.itemName);
-                item = null
-                //item.draw(10,50,canvas.width, canvas.height);
+                item = null;
             }
         } else {
             playerNearItem = false;
         }
     }
     
-    function checkAllItemsCollected() {
+    function checkAllItemsCollected(player) {
         // Verificar si item es null antes de intentar acceder a itemName
-        if (item !== null && typeof item !== 'undefined') {
-            //Lista de todos los nombres de los items
-            const allItemNames = [item.itemName]; 
+        // if (item !== null && typeof item !== 'undefined') {
+        //     //Lista de todos los nombres de los items
+        //     const allItemNames = [item.itemName]; 
         
-            //Verificar si todos los items han sido recogidos
-            const allItemsCollected = allItemNames.every(itemName => player.items.includes(itemName));
+        //     //Verificar si todos los items han sido recogidos
+        //     const allItemsCollected = allItemNames.every(itemName => player.items.includes(itemName));
         
-            //Si todos los items han sido recogidos
-            if (allItemsCollected) {
+        //     //Si todos los items han sido recogidos
+        //     if (allItemsCollected) {
+                
                 //Calcular la distancia entre el jugador y la puerta final
-                const doorX = canvas.width - 50; //Posición X de la puerta final
-                const doorY = canvas.height / 2 - 50; //Posición Y de la puerta final
-                const distanceX = Math.abs(player.position.x - doorX);
-                const distanceY = Math.abs(player.position.y - doorY);
-                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                var distanceX = Math.abs(player.position.x - doorPosition.position.x);
+                var distanceY = Math.abs(player.position.y - doorPosition.position.y);  
+                var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
         
                 //Si el jugador está cerca de la puerta final
                 if (distance < 30) {
                     // Iluminar la puerta final
                     ctx.save();
                     ctx.shadowColor = 'gold';
-                    ctx.shadowBlur = 20;
-                    ctx.fillRect(doorX - 50, doorY - 50, 100, 100);
+                    ctx.shadowBlur = 100;
+                    door(doorPosition.x, doorPosition.y);
                     ctx.restore();
                     console.log('hi');
+                }else {
+                    // Dibujar la puerta con su apariencia normal
+                    door(doorPosition.x, doorPosition.y);
                 }
-            }
-        }
+                animate();
+    //         }else {
+    //             // Dibujar la puerta con su apariencia normal
+    //             door();
+    //         }
+    //     }
     }
-    
-
 }
 
 // Creación del botón
@@ -493,4 +480,19 @@ function playIcon(x, y, size) {
     ctx.lineTo(x, y + size);
     ctx.closePath();
     ctx.fill();
+}
+
+function door(x,y) {
+    ctx.fillStyle = 'green';
+    ctx.fillRect(x, y, 15, 88, 20);
+}
+
+function paredvertical1(){
+    ctx.fillStyle = 'red';
+    ctx.fillRect(437, 10, 22, 216);
+}
+
+function paredvertical2(){
+    ctx.fillStyle = 'red';
+    ctx.fillRect(437, 500, 22, 216);
 }

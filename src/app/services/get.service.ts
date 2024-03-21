@@ -9,19 +9,21 @@ export class GetService {
 
   constructor(private http: HttpClient) {}
 
-  // getDataContact(): Observable<any> {
-  //   let url = "/server/contact";
-  //   return this.http.get(url); 
-  // }
-
   //devolver info del usuario
   getUsersInfo(): Observable<any> {
     const url = "/server/user/login";
     return this.http.get(url);
   }
 
-  // getDataAboutUs(): Observable<any> {
-  //   let url = "/server/aboutUs/";
-  //   return this.http.get(url);
-  // }
+  //devolver info de los
+  getCharacters(): Observable<any> {
+    let url = "/server/characters/";
+    return this.http.get(url);
+  }
+
+  //devolver info del usuario
+  getItems(): Observable<any> {
+    let url = "/server/items";
+    return this.http.get(url); 
+  }
 }
