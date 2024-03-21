@@ -309,10 +309,9 @@ function startPlayerAnimation() {
         window.requestAnimationFrame(animate);
         if (item) {
             item.draw();
-            findItem();
-            checkAllItemsCollected();
+            findItem();   
         }
-        checkDoorProximity(player);
+        checkAllItemsCollected(player, doorPosition);
     }
 
     // Agregar los eventos de teclado para el jugador
@@ -405,42 +404,38 @@ function startPlayerAnimation() {
         }
     }
     
-    function checkAllItemsCollected(player) {
-        // Verificar si item es null antes de intentar acceder a itemName
-        // if (item !== null && typeof item !== 'undefined') {
-        //     //Lista de todos los nombres de los items
-        //     const allItemNames = [item.itemName]; 
-        
-        //     //Verificar si todos los items han sido recogidos
-        //     const allItemsCollected = allItemNames.every(itemName => player.items.includes(itemName));
-        
-        //     //Si todos los items han sido recogidos
-        //     if (allItemsCollected) {
-                
-                //Calcular la distancia entre el jugador y la puerta final
-                var distanceX = Math.abs(player.position.x - doorPosition.position.x);
-                var distanceY = Math.abs(player.position.y - doorPosition.position.y);  
-                var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-        
-                //Si el jugador está cerca de la puerta final
-                if (distance < 30) {
-                    // Iluminar la puerta final
-                    ctx.save();
-                    ctx.shadowColor = 'gold';
-                    ctx.shadowBlur = 100;
-                    door(doorPosition.x, doorPosition.y);
-                    ctx.restore();
-                    console.log('hi');
-                }else {
-                    // Dibujar la puerta con su apariencia normal
-                    door(doorPosition.x, doorPosition.y);
-                }
-                animate();
-    //         }else {
-    //             // Dibujar la puerta con su apariencia normal
-    //             door();
-    //         }
-    //     }
+
+}
+let allItemsCollected = false;
+function checkAllItemsCollected(player, doorPosition) {
+     const allItemsCollected = player.items.length > 0;
+    
+    // Si todos los items han sido recogidos
+    if (allItemsCollected) {
+        checkDoorProximity(player, doorPosition);
+    } else {
+        // Dibujar la puerta con su apariencia normal
+        door(doorPosition.x, doorPosition.y);
+    }
+}
+
+function checkDoorProximity(player, doorPosition) {
+    // Calcular la distancia entre el jugador y la puerta
+    var distanceX = Math.abs(player.position.x - doorPosition.x);
+    var distanceY = Math.abs(player.position.y - doorPosition.y);  
+    var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+    // Si el jugador está cerca de la puerta
+    if (distance < 80) { 
+        // Iluminar la puerta
+        ctx.save();
+        ctx.shadowColor = 'gold'; 
+        ctx.shadowBlur = 20;
+        door(doorPosition.x, doorPosition.y);
+        ctx.restore();
+    } else {
+        // Dibujar la puerta con su apariencia normal
+        door(doorPosition.x, doorPosition.y);
     }
 }
 
@@ -483,7 +478,7 @@ function playIcon(x, y, size) {
 }
 
 function door(x,y) {
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = 'lightgrey';
     ctx.fillRect(x, y, 15, 88, 20);
 }
 

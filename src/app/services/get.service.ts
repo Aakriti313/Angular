@@ -15,13 +15,13 @@ export class GetService {
     return this.http.get(url);
   }
 
-  //devolver info de los
+  //devolver info de los personajes
   getCharacters(): Observable<any> {
     let url = "/server/characters/";
     return this.http.get(url);
   }
 
-  //devolver info del usuario
+  //devolver info de los items
   getItems(): Observable<any> {
     let url = "/server/items";
     return this.http.get(url); 
