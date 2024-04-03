@@ -302,8 +302,8 @@ function startPlayerAnimation() {
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         background1.draw();
         door(doorPosition.x, doorPosition.y);
-        paredvertical1();
-        paredvertical2();
+        // paredvertical1();
+        // paredvertical2();
         player.draw();
         player.update();
         window.requestAnimationFrame(animate);
@@ -420,6 +420,19 @@ function checkAllItemsCollected(player, doorPosition) {
 }
 
 function checkDoorProximity(player, doorPosition) {
+
+    // Manejar eventos de teclado
+    // canvas.addEventListener('keydown', (event) => {
+    //     if (event.keyCode === 32 && !spacePressed) {
+    //         spacePressed = true;}
+    // });
+    
+    // canvas.addEventListener('keyup', (event) => {
+    //     if (event.key === 32) {
+    //         spacePressed = false;
+    //     }
+    // });
+
     // Calcular la distancia entre el jugador y la puerta
     var distanceX = Math.abs(player.position.x - doorPosition.x);
     var distanceY = Math.abs(player.position.y - doorPosition.y);  
@@ -433,10 +446,27 @@ function checkDoorProximity(player, doorPosition) {
         ctx.shadowBlur = 20;
         door(doorPosition.x, doorPosition.y);
         ctx.restore();
+        if (!spacePressed) {
+            // Finalizar juego
+            endGame();
+            return;
+        }
     } else {
         // Dibujar la puerta con su apariencia normal
         door(doorPosition.x, doorPosition.y);
     }
+    
+}
+
+// Al finalizar
+function endGame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.cursor = "default";
+    ctx.font = '15px "Press Start 2P"'
+    ctx.fillStyle = 'white';
+    ctx.textAlign = "center";
+    ctx.fillText("¡FELICIDADES DETECTIVE, HAS RESUELTO EL CASO!", canvas.width / 2, canvas.height / 2);
+
 }
 
 // Creación del botón
