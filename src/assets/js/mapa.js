@@ -212,6 +212,7 @@ export class Engine {
         checkAllItemsCollected();
       }
       checkDoorProximity(player);
+      checkAllItemsCollected(player, doorPosition);
     }
 
     // Agregar los eventos de teclado para el jugador
@@ -519,6 +520,11 @@ class Player extends Sprite {
     this.items.push(itemName);
     console.log(`Item encontrado: ${itemName}`);
   }
+
+  door(x,y) {
+    ctx.fillStyle = 'lightgrey';
+    ctx.fillRect(x, y, 15, 88, 20);
+}
 }
 
 //Clase objeto
