@@ -1,5 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
-import { GetService } from "../services/get.service";
+import { GetService } from '../services/get.service';
 import { PostService } from '../services/post.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { User } from '../clases/users';

@@ -12,6 +12,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { FormsComponent } from './forms/forms.component';
 import { EnigmaOfMurdersComponent } from './enigma-of-murders/enigma-of-murders.component';
 import { ProfileComponent } from './profile/profile.component';
+import { Engine } from '../assets/js/mapa';
 
 @NgModule({
   declarations: [
