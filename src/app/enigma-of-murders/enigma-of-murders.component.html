@@ -1,16 +1,33 @@
-<div id="divEofM" class="col-12 p-5" style="text-align: justify;">
-    <div class="text-end" (click)="close()" role="button"><span class="btn-close"></span></div>
-    <div style="display: flex;">
-        <p class="col-10 pt-5">¿Te gustaría ser el personaje principal de un videojuego?
-        ¿Ser el mejor detective de todos los tiempos?
-        ¡¡Con Enigma of Murders, el nuevo videojuego web RPG, puedes serlo!!</p>
-        <img class="col-2" src="../assets/img/Detective.gif" alt="Detective gif" style="width: 10%;margin-left: 50px;">
+<div class="p-5 " id="games">
+    <form class="d-flex col-12" role="search">
+        <input class="form-control me-2" style="width: 150px;" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    
+    <div id="divEofM" class="col-12 p-5" style="text-align: justify;">
+        <div style="display: flex;">
+            <p class="col-10 pt-5">¿Te gustaría ser el personaje principal de un videojuego?
+            ¿Ser el mejor detective de todos los tiempos?
+            ¡¡Con Enigma of Murders, el nuevo videojuego web RPG, puedes serlo!!</p>
+            <img class="col-2" src="../assets/img/Detective.gif" alt="Detective gif" style="width: 10%;margin-left: 50px;">
+        </div>
+        <div class="col-12 mt-3">
+            <p>Enigma of Murders es una RPG on-line que adoptará la forma de un escape room.
+            Como detective podrás sumergirte en una experiéncia dónde deberás resolver el enigma para poder escapar.
+            <br>
+            El objetivo será brindarte una experiéncia interactiva envolvente que combine elementos de narrativa,
+            resolución de acertijos y toma de decisiones, todo ello dentro de la página web accesible para diferentes dispositivos.</p>
+        </div>
     </div>
-    <div class="col-12 mt-3">
-        <p>Enigma of Murders es una RPG on-line que adoptará la forma de un escape room.
-        Como deteective podrás sumergirte en una experiéncia dónde deberás resolver el enigma para poder escapar.
-        <br>
-        El objetivo será brindarte una experiéncia interactiva envolvente que combine elementos de narrativa,
-        resolución de acertijos y toma de decisiones, todo ello dentro de la página web accesible para diferentes dispositivos.</p>
+
+    
+    <div  style="position: relative;">
+        <div  class="text-center mt-5 mb-5">
+            <div>
+                <canvas id="canvas" width="900" height="500" style="border: 2px solid black;">
+                    Canvas not supported by your browser.
+                </canvas>
+            </div>
+        </div>
     </div>
 </div>

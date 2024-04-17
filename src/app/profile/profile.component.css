@@ -1,13 +1,3 @@
-#profile{
-    display: flex;
-    justify-content: center;
-    background: #f8f3ea;
-    box-shadow: 18px 18px 30px #ede8de, -18px -18px 30px #ede8de;
-    margin: 2%;
-    padding: 2%;
-    border-radius: 25px;
-}
-
 .profset{
     align-items: center;
     text-align: center;

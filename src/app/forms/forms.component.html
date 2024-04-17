@@ -1,14 +1,14 @@
-<div class="container text-center p-5">
-    <div id="background1" *ngIf="isLogInFormVisible" novalidate>
-        <form [formGroup]="logInForm" (ngSubmit)="onSubmitLogIn()" class="form_text">
+<div class="container text-center p-5 componentsBackgrounds">
+    <div *ngIf="isLogInFormVisible" novalidate>
+        <form [formGroup]="logInForm" (ngSubmit)="onSubmitLogIn()">
             <div>
-                <p style="color: black;">Bienvenido detective!!</p>
+                <p style="color: black;">¡Nos alegramos de verte de nuevo!</p>
                 <input formControlName="nickname_user" placeholder="Nickname" type="text" class="mb-2" required><br>
                 <input formControlName="password_user" placeholder="Password" type="password" class="mb-2" required><br>
                 <button type="submit" [disabled]="!logInForm.valid">Log in</button>
             </div>
             <div class="mt-4">
-                <p style="color: black;font-size: xx-small;">Todavía no tienes cuenta?</p>
+                <p style="color: black;font-size: x-small;">Todavía no tienes cuenta?</p>
                 <button type="button" (click)="showSignUpForm()">Sign up</button>
             </div>
         </form>
@@ -16,7 +16,7 @@
 
     <div *ngIf="isSignUpFormVisible" novalidate>
         <form [formGroup]="signUpForm" (ngSubmit)="onSubmitSignUp()">
-            <p style="color: black;">Bienvenido detective!!</p>
+            <p style="color: black;">¡Bienvenido a Studio Vila!</p>
             <input ngModel formControlName="name_user" placeholder="Username" type="text" class="mb-2" required><br>
             <span *ngIf="this.signUpForm.get('name_user')?.touched && this.signUpForm.get('name_user')?.errors?.['required']">
                 <p style="color: red; font-size: smaller;">Es obligatorio rellenar el campo.</p>
