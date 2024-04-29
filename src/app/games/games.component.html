@@ -9,22 +9,26 @@
                 <br>
                 Desde Studio Vila esperamos que encuentres tu juego y pases un buen rato.
             </p>
-            <p *ngIf="isLogged" class="text-bg-danger">🔒​<span> Inicia sesión para poder jugar </span>🔒</p>
+            <div class="alert alert-danger text-center" role="alert" *ngIf="!isLogued">
+                <span>Inicia sesión para poder jugar!</span>
+            </div>
         </div>
-        <div class="col-4" *ngFor="let game of filteredGames">
+       <div class="row justify-content-center" *ngIf="isLogued">
+        <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let game of filteredGames">
             <ng-container *ngIf="game.title === 'Enigma Of Murders'; else otherGames">
-                <a *ngIf="isLogged" routerLink="/app-enigma-of-murders" routerLinkActive="active" class="nav-link active">
+                <a routerLink="/app-enigma-of-murders" routerLinkActive="active" class="nav-link active">
                   <img [src]="game.image" alt="" width="100%">
                 </a>
                 <p class="titleGame">{{ game.title }}</p>
             </ng-container>
             <ng-template #otherGames>
-                <a *ngIf="isLogged">
+                <a >
                   <img [src]="game.image" alt="" width="100%">
                 </a>
                 <p class="titleGame">{{ game.title }}</p>
             </ng-template>
           </div>
+        </div>
     </div>
 
 </div>
