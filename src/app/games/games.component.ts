@@ -16,7 +16,12 @@ export class GamesComponent {
     { title: 'Proximamente...', image: '../../assets/img/comingsoon.png'}
   ];
   
-  constructor(private logued : IsLogued) { }
+  constructor(private logued : IsLogued) { 
+
+    this.isLogued = this.logued.getIsLogued();
+
+
+  }
   
   filteredGames = this.games;
   searchInput: any;
@@ -25,10 +30,6 @@ export class GamesComponent {
     this.filteredGames = this.games.filter(game =>
       game.title.toLowerCase().includes(term.toLowerCase())
     );
-  }
-
-  isLogged(){
-    this.isLogued = this.logued.setIsLogued(true);
   }
   
   
