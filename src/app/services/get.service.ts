@@ -26,4 +26,10 @@ export class GetService {
     let url = "/server/items";
     return this.http.get(url); 
   }
+
+  //devolver lista de users
+  // getUsersList(): Observable<any> {
+  //   const url = "/server/user/login";
+  //   return this.http.get(url);
+  // }
 }

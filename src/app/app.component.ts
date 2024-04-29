@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
 
   constructor(private formsComponent: IsLogued,private en:Engine) {}
   ngOnInit(): void {
-    this.en.init();
+    //this.en.init();
   }
 
   // Método para verificar si el usuario está logueado
