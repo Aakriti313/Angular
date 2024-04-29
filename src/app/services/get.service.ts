@@ -29,7 +29,7 @@ export class GetService {
 
   //devolver lista de users
   // getUsersList(): Observable<any> {
-  //   const url = "/server/user/login";
+  //   let url = "/server/user/get";
   //   return this.http.get(url);
   // }
 }
