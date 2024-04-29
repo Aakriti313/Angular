@@ -20,7 +20,7 @@ export class Engine {
   tutorial2_image = new Image();
 
   constructor( ) {
-    this.s = new GetService()
+    this.items = new GetService()
     //window.addEventListener("load", this.init);
   }
 
@@ -184,13 +184,17 @@ tutorial2() {
 
   // Mapa juego
   drawMap(event) {
+    console.log("entra?");
     this.engine.startPlayerAnimation();
   }
 
   startPlayerAnimation() {
+    let engine = document.getElementById("canvas").engine;
+    console.log("SI");
     // Crear una instancia del jugador
     let player = new Player({
       imageSrc: "assets/img/fantasma.png",
+      engine: engine
     });
 
     //Crear un objeto aleatorio
@@ -199,16 +203,18 @@ tutorial2() {
       imageSrc: "assets/img/items/item1_carta.png",
     });
 
-    this.s.getItems().draw;
+    this.items.getItems().draw;
 
     let doorPosition = { x: 885, y: 170 };
+
     // Función de animación del jugador
     function animate() {
+      let engine = document.getElementById("canvas").engine;
       //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.background1.draw();
-      door(doorPosition.x, doorPosition.y);
-      paredvertical1();
-      paredvertical2();
+      engine.background1.draw();
+      engine.door(doorPosition.x, doorPosition.y);
+      engine.paredvertical1();
+      engine.paredvertical2();
       player.draw();
       player.update();
       window.requestAnimationFrame(animate);
@@ -392,7 +398,7 @@ tutorial2() {
   }
 
   door(x, y) {
-    this.ctx.fillStyle = "green";
+    this.ctx.fillStyle = "lightgrey";
     this.ctx.fillRect(x, y, 15, 88, 20);
   }
 
@@ -425,6 +431,8 @@ class Sprite {
     this.frameBuffer = frameBuffer;
   }
   draw() {
+    let engine = document.getElementById("canvas").engine;
+
     if (!this.loaded) return;
     let cropbox = {
       position: {
@@ -435,7 +443,7 @@ class Sprite {
       height: this.height,
     };
 
-    this.ctx.drawImage(
+    engine.ctx.drawImage(
       this.image,
       cropbox.position.x,
       cropbox.position.y,
@@ -462,7 +470,7 @@ class Sprite {
 
 // Clase Player
 class Player extends Sprite {
-  constructor({ imageSrc, frameRate }) {
+  constructor({ imageSrc, engine, frameRate }) {
     super({ imageSrc, frameRate });
     this.position = {
       x: 100,
@@ -482,10 +490,11 @@ class Player extends Sprite {
     };
     this.updateSides();
     this.items = [];
+    this.engine = engine;
   }
 
   draw() {
-    this.ctx.drawImage(
+    this.engine.ctx.drawImage(
       this.image,
       this.position.x,
       this.position.y,
@@ -507,7 +516,7 @@ class Player extends Sprite {
   update() {
     if (
       this.position.x + this.velocity.x >= 0 + this.margin.left &&
-      this.sides.right + this.velocity.x <= this.canvas.width - this.margin.right
+      this.sides.right + this.velocity.x <= this.engine.canvas.width - this.margin.right
     ) {
       this.position.x += this.velocity.x;
       this.updateSides();
@@ -515,7 +524,7 @@ class Player extends Sprite {
 
     if (
       this.position.y + this.velocity.y >= 0 + this.margin.top &&
-      this.sides.bottom + this.velocity.y <= this.canvas.height - this.margin.bottom
+      this.sides.bottom + this.velocity.y <= this.engine.canvas.height - this.margin.bottom
     ) {
       this.position.y += this.velocity.y;
       this.updateSides();
@@ -527,10 +536,10 @@ class Player extends Sprite {
     console.log(`Item encontrado: ${itemName}`);
   }
 
-  door(x,y) {
-    ctx.fillStyle = 'lightgrey';
-    ctx.fillRect(x, y, 15, 88, 20);
-}
+  // door(x,y) {
+  //   this.ctx.fillStyle = 'lightgrey';
+  //   this.ctx.fillRect(x, y, 15, 88, 20);
+  // }
 }
 
 //Clase objeto
@@ -538,8 +547,8 @@ class Item extends Sprite {
   constructor({ imageSrc, frameRate, itemName }) {
     super({ imageSrc, frameRate });
     this.position = {
-      x: Math.floor(Math.random() * this.canvas.width) + 1,
-      y: Math.floor(Math.random() * this.canvas.height) + 1,
+      x: Math.floor(Math.random() * this.width) + 1,
+      y: Math.floor(Math.random() * this.height) + 1,
     };
     this.width = 100;
     this.height = 100;
