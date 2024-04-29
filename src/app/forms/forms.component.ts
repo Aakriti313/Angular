@@ -85,7 +85,7 @@ export class FormsComponent {
           this.signUpForm.value.nickname_user as string,
           parseInt(this.signUpForm.value.age_user as string, 10) || 0,
           this.signUpForm.value.email_user as string,
-          parseInt(this.signUpForm.value.age_user as string, 10) || 0,
+          parseInt(this.signUpForm.value.phone_user as string, 10) || 0,
           this.signUpForm.value.password_user as string
         );
         

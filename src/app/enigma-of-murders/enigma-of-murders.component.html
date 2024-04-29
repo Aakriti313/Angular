@@ -1,8 +1,4 @@
 <div class="p-5 " id="games">
-    <form class="d-flex col-12" role="search">
-        <input class="form-control me-2" style="width: 150px;" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
     
     <div id="divEofM" class="col-12 p-5" style="text-align: justify;">
         <div style="display: flex;">
@@ -31,3 +27,9 @@
     </div>
     
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var engine = new Engine();
+        engine.init();
+    });
+</script>

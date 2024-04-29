@@ -1,30 +1,29 @@
 <div class="p-5 componentsBackgrounds" id="games">
-    <div class="container text-center">
-        <div class="row">
-            <div class="col-12 mb-5">
-                <p>¡¡Bienvenidos a la nueva página de videojuegos online!!
-                    <br>
-                    Desde Studio Vila esperamos que encuentres tu juego y pases un buen rato.
-                </p>
-            </div>
-            <div class="col-4">
-                <a routerLink="/app-enigma-of-murders" routerLinkActive="active" class="nav-link active">
-                    <img src="../../assets/img/IntroEnigmaOfMurders.png" alt="" width="100%">
-                </a>
-            </div>
-            <div class="col-4">
-                <a routerLink="/app-enigma-of-murders">
-                    <img src="../../assets/img/IntroEnigmaOfMurders.png" alt="" width="100%">
-                </a>
-            </div>
-            <div class="col-4">
-                <a routerLink="/app-enigma-of-murders">
-                    <img src="../../assets/img/IntroEnigmaOfMurders.png" alt="" width="100%">
-                </a>
-            </div>
+    <div class="container text-center row">
+        <form class="d-flex col-12 mb-5" role="search">
+            <input class="form-control me-2" style="width: 20%;" type="search" placeholder="Search" aria-label="Search" #searchInput (input)="search(searchInput.value)">
+            <button class="btn btn-light" (click)="search(searchInput.value)"  type="submit">Search</button>
+        </form>
+        <div class="col-12 mb-5">
+            <p class=" mb-5">¡¡Bienvenido a la nueva página de videojuegos online!!
+                <br>
+                Desde Studio Vila esperamos que encuentres tu juego y pases un buen rato.
+            </p>
+            <p *ngIf="isLogged" class="text-bg-danger">🔒​<span> Inicia sesión para poder jugar </span>🔒</p>
         </div>
+        <div class="col-4" *ngFor="let game of filteredGames">
+            <ng-container *ngIf="game.title === 'Enigma Of Murders'; else otherGames">
+                <a *ngIf="isLogged" routerLink="/app-enigma-of-murders" routerLinkActive="active" class="nav-link active">
+                  <img [src]="game.image" alt="" width="100%">
+                </a>
+                <p class="titleGame">{{ game.title }}</p>
+            </ng-container>
+            <ng-template #otherGames>
+                <a *ngIf="isLogged">
+                  <img [src]="game.image" alt="" width="100%">
+                </a>
+                <p class="titleGame">{{ game.title }}</p>
+            </ng-template>
+          </div>
     </div>
-
-    
-
 </div>

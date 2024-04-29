@@ -32,7 +32,7 @@ import { GamesComponent } from './games/games.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [Engine],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
