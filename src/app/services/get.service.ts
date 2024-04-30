@@ -27,10 +27,9 @@ export class GetService {
     return this.http.get(url); 
   }
 
-
+  //devolver lista de users
   getUsersList(): Observable<any> {
     let url = "/server/user/get";
-    return this.http.get(url); 
+    return this.http.get(url);
   }
-
 }
