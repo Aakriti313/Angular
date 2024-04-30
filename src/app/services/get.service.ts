@@ -27,8 +27,10 @@ export class GetService {
     return this.http.get(url); 
   }
 
+
   getUsersList(): Observable<any> {
     let url = "/server/user/get";
     return this.http.get(url); 
   }
+
 }
