@@ -1,5 +1,6 @@
 import { Component, ElementRef} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { User } from '../clases/users';
 import { PostService } from '../services/post.service';
@@ -26,7 +27,12 @@ export class FormsComponent {
   }
 
   //Formularios
-  constructor(private fb: FormBuilder, private postService: PostService, private el:ElementRef, private logued : IsLogued) {}
+  constructor(
+    private router: Router,
+    private fb: FormBuilder, 
+    private postService: PostService, 
+    private el: ElementRef, 
+    private logued : IsLogued) {}
 
   logInForm = this.fb.group({
     nickname_user: ['', Validators.required],
@@ -63,10 +69,11 @@ export class FormsComponent {
           this.logued.setUserType(result["user"]["user_type"]);
           this.isLogInFormVisible = false;
           this.isSignUpFormVisible = false;
-          alert(result["message"]);
+          // alert(result["message"]);
           console.log(this.logInForm.value);
           localStorage.setItem('currentUser',JSON.stringify(result["user"]));
           localStorage.setItem('nickname_user',result["user"]["nickname_user"]);
+          this.router.navigate(['/app-games']);
         } else if(result = "Usuario no encontrado") {
           alert(result);
         } else if(result = "Credenciales inválidas") {
