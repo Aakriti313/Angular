@@ -26,4 +26,9 @@ export class GetService {
     let url = "/server/items";
     return this.http.get(url); 
   }
+
+  getUsersList(): Observable<any> {
+    let url = "/server/user/get";
+    return this.http.get(url); 
+  }
 }
