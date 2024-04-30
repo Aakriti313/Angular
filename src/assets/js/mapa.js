@@ -1,4 +1,4 @@
-// import { Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { GetService } from "../../app/services/get.service"; 
 
 export class Engine {
@@ -19,32 +19,33 @@ export class Engine {
   tutorial1_image = new Image();
   tutorial2_image = new Image();
 
-  constructor( ) {
-    this.items = new GetService()
+  constructor(characters) {
+    this.characters = characters || new GetService();
+    // this.items = new GetService();
     //window.addEventListener("load", this.init);
   }
 
   // Al iniciar
   init() {
     this.canvas = document.getElementById("canvas");
-    this.canvas.engine=this
+    this.canvas.engine = this;
     this.canvas.setAttribute("tabindex", 0);
     this.ctx = this.canvas.getContext("2d");
-    
+
     this.canvas.style.cursor = "pointer";
     this.logo.src = "assets/img/logo_pantalla_completa_dark.png";
-    this.logo.onload =  ()=> {
-      console.log("logo onload")
+    this.logo.onload = () => {
+      console.log("logo onload");
       this.ctx.drawImage(logo, 0, 0, this.canvas.width, this.canvas.height);
       this.canvas.removeEventListener("click", this.init);
-      this.canvas.addEventListener("click", this.startGame,{ once: true });
+      this.canvas.addEventListener("click", this.startGame, { once: true });
     };
   }
 
   // Comprobar que se ha dado dentro del boton play
   startGame(event) {
-    console.log("startGame")
-   // event.target.removeEventListener("click", event.target.click);
+    console.log("startGame");
+    // event.target.removeEventListener("click", event.target.click);
     // Obtener coordenadas del clic.
     var x = event.clientX - this.offsetLeft;
     var y = event.clientY - this.offsetTop;
@@ -57,18 +58,24 @@ export class Engine {
 
   // Intro
   intro(engine) {
-    console.log("intro")
+    console.log("intro");
     engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
     engine.canvas.style.cursor = "wait";
     engine.game_image.src = "assets/img/IntroEnigmaOfMurders.png";
-    engine.game_image.onload = ()=> {
+    engine.game_image.onload = () => {
       console.log("load game image");
-      engine.ctx.drawImage(engine.game_image, 0, 0, engine.canvas.width, engine.canvas.height);
-      setTimeout( ()=> {
+      engine.ctx.drawImage(
+        engine.game_image,
+        0,
+        0,
+        engine.canvas.width,
+        engine.canvas.height
+      );
+      setTimeout(() => {
         console.log("timout intro");
         // Limpiar el canvas después de 3 segundos
         engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
-       // this.canvas.removeEventListener("click", this.intro);
+        // this.canvas.removeEventListener("click", this.intro);
         engine.menuGame(engine);
       }, 3000);
     };
@@ -105,7 +112,7 @@ export class Engine {
     const rankingSize = 80;
     engine.playIcon(455 - rankingSize / 2, 250 - rankingSize / 2, rankingSize);
 
-    engine.canvas.addEventListener("mousemove",  (event)=> {
+    engine.canvas.addEventListener("mousemove", (event) => {
       var x = event.clientX - engine.canvas.offsetLeft;
       var y = event.clientY - engine.canvas.offsetTop;
 
@@ -120,7 +127,7 @@ export class Engine {
       }
     });
 
-    engine.canvas.addEventListener("click", engine.playGame,{ once: true });
+    engine.canvas.addEventListener("click", engine.playGame, { once: true });
   }
 
   playGame(event) {
@@ -135,28 +142,42 @@ export class Engine {
     }
   }
 
- // Método para mostrar el primer tutorial
-tutorial1() {
-  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar el canvas
-  this.canvas.style.cursor = "default";
-  this.tutorial1_image.src = "assets/img/tutorial1.png";
-  this.tutorial1_image.onload = () => {
-    this.ctx.drawImage(this.tutorial1_image, 0, 0, this.canvas.width, this.canvas.height);
-    this.canvas.removeEventListener("click", this.tutorial1);
-    this.canvas.addEventListener("click", this.tutorial2.bind(this),{ once: true }); // Al hacer clic, mostrar el segundo tutorial
-  };
-}
+  // Método para mostrar el primer tutorial
+  tutorial1() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar el canvas
+    this.canvas.style.cursor = "default";
+    this.tutorial1_image.src = "assets/img/tutorial1.png";
+    this.tutorial1_image.onload = () => {
+      this.ctx.drawImage(
+        this.tutorial1_image,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+      this.canvas.removeEventListener("click", this.tutorial1);
+      this.canvas.addEventListener("click", this.tutorial2.bind(this), {
+        once: true,
+      }); // Al hacer clic, mostrar el segundo tutorial
+    };
+  }
 
-// Método para mostrar el segundo tutorial
-tutorial2() {
-  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar el canvas
-  this.tutorial2_image.src = "assets/img/tutorial2.png";
-  this.tutorial2_image.onload = () => {
-    this.ctx.drawImage(this.tutorial2_image, 0, 0, this.canvas.width, this.canvas.height);
-    this.canvas.removeEventListener("click", this.tutorial2);
-    this.canvas.addEventListener("click", this.drawMap,{ once: true }); // Al hacer clic, iniciar el mapa
-  };
-}
+  // Método para mostrar el segundo tutorial
+  tutorial2() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar el canvas
+    this.tutorial2_image.src = "assets/img/tutorial2.png";
+    this.tutorial2_image.onload = () => {
+      this.ctx.drawImage(
+        this.tutorial2_image,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+      this.canvas.removeEventListener("click", this.tutorial2);
+      this.canvas.addEventListener("click", this.characters, { once: true });
+    };
+  }
 
   //Función para pasar al siguiente tutorial o al mapa de juego
   nextTutorial(event) {
@@ -182,6 +203,28 @@ tutorial2() {
     }
   }
 
+  characters() {
+    let engine = document.getElementById("canvas").engine;
+    let charactersService = new GetService();
+    engine.ctx.clearRect(0, 0, this.width, this.height); // Limpiar el canvas
+    
+    // Obtener los personajes desde el servicio en Angular
+    charactersService.getCharacters().subscribe(characters => {
+      characters.forEach(characterData => {
+        // Crear una nueva instancia de Player para cada personaje
+        let character = new Player({
+          imageSrc: characterData.image, // Suponiendo que 'image' es el campo que contiene la URL de la imagen del personaje
+          engine: engine,
+          // Puedes pasar otros parámetros necesarios para la instancia de Player según los datos del personaje
+        });
+
+        // Dibujar el personaje en el lienzo
+        character.draw();
+      });
+    });
+    this.canvas.addEventListener("click", this.drawMap, { once: true }); // Al hacer clic, iniciar el mapa
+  }
+
   // Mapa juego
   drawMap(event) {
     console.log("entra?");
@@ -194,7 +237,7 @@ tutorial2() {
     // Crear una instancia del jugador
     let player = new Player({
       imageSrc: "assets/img/fantasma.png",
-      engine: engine
+      engine: engine,
     });
 
     //Crear un objeto aleatorio
@@ -203,7 +246,7 @@ tutorial2() {
       imageSrc: "assets/img/items/item1_carta.png",
     });
 
-    this.items.getItems().draw;
+    // this.items.getItems().draw;
 
     let doorPosition = { x: 885, y: 170 };
 
@@ -213,8 +256,8 @@ tutorial2() {
       //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       engine.background1.draw();
       engine.door(doorPosition.x, doorPosition.y);
-      engine.paredvertical1();
-      engine.paredvertical2();
+      //engine.paredvertical1();
+      //engine.paredvertical2();
       player.draw();
       player.update();
       window.requestAnimationFrame(animate);
@@ -372,7 +415,13 @@ tutorial2() {
     this.ctx.lineTo(x + width - radius, y);
     this.ctx.arcTo(x + width, y, x + width, y + radius, radius);
     this.ctx.lineTo(x + width, y + height - radius);
-    this.ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+    this.ctx.arcTo(
+      x + width,
+      y + height,
+      x + width - radius,
+      y + height,
+      radius
+    );
     this.ctx.lineTo(x + radius, y + height);
     this.ctx.arcTo(x, y + height, x, y + height - radius, radius);
     this.ctx.lineTo(x, y + radius);
@@ -409,7 +458,7 @@ tutorial2() {
 
   paredvertical2() {
     this.ctx.fillStyle = "blue";
-    this.ctx.fillRect(437, 500, 52, 216);
+    this.ctx.fillRect(437, 256, 22, 182);
   }
 }
 
@@ -516,7 +565,8 @@ class Player extends Sprite {
   update() {
     if (
       this.position.x + this.velocity.x >= 0 + this.margin.left &&
-      this.sides.right + this.velocity.x <= this.engine.canvas.width - this.margin.right
+      this.sides.right + this.velocity.x <=
+        this.engine.canvas.width - this.margin.right
     ) {
       this.position.x += this.velocity.x;
       this.updateSides();
@@ -524,7 +574,8 @@ class Player extends Sprite {
 
     if (
       this.position.y + this.velocity.y >= 0 + this.margin.top &&
-      this.sides.bottom + this.velocity.y <= this.engine.canvas.height - this.margin.bottom
+      this.sides.bottom + this.velocity.y <=
+        this.engine.canvas.height - this.margin.bottom
     ) {
       this.position.y += this.velocity.y;
       this.updateSides();
@@ -535,11 +586,6 @@ class Player extends Sprite {
     this.items.push(itemName);
     console.log(`Item encontrado: ${itemName}`);
   }
-
-  // door(x,y) {
-  //   this.ctx.fillStyle = 'lightgrey';
-  //   this.ctx.fillRect(x, y, 15, 88, 20);
-  // }
 }
 
 //Clase objeto
