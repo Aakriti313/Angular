@@ -10,7 +10,7 @@
                 Desde Studio Vila esperamos que encuentres tu juego y pases un buen rato.
             </p>
             <div class="alert alert-danger text-center" role="alert" *ngIf="!isLogued">
-                <span>Inicia sesión para poder jugar!</span>
+                <span>¡Inicia sesión para poder jugar!</span>
             </div>
         </div>
        <div class="row justify-content-center" *ngIf="isLogued">
@@ -22,7 +22,7 @@
                 <p class="titleGame">{{ game.title }}</p>
             </ng-container>
             <ng-template #otherGames>
-                <a >
+                <a>
                   <img [src]="game.image" alt="" width="100%">
                 </a>
                 <p class="titleGame">{{ game.title }}</p>

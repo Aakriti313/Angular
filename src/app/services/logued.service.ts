@@ -4,7 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class IsLogued {
+
   private isLogued: boolean = false;
+  private userType: string = '';
 
   constructor() { }
 
@@ -17,4 +19,14 @@ export class IsLogued {
   setIsLogued(value: boolean) {
     this.isLogued = value;
   }
+
+  getUserType(): string {
+    return this.userType;
+  }
+
+  setUserType(type: string){
+    return this.userType = type;
+  }
+
+  
 }

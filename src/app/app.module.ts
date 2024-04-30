@@ -14,6 +14,7 @@ import { EnigmaOfMurdersComponent } from './enigma-of-murders/enigma-of-murders.
 import { ProfileComponent } from './profile/profile.component';
 import { Engine } from '../assets/js/mapa';
 import { GamesComponent } from './games/games.component';
+import { AdminPageComponent } from './admin-page/admin-page.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { GamesComponent } from './games/games.component';
     FormsComponent,
     EnigmaOfMurdersComponent,
     ProfileComponent,
-    GamesComponent
+    GamesComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,

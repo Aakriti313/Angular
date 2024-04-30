@@ -59,7 +59,8 @@ export class FormsComponent {
       this.postService.postUserLogIn(user).subscribe((result) => {
         console.log(result)
         if (result["message"] == "Inicio de sesión exitoso") {
-          
+          this.logued.setIsLogued(true);
+          this.logued.setUserType(result["user"]["user_type"]);
           this.isLogInFormVisible = false;
           this.isSignUpFormVisible = false;
           alert(result["message"]);

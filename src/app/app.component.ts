@@ -11,6 +11,7 @@ import { Engine } from '../assets/js/mapa';
 export class AppComponent implements OnInit {
   copyright = '@copyright Studio VILA';
   title = '';
+  userType: string = '';
 
   constructor(private formsComponent: IsLogued,private en:Engine) {}
   ngOnInit(): void {
@@ -22,6 +23,9 @@ export class AppComponent implements OnInit {
     return this.formsComponent.getIsLogued();
   }
 
-  
-  
+  isAdmin(): boolean {
+    return this.formsComponent.getUserType() === 'admin';
+  }
+
+
 }
