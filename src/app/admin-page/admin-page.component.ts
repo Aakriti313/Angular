@@ -10,7 +10,7 @@ import { User } from '../clases/users';
 export class AdminPageComponent implements OnInit{
   users: any[] = [];
 
-  filteredUsers = this.users;
+  filteredUsers: any[] = [];
 
   constructor( private get : GetService){}
   
@@ -21,16 +21,16 @@ export class AdminPageComponent implements OnInit{
   getList(){
     this.get.getUsersList().subscribe((data: any[]) => {
       this.users = data;
+      this.filteredUsers = this.users;
       console.log(this.users); 
     });
   }
   
   search(term: string) {
-    // this.filteredUsers = this.users.filter(user =>
-    //   user.name_user.toLowerCase().includes(term.toLowerCase())
-    // );
+    this.filteredUsers = this.users.filter(user =>
+      user.nickname && user.nickname.toLowerCase().includes(term.toLowerCase())
+    );
   }
-
-
   
+
 }
