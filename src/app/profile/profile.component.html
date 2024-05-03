@@ -6,13 +6,14 @@
           <br><br>
           <button type="button" name="profset" class="btn btn_settings">⚙️​ Settings</button>
           <br><br>
-          <button type="button" class="btn btn_delete">Cerrar sesión</button>
+          <button type="button" class="btn btn_delete" [routerLink]="['/app-forms']">Cerrar sesión</button>
           <br><br>
           <button type="button" (click)="delete()" class="btn btn_delete">Eliminar cuenta</button>
           <br><br>
       </div>
       <div id="info" class="col-md-6">
-        <img class="card-img-top" src="../../assets/img/lauraAvatar.png" style="width: 40%;" alt="profile_image">
+        <!-- <img class="card-img-top" src="../../assets/img/lauraAvatar.png" style="width: 40%;" alt="profile_image"> -->
+        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" />
         <br><br>
           <form class="row" [formGroup]="UserForm" id="user">
             <div class="form-group col-md-12 mb-3">
@@ -46,7 +47,7 @@
 
             </div>
             <div class="form-group col-md-12 mb-3">
-              <label for="password_user" class="col-md-4" style="width: auto;">Contraseña:</label>
+              <label for="password_user" class="col-md-4">Contraseña:</label>
               <input formControlName="password_user" [(ngModel)]="datos.password" [disabled]="!isEditable" type="password" class="col-md-6" required>
             </div>
             <div class="form-group col-md-12 mb-3">

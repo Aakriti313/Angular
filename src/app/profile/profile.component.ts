@@ -3,6 +3,8 @@ import { GetService } from '../services/get.service';
 import { PostService } from '../services/post.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { User } from '../clases/users';
+import { ImageService } from '../services/image.service';
+
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +15,12 @@ export class ProfileComponent {
   userData: any;
   isEditable: boolean = false;
 
-  constructor(private fb: FormBuilder, private _GetService: GetService, private postService: PostService, private el:ElementRef) {
+  constructor(
+    private imageService: ImageService,
+    private fb: FormBuilder, 
+    private _GetService: GetService, 
+    private postService: PostService, 
+    private el:ElementRef) {
     this.userData = [];
   }
 
@@ -59,6 +66,7 @@ export class ProfileComponent {
 
     this.postService.deleteUser(currentUser.nickname_user||"").subscribe((result) => {console.log(result)});
   }
+  
   ngOnInit(): void {
     this._GetService.getUsersInfo().subscribe((data: any) => {
       this.userData = data;
@@ -66,9 +74,14 @@ export class ProfileComponent {
     });
     //Scroll
     this.scrollToView();
-  }
+    //Mostrar imagen seleccionada
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+    this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname_user);
+    }
   
   scrollToView(){
     this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest"});
   }
+
+  selectedImage: string | null = null;
 }

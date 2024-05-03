@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class GetService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http:HttpClient) {}
 
   //devolver info del usuario
   getUsersInfo(): Observable<any> {
@@ -32,4 +32,5 @@ export class GetService {
     let url = "/server/user/get";
     return this.http.get(url);
   }
+  
 }

@@ -33,5 +33,10 @@ export class PostService {
     let url = "/server/user/delete/"+nickname;
     return this.http.delete(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
+
+  // sendEmail(emailData: any) {
+  //   let url = "/server/user/email";
+  //   return this.http.post(url, emailData);
+  // }
   
 }
