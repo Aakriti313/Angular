@@ -53,6 +53,7 @@ export class FormsComponent {
       repeat_password_user: ['', Validators.required],
     });
 
+    
   //LogIn
   onSubmitLogIn() {
     if (this.logInForm.valid) {
