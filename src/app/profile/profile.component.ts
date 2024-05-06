@@ -4,6 +4,7 @@ import { PostService } from '../services/post.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { User } from '../clases/users';
 import { ImageService } from '../services/image.service';
+import { IsLogued } from '../services/logued.service';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class ProfileComponent {
     private fb: FormBuilder, 
     private _GetService: GetService, 
     private postService: PostService, 
-    private el:ElementRef) {
+    private el:ElementRef,
+    private log : IsLogued) {
     this.userData = [];
   }
 
@@ -58,6 +60,10 @@ export class ProfileComponent {
             console.error('Error al actualizar los datos:', error);
         }
     );
+  }
+
+  logOut(){
+    this.log.setIsLogued(false);
   }
 
   delete(){

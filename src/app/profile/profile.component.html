@@ -6,7 +6,7 @@
           <br><br>
           <button type="button" name="profset" class="btn btn_settings">⚙️​ Settings</button>
           <br><br>
-          <button type="button" class="btn btn_delete" [routerLink]="['/app-forms']">Cerrar sesión</button>
+          <button type="button" class="btn btn_delete" (click)="logOut()" [routerLink]="['/app-forms']">Cerrar sesión</button>
           <br><br>
           <button type="button" (click)="delete()" class="btn btn_delete">Eliminar cuenta</button>
           <br><br>
