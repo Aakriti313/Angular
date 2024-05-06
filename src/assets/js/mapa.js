@@ -1,7 +1,12 @@
-//import { Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { Injector } from "@angular/core";
 import { GetService } from "../../app/services/get.service"; 
 
-export class Engine {
+import { AppInjector } from "../../app/app.module";
+// Obtiene una instancia del servicio HttpClient
+
+
+export class Engine{
   // Variables a utilizar
   canvas = null;
   ctx = null;
@@ -19,11 +24,10 @@ export class Engine {
   tutorial1_image = new Image();
   tutorial2_image = new Image();
 
-  // constructor(characters) {
-  //   this.characters = characters || new GetService();
+  constructor() {
   //   // this.items = new GetService();
   //   //window.addEventListener("load", this.init);
-  // }
+   }
 
   // Al iniciar
   init() {
@@ -204,8 +208,11 @@ export class Engine {
   }
 
   characters() {
+    const charactersService = AppInjector.get(GetService);
+    
+    // const charactersService  = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
-    let charactersService = new GetService();
+   //let charactersService = new GetService();
     engine.ctx.clearRect(0, 0, this.width, this.height); // Limpiar el canvas
     
     // Obtener los personajes desde el servicio en Angular
@@ -215,7 +222,6 @@ export class Engine {
         let character = new Player({
           imageSrc: characterData.image, // Suponiendo que 'image' es el campo que contiene la URL de la imagen del personaje
           engine: engine,
-          // Puedes pasar otros parámetros necesarios para la instancia de Player según los datos del personaje
         });
 
         // Dibujar el personaje en el lienzo
