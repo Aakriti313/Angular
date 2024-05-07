@@ -27,7 +27,7 @@ export class Engine{
   constructor() {
   //   // this.items = new GetService();
   //   //window.addEventListener("load", this.init);
-   }
+  }
 
   // Al iniciar
   init() {
@@ -217,18 +217,20 @@ export class Engine{
     
     // Obtener los personajes desde el servicio en Angular
     charactersService.getCharacters().subscribe(characters => {
+      console.log("character1");
       characters.forEach(characterData => {
         // Crear una nueva instancia de Player para cada personaje
-        let character = new Player({
-          imageSrc: characterData.image, // Suponiendo que 'image' es el campo que contiene la URL de la imagen del personaje
-          engine: engine,
-        });
 
-        // Dibujar el personaje en el lienzo
-        character.draw();
+        let characterImage = new Image();
+        characterImage.src = characterData.image;
+
+        characterImage.onload = () => {
+          // Dibujar la imagen del personaje en el lienzo cuando la imagen haya cargado
+          ctx.drawImage(characterImage, 0, 0);
+        };
       });
     });
-    this.canvas.addEventListener("click", this.drawMap, { once: true }); // Al hacer clic, iniciar el mapa
+    this.canvas.addEventListener("click", this.drawMap, { once: true });
   }
 
   // Mapa juego

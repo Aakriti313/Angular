@@ -10,7 +10,7 @@
                 Desde Studio Vila esperamos que encuentres tu juego y pases un buen rato.
             </p>
             <div class="alert alert-danger text-center" role="alert" *ngIf="!isLogued">
-                <span>¡Inicia sesión para poder jugar!</span>
+                <button style="border: none; background-color: rgba(255, 255, 255, 0);" [routerLink]="['/app-forms']"><span>¡Inicia sesión para poder jugar!</span></button>
             </div>
         </div>
        <div class="row justify-content-center" *ngIf="isLogued">
