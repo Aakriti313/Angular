@@ -15,12 +15,15 @@ import { IsLogued } from '../services/logued.service';
 export class ProfileComponent {
   userData: any;
   isEditable: boolean = false;
+  selectedImage: string | null = '';
+  //Datos user
+  datos = JSON.parse(localStorage.getItem("currentUser")||"{}");
 
   constructor(
     private imageService: ImageService,
     private fb: FormBuilder, 
-    private _GetService: GetService, 
-    private postService: PostService, 
+    private get: GetService, 
+    private post: PostService, 
     private el:ElementRef,
     private log : IsLogued) {
     this.userData = [];
@@ -36,9 +39,23 @@ export class ProfileComponent {
     password_user: [{value: '', disabled: !this.isEditable}, Validators.required],
   });
 
+  ngOnInit(): void {
+    this.get.getUsersInfo().subscribe((data: any) => {
+      this.userData = data;
+      this.UserForm.patchValue(data);
+    });
+    
+    //Scroll
+    this.scrollToView();
 
-  //Datos user
-    datos= JSON.parse(localStorage.getItem("currentUser")||"{}");
+    //Mostrar imagen seleccionada
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+    this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname);
+  }
+  
+  scrollToView(){
+    this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest"});
+  }
 
   edit() {
     this.isEditable = true;
@@ -47,7 +64,7 @@ export class ProfileComponent {
 
   save() {
     const updatedUserData = this.UserForm.value;
-    this.postService.updateUser(updatedUserData).subscribe(
+    this.post.updateUser(updatedUserData).subscribe(
         (result) => {
             console.log('Datos actualizados correctamente:', result);
             // Actualizamos los datos locales del usuario
@@ -70,24 +87,7 @@ export class ProfileComponent {
     let currentUser:User = JSON.parse(localStorage.getItem("currentUser")||JSON.stringify(new User()));
     console.log(currentUser)
 
-    this.postService.deleteUser(currentUser.nickname_user||"").subscribe((result) => {console.log(result)});
+    this.post.deleteUser(currentUser.nickname_user||"").subscribe((result) => {console.log(result)});
   }
   
-  ngOnInit(): void {
-    this._GetService.getUsersInfo().subscribe((data: any) => {
-      this.userData = data;
-      this.UserForm.patchValue(data);
-    });
-    //Scroll
-    this.scrollToView();
-    //Mostrar imagen seleccionada
-    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname_user);
-    }
-  
-  scrollToView(){
-    this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest"});
-  }
-
-  selectedImage: string | null = null;
 }

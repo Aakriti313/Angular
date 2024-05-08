@@ -18,7 +18,7 @@ export class FormsComponent {
   
   isLogInFormVisible = true;
   isSignUpFormVisible = false;
-  
+  selectedImage: string | null = '';
   isLogued :any;
   
   //Mostrar SignUpForm
@@ -40,6 +40,11 @@ export class FormsComponent {
     nickname_user: ['', Validators.required],
     password_user: ['', Validators.required],
   });
+
+  ngOnInit(): void {
+    this.scrollToView();
+
+  }
 
   signUpForm = this.fb.group({
       image_user: ['', Validators.required],
@@ -74,18 +79,23 @@ export class FormsComponent {
           this.isSignUpFormVisible = false;
           localStorage.setItem('currentUser', JSON.stringify(result["user"]));
           localStorage.setItem('nickname_user', result["user"]["nickname_user"]);
-          this.router.navigate(['/app-games']);
-
+          // Recuperar el usuario actual
+          const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
           // Recuperamos la imagen seleccionada del localStorage y la establecemos en el servicio ImageService
-          const selectedImage = localStorage.getItem('selectedImage');
+          const selectedImageKey = 'selectedImage_' + currentUser.nickname;
+          const selectedImage = localStorage.getItem(selectedImageKey);
+
           if (selectedImage) {
             this.imageService.setSelectedImage(selectedImage);
           }
+
+          this.router.navigate(['/app-games']);          
         } else if (result = "Usuario no encontrado") {
           alert(result);
         } else if (result = "Credenciales inválidas") {
           alert(result);
         }
+
       });
     }
   }
@@ -103,9 +113,20 @@ export class FormsComponent {
           parseInt(this.signUpForm.value.phone_user as string, 10) || 0,
           this.signUpForm.value.password_user as string,
         );
-        
-        this.postService.postUserSignUp(newUser).subscribe((result) => {console.log(result)});
-        
+         // Guardamos la URL de la imagen seleccionada en el formulario de registro
+         this.signUpForm.patchValue({
+          image_user: this.selectedImage || '' // Si selectedImage es null o undefined, asignamos una cadena vacía
+        });
+
+        this.postService.postUserSignUp(newUser).subscribe(
+          (result) => {
+            console.log('result', result)
+            if (this.signUpForm.value.image_user) {
+              localStorage.setItem('selectedImage', this.signUpForm.value.image_user);
+            }
+          }
+        );
+
         console.log(this.signUpForm.value);
         this.isLogInFormVisible = true;
         this.isSignUpFormVisible = false;
@@ -118,9 +139,6 @@ export class FormsComponent {
   }
 
   //Scroll
-  ngOnInit(): void {
-    this.scrollToView();
-  }
   scrollToView(){
     this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest"});
   }
@@ -137,16 +155,18 @@ export class FormsComponent {
     '../../assets/img/PerfilAvatar/GirlBrownPale.png',
   ]
 
-  selectedImage: string | null = null;
+
 
   selectImage(image: string) {
     this.selectedImage = image;
+    console.log('Imagen seleccionada:', this.selectedImage);
     this.signUpForm.patchValue({
       image_user: image
     });
+
     this.imageService.setSelectedImage(image);
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    localStorage.setItem('selectedImage_' + currentUser.nickname_user, image); // Aquí se corrige la clave
+    localStorage.setItem('selectedImage_' + currentUser.nickname, image); // Aquí se corrige la clave
   }
   
 

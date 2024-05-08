@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GetService } from '../services/get.service';
 import { User } from '../clases/users';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-admin-page',
@@ -12,7 +13,9 @@ export class AdminPageComponent implements OnInit{
 
   filteredUsers: any[] = [];
 
-  constructor( private get : GetService){}
+  constructor( 
+    private get : GetService,
+    private post : PostService){}
   
   ngOnInit(): void {
     this.getList();
@@ -32,5 +35,17 @@ export class AdminPageComponent implements OnInit{
     );
   }
   
+  delete(nickname: string) {
+    this.post.deleteUser(nickname).subscribe(
+      (result) => {
+        console.log(result);
+        // Aquí puedes actualizar la lista de usuarios después de eliminar uno si lo deseas
+        // Por ejemplo, podrías volver a cargar la lista de usuarios con this.getList();
+      },
+      (error) => {
+        console.error("Error deleting user:", error);
+      }
+    );
+  }
 
 }
