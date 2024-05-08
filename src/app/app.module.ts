@@ -15,6 +15,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { Engine } from '../assets/js/mapa';
 import { GamesComponent } from './games/games.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
+import { Injector } from '@angular/core';
+
+export let AppInjector: Injector;
 
 @NgModule({
   declarations: [
@@ -37,4 +40,8 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
   providers: [Engine],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private injector: Injector) {
+    AppInjector = this.injector;
+  }
+}
