@@ -1,3 +1,4 @@
+
 <div class="componentsBackgrounds">
   <div class="row d-flex justify-content-between">
       <div class="col-md-4 text-center">
@@ -12,8 +13,7 @@
           <br><br>
       </div>
       <div id="info" class="col-md-6">
-        <!-- <img class="card-img-top" src="../../assets/img/lauraAvatar.png" style="width: 40%;" alt="profile_image"> -->
-        <img [src]="selectedImage" alt="Profile Image" />
+        <img class="card-img-top" *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" style="width: 40%;" alt="profile_image"/>
         <br><br>
           <form class="row" [formGroup]="UserForm" id="user">
             <div class="form-group col-md-12 mb-3">

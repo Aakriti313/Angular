@@ -10,10 +10,10 @@ export class GetService {
   constructor(private http:HttpClient) {}
 
   //devolver info del usuario
-  getUsersInfo(): Observable<any> {
-    const url = "/server/user/login";
-    return this.http.get(url);
-  }
+  // getUsersInfo(): Observable<any> {
+  //   const url = "/server/user/login";
+  //   return this.http.get(url);
+  // }
 
   //devolver info de los personajes
   getCharacters(): Observable<any> {

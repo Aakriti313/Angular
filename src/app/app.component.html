@@ -36,8 +36,7 @@
             <li *ngIf="isLogued()" class="nav-item">
                 <a routerLink="/app-profile" routerLinkActive="active" class="nav-link">
                     <span class="navbar-text">
-                        <!-- <img src="../assets/img/lauraAvatar.png" alt="" style="width: 50px;">-->
-                        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" style="width: 50px;"/> Profile 
+                        <img *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" style="width: 50px;"/> {{ username }} 
                     </span>
                 </a>
             </li>
