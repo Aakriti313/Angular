@@ -1,9 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
-import { GetService } from '../services/get.service';
 import { PostService } from '../services/post.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { User } from '../clases/users';
-import { ImageService } from '../services/image.service';
 import { IsLogued } from '../services/logued.service';
 
 
@@ -20,9 +18,7 @@ export class ProfileComponent {
   datos = JSON.parse(localStorage.getItem("currentUser")||"{}");
 
   constructor(
-    private imageService: ImageService,
     private fb: FormBuilder, 
-    private get: GetService, 
     private post: PostService, 
     private el:ElementRef,
     private log : IsLogued) {
@@ -40,18 +36,13 @@ export class ProfileComponent {
   });
 
   ngOnInit(): void {
-    this.get.getUsersInfo().subscribe((data: any) => {
-      this.userData = data;
-      this.UserForm.patchValue(data);
-    });
-    
-    //Scroll
-    this.scrollToView();
-
-    //Mostrar imagen seleccionada
     const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname);
+    this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname_user);
+    console.log('Perfil',currentUser);
+
+    this.scrollToView();
   }
+ 
   
   scrollToView(){
     this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest"});

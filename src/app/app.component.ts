@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IsLogued } from './services/logued.service';
 import { Engine } from '../assets/js/mapa';
-import { ImageService } from './services/image.service';
 
 @Component({
   selector: 'app-root',
@@ -13,21 +12,28 @@ export class AppComponent implements OnInit {
   copyright = '@copyright Studio VILA';
   title = '';
   userType: string = '';
-  selectedImage: string | null = null;
+  selectedImage: string | null = '';
+  username: string | null = '';
 
   constructor(private formsComponent: IsLogued,
-    private en:Engine,
-    private imageService: ImageService
-  ) {}
+    private en:Engine
+  ) {
+    
+  }
   
   ngOnInit(): void {
-    //this.en.init();
-    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname_user);
+    // this.en.init();
   }
 
   // Método para verificar si el usuario está logueado
   isLogued(): boolean {
+      // Recupera los datos del usuario del localStorage
+      const currentUserString = localStorage.getItem("currentUser");
+      if (currentUserString) {
+          const currentUser = JSON.parse(currentUserString);
+          this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname_user);
+          this.username = currentUser.nickname_user; // Asigna el nombre de usuario
+      }
     return this.formsComponent.getIsLogued();
   }
 
