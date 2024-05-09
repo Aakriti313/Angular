@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { Injector } from "@angular/core";
+  // import { Injectable } from "@angular/core";
+  // import { Injector } from "@angular/core";
 import { GetService } from "../../app/services/get.service"; 
 
 import { AppInjector } from "../../app/app.module";
@@ -37,10 +37,10 @@ export class Engine{
     this.ctx = this.canvas.getContext("2d");
 
     this.canvas.style.cursor = "pointer";
-    this.logo.src = "assets/img/logo_pantalla_completa_dark.png";
+    this.logo.src = "/assets/img/logo_pantalla_completa_dark.png";
     this.logo.onload = () => {
       console.log("logo onload");
-      this.ctx.drawImage(logo, 0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.drawImage(this.logo, 0, 0, this.canvas.width, this.canvas.height);
       this.canvas.removeEventListener("click", this.init);
       this.canvas.addEventListener("click", this.startGame, { once: true });
     };
@@ -209,29 +209,115 @@ export class Engine{
 
   characters() {
     const charactersService = AppInjector.get(GetService);
-    
-    // const charactersService  = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
-   //let charactersService = new GetService();
-    engine.ctx.clearRect(0, 0, this.width, this.height); // Limpiar el canvas
-    
+    engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
+
+    //change backgroundcolor
+    engine.ctx.fillStyle = "#f8f3ea";
+    engine.ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    //title
+    engine.ctx.font = '20px "Press Start 2P"';
+    engine.ctx.fillStyle = "#0b1853";
+    engine.ctx.textAlign = "center";
+    engine.ctx.fillText("CHARACTERS", engine.canvas.width / 2, 80);
+
+
     // Obtener los personajes desde el servicio en Angular
     charactersService.getCharacters().subscribe(characters => {
-      console.log("character1");
-      characters.forEach(characterData => {
-        // Crear una nueva instancia de Player para cada personaje
+      console.log("Cargando personajes...");
+      let loadedCharacters = 0; // Contador para rastrear cuántos personajes se han cargado correctamente
 
-        let characterImage = new Image();
-        characterImage.src = characterData.image;
+        //Characters cards
+        engine.ctx.fillStyle = "red";
+        engine.ctx.fillRect(10, 100, 160, 200);
 
-        characterImage.onload = () => {
-          // Dibujar la imagen del personaje en el lienzo cuando la imagen haya cargado
-          ctx.drawImage(characterImage, 0, 0);
-        };
-      });
+        engine.ctx.fillStyle = "blue";
+        engine.ctx.fillRect(180, 100, 160, 200);
+
+        engine.ctx.fillStyle = "green";
+        engine.ctx.fillRect(350, 100, 160, 200);
+
+        engine.ctx.fillStyle = "yellow";
+        engine.ctx.fillRect(530, 100, 160, 200);
+
+        engine.ctx.fillStyle = "grey";
+        engine.ctx.fillRect(710, 100, 160, 200);
+
+        engine.ctx.fillStyle = "black";
+        engine.ctx.fillRect(40, 330, 800, 150);
+
+
+        characters.forEach(characterData => {
+            let characterImage = new Image();
+            let name = characterData.name_character;
+            console.log(name);
+
+            // Aquí comprobamos si characterData.image es una cadena de URL o un Blob.
+            if (typeof characterData.image === 'string') {
+                // Si es una cadena de URL, simplemente asignamos la URL a src.
+                characterImage.src = characterData.image;
+                
+                characterImage.onload = () => {
+                    // Incrementar el contador de personajes cargados
+                    loadedCharacters++;
+
+                    // Dibujar la imagen del personaje en el lienzo cuando la imagen haya cargado
+                    engine.ctx.drawImage(characterImage, 100, 100, 50, 50);
+
+                    // engine.ctx.font = '20px "Press Start 2P"';
+                    engine.ctx.fillStyle = "white";
+                    // engine.ctx.textAlign = "center";
+                    engine.ctx.fillText(name, 100, 100);
+                    
+                    // Verificar si todos los personajes se han cargado
+                    if (loadedCharacters === characters.length) {
+                        console.log("¡Todos los personajes han sido cargados!");
+                        // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
+                        engine.canvas.addEventListener("click", engine.drawMap, { once: true });
+                    }
+                };
+            } else {
+                // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
+                const blobUrl = URL.createObjectURL(characterData.image);
+                characterImage.src = blobUrl;
+
+                characterImage.onload = () => {
+                    // Incrementar el contador de personajes cargados
+                    loadedCharacters++;
+
+                    // Dibujar la imagen del personaje en el lienzo cuando la imagen haya cargado
+                    engine.ctx.drawImage(characterImage, 100, 100, 50, 50);
+
+                    // engine.ctx.font = '20px "Press Start 2P"';
+                    engine.ctx.fillStyle = "white";
+                    // engine.ctx.textAlign = "center";
+                    engine.ctx.fillText(name, 100, 100);
+
+                    // Verificar si todos los personajes se han cargado
+                    if (loadedCharacters === characters.length) {
+                        console.log("¡Todos los personajes han sido cargados!");
+                        // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
+                        engine.canvas.addEventListener("click", engine.drawMap, { once: true });
+                    }
+                };
+
+                characterImage.onerror = () => {
+                    console.log("Error al cargar la imagen del personaje:", characterData.image);
+                    // En caso de error al cargar la imagen, también se incrementa el contador de personajes cargados para no bloquear el código
+                    loadedCharacters++;
+
+                    // Verificar si todos los personajes se han cargado
+                    if (loadedCharacters === characters.length) {
+                        console.log("¡Todos los personajes han sido cargados!");
+                        // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
+                        engine.canvas.addEventListener("click", engine.drawMap, { once: true });
+                    }
+                };
+            }
+        });
     });
-    this.canvas.addEventListener("click", this.drawMap, { once: true });
-  }
+}
 
   // Mapa juego
   drawMap(event) {
@@ -469,6 +555,11 @@ export class Engine{
     this.ctx.fillRect(437, 256, 22, 182);
   }
 }
+
+// cards(widt, height) {
+//   this.ctx.fillStyle = "lightgrey";
+//   this.ctx.fillRect(160, 400, width, height);
+// }
 
 //Class Sprite
 class Sprite {
