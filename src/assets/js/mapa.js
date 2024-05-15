@@ -13,7 +13,7 @@ export class Engine{
       x: 0,
       y: 0,
     },
-    imageSrc: "assets/img/mapaJuegoMurderofCrime2.png",
+    imageSrc: "assets/img/mapaJuegoMurderofCrime.png",
   });
   spacePressed = false;
   tutorial1_image = new Image();
