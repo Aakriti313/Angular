@@ -242,6 +242,8 @@ export class Engine {
         { x: 720, y: 310 },
       ];
 
+      const characterInfoZone = { x: 50, y: 330, width: 800, height: 150 };
+
       //Characters cards
       // engine.ctx.fillStyle = "grey";
       // engine.ctx.fillRect(20, 100, 160, 200);
@@ -258,8 +260,16 @@ export class Engine {
       // engine.ctx.fillStyle = "grey";
       // engine.ctx.fillRect(720, 100, 160, 200);
 
-      // engine.ctx.fillStyle = "grey";
-      // engine.ctx.fillRect(50, 330, 800, 150);
+      // Dibujar la zona gris
+        engine.ctx.fillStyle = "grey";
+        engine.ctx.fillRect(characterInfoZone.x, characterInfoZone.y, characterInfoZone.width, characterInfoZone.height);
+
+        // Almacenar la información de los personajes
+        const charactersInfo = characters.map((character) => ({
+            name: character.name_character,
+            description: character.description_character,
+            skills: character.skills_character,
+        }));
 
       characters.forEach((characterData, index) => {
         let characterImage = new Image();
@@ -268,7 +278,8 @@ export class Engine {
         console.log(charactername);
 
         // Seleccionar las coordenadas de dibujo según el índice del personaje
-        const charactersImageZone = charactersZones[index % charactersZones.length];
+        const charactersImageZone =
+          charactersZones[index % charactersZones.length];
         //const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
 
         if (typeof characterData.image === "string") {
@@ -286,11 +297,12 @@ export class Engine {
           loadedCharacters++;
 
           // Dibujar la imagen del personaje en el lienzo con las coordenadas de la zona gris
-          engine.ctx.drawImage( characterImage,charactersImageZone.x, charactersImageZone.y, 160, 200 );
+          engine.ctx.drawImage( characterImage, charactersImageZone.x, charactersImageZone.y, 160, 200);
 
           engine.ctx.font = '8px "Press Start 2P"';
           engine.ctx.fillStyle = "black";
-          const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
+          const charactersNameZone =
+            charactersNameZones[index % charactersNameZones.length];
           // engine.ctx.textAlign = "center";
           // engine.ctx.fillText(charactername, charactersImageZone.x + 200, charactersImageZone.y + 210);
 
@@ -301,37 +313,55 @@ export class Engine {
           // Dibujar el nombre del personaje dentro de la zona de nombre
           engine.ctx.fillText(charactername, nameX, nameY);
 
+          engine.canvas.addEventListener("click", function (event) {
+            const clickX = event.offsetX;
+            const clickY = event.offsetY;
+            if (
+              clickX >= charactersImageZone.x &&
+              clickX <= charactersImageZone.x + 160 &&
+              clickY >= charactersImageZone.y &&
+              clickY <= charactersImageZone.y + 200
+            ) {
+              // // Este personaje ha sido seleccionado
+              // selectedCharacterIndex = index;
+              // // engine.ctx.shadowColor = "white"; // Sombra exterior
+              // // engine.ctx.shadowBlur = 20;
+              // engine.ctx.strokeStyle = "white";
+              // engine.ctx.lineWidth = 2;
+              // engine.ctx.strokeRect( charactersImageZone.x, charactersImageZone.y, 160, 200);
 
-          engine.canvas.addEventListener("click", function(event) {
-                    const clickX = event.offsetX;
-                    const clickY = event.offsetY;
-                    if (
-                        clickX >= charactersImageZone.x &&
-                        clickX <= charactersImageZone.x + 160 &&
-                        clickY >= charactersImageZone.y &&
-                        clickY <= charactersImageZone.y + 200
-                    ) {
-                        // Este personaje ha sido seleccionado
-                        selectedCharacterIndex = index;
-                        // engine.ctx.shadowColor = "white"; // Sombra exterior
-                        // engine.ctx.shadowBlur = 20;
-                        engine.ctx.strokeStyle = "white";
-                        engine.ctx.lineWidth = 2;
-                        engine.ctx.strokeRect(charactersImageZone.x, charactersImageZone.y, 160, 200);
 
-                        // Verificar si todos los personajes se han cargado
-          if (loadedCharacters === characters.length) {
-            console.log("¡Todos los personajes han sido cargados!");
-            // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
-            engine.canvas.addEventListener("click", engine.drawMap, {
-              once: true,
-            });
-          }
-                        
-                    }
-                });
 
+              // // Verificar si todos los personajes se han cargado
+              // if (loadedCharacters === characters.length) {
+              //   console.log("¡Todos los personajes han sido cargados!");
+              //   // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
+              //   // engine.canvas.addEventListener("click", engine.drawMap, {
+              //   //   once: true,
+              //   // });
+              // }
+
+              // Este personaje ha sido seleccionado
+              selectedCharacterIndex = index;
+
+              // Limpiar la zona de información del personaje
+              engine.ctx.clearRect(characterInfoZone.x, characterInfoZone.y, characterInfoZone.width, characterInfoZone.height);
+
+              // Mostrar la información del personaje seleccionado en la zona gris
+              const selectedCharacterInfo = charactersInfo[selectedCharacterIndex];
+              engine.ctx.font = '12px "Press Start 2P"';
+              engine.ctx.fillStyle = "white";
+              engine.ctx.textAlign = "left";
+              let infoX = characterInfoZone.x + 10;
+              let infoY = characterInfoZone.y + 20;
+              engine.ctx.fillText(selectedCharacterInfo.name, infoX, infoY);
+              infoY += 20;
+              engine.ctx.fillText(selectedCharacterInfo.description, infoX, infoY);
+              infoY += 20;
+              engine.ctx.fillText(selectedCharacterInfo.skills, infoX, infoY);
           
+            }
+          });
         };
 
         characterImage.onerror = () => {
