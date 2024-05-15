@@ -1,7 +1,7 @@
-import { GetService } from "../../app/services/get.service"; 
+import { GetService } from "../../app/services/get.service";
 import { AppInjector } from "../../app/app.module";
 
-export class Engine{
+export class Engine {
   // Variables a utilizar
   canvas = null;
   ctx = null;
@@ -32,7 +32,13 @@ export class Engine{
     this.logo.src = "/assets/img/logo_pantalla_completa_dark.png";
     this.logo.onload = () => {
       console.log("logo onload");
-      this.ctx.drawImage(this.logo, 0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.drawImage(
+        this.logo,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
       this.canvas.removeEventListener("click", this.init);
       this.canvas.addEventListener("click", this.startGame, { once: true });
     };
@@ -214,9 +220,8 @@ export class Engine{
     engine.ctx.textAlign = "center";
     engine.ctx.fillText("CHARACTERS", engine.canvas.width / 2, 70);
 
-
     // Obtener los personajes desde el servicio en Angular
-    charactersService.getCharacters().subscribe(characters => {
+    charactersService.getCharacters().subscribe((characters) => {
       console.log("Cargando personajes...");
       let loadedCharacters = 0; // Contador para rastrear cuántos personajes se han cargado correctamente
 
@@ -226,7 +231,7 @@ export class Engine{
         { x: 195, y: 100 },
         { x: 370, y: 100 },
         { x: 545, y: 100 },
-        { x: 720, y: 100 }
+        { x: 720, y: 100 },
       ];
 
       const charactersNameZones = [
@@ -234,92 +239,121 @@ export class Engine{
         { x: 195, y: 310 },
         { x: 370, y: 310 },
         { x: 545, y: 310 },
-        { x: 720, y: 310 }
+        { x: 720, y: 310 },
       ];
 
+      //Characters cards
+      // engine.ctx.fillStyle = "grey";
+      // engine.ctx.fillRect(20, 100, 160, 200);
 
-        //Characters cards
-        // engine.ctx.fillStyle = "grey";
-        // engine.ctx.fillRect(20, 100, 160, 200);
+      // engine.ctx.fillStyle = "grey";
+      // engine.ctx.fillRect(20, 305, 160, 20);
 
-        // engine.ctx.fillStyle = "grey";
-        // engine.ctx.fillRect(20, 305, 160, 20);
+      // engine.ctx.fillStyle = "grey";
+      // engine.ctx.fillRect(370, 100, 160, 200);
 
-        // engine.ctx.fillStyle = "grey";
-        // engine.ctx.fillRect(370, 100, 160, 200);
+      // engine.ctx.fillStyle = "grey";
+      // engine.ctx.fillRect(545, 100, 160, 200);
 
-        // engine.ctx.fillStyle = "grey";
-        // engine.ctx.fillRect(545, 100, 160, 200);
+      // engine.ctx.fillStyle = "grey";
+      // engine.ctx.fillRect(720, 100, 160, 200);
 
-        // engine.ctx.fillStyle = "grey";
-        // engine.ctx.fillRect(720, 100, 160, 200);
+      // engine.ctx.fillStyle = "grey";
+      // engine.ctx.fillRect(50, 330, 800, 150);
 
-        // engine.ctx.fillStyle = "grey";
-        // engine.ctx.fillRect(50, 330, 800, 150);
+      characters.forEach((characterData, index) => {
+        let characterImage = new Image();
+        let charactername = characterData.name_character;
+        let selectedCharacterIndex = -1;
+        console.log(charactername);
 
-        characters.forEach((characterData, index) => {
-            let characterImage = new Image();
-            let charactername = characterData.name_character;
-            let isSelected = false;
-            console.log(charactername);
+        // Seleccionar las coordenadas de dibujo según el índice del personaje
+        const charactersImageZone = charactersZones[index % charactersZones.length];
+        //const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
 
-            // Seleccionar las coordenadas de dibujo según el índice del personaje
-            const charactersImageZone = charactersZones[index % charactersZones.length];
-            //const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
+        if (typeof characterData.image === "string") {
+          // Si es una cadena de URL, simplemente asignamos la URL a src.
+          // image.onload = () => { engine.ctx.drawImage(image, 0, 0) }
+          characterImage.src = "data:image/png;base64," + characterData.image;
+        } else {
+          // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
+          const blobUrl = URL.createObjectURL(characterData.image);
+          characterImage.src = "data:image/png;base64, " + blobUrl;
+        }
 
-            if (typeof characterData.image === 'string') {
-              // Si es una cadena de URL, simplemente asignamos la URL a src.
-              // image.onload = () => { engine.ctx.drawImage(image, 0, 0) }
-              characterImage.src = "data:image/png;base64," + characterData.image;
-            }else{
-              // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
-              const blobUrl = URL.createObjectURL(characterData.image);
-              characterImage.src = "data:image/png;base64, "+blobUrl;
+        characterImage.onload = () => {
+          // Incrementar el contador de personajes cargados
+          loadedCharacters++;
+
+          // Dibujar la imagen del personaje en el lienzo con las coordenadas de la zona gris
+          engine.ctx.drawImage( characterImage,charactersImageZone.x, charactersImageZone.y, 160, 200 );
+
+          engine.ctx.font = '8px "Press Start 2P"';
+          engine.ctx.fillStyle = "black";
+          const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
+          // engine.ctx.textAlign = "center";
+          // engine.ctx.fillText(charactername, charactersImageZone.x + 200, charactersImageZone.y + 210);
+
+          // Ajustar las coordenadas X e Y para centrar el nombre dentro de la zona
+          const nameX = charactersNameZone.x + 160 / 2;
+          const nameY = charactersNameZone.y + 10; // Ajuste para centrar verticalmente
+
+          // Dibujar el nombre del personaje dentro de la zona de nombre
+          engine.ctx.fillText(charactername, nameX, nameY);
+
+
+          engine.canvas.addEventListener("click", function(event) {
+                    const clickX = event.offsetX;
+                    const clickY = event.offsetY;
+                    if (
+                        clickX >= charactersImageZone.x &&
+                        clickX <= charactersImageZone.x + 160 &&
+                        clickY >= charactersImageZone.y &&
+                        clickY <= charactersImageZone.y + 200
+                    ) {
+                        // Este personaje ha sido seleccionado
+                        selectedCharacterIndex = index;
+                        // engine.ctx.shadowColor = "white"; // Sombra exterior
+                        // engine.ctx.shadowBlur = 20;
+                        engine.ctx.strokeStyle = "white";
+                        engine.ctx.lineWidth = 2;
+                        engine.ctx.strokeRect(charactersImageZone.x, charactersImageZone.y, 160, 200);
+
+                        // Verificar si todos los personajes se han cargado
+          if (loadedCharacters === characters.length) {
+            console.log("¡Todos los personajes han sido cargados!");
+            // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
+            engine.canvas.addEventListener("click", engine.drawMap, {
+              once: true,
+            });
           }
+                        
+                    }
+                });
 
-    characterImage.onload = () => {
-      // Incrementar el contador de personajes cargados
-      loadedCharacters++;
+          
+        };
 
-      // Dibujar la imagen del personaje en el lienzo con las coordenadas de la zona gris
-      engine.ctx.drawImage(characterImage, charactersImageZone.x, charactersImageZone.y, 160, 200);
+        characterImage.onerror = () => {
+          console.log(
+            "Error al cargar la imagen del personaje:",
+            characterData.image
+          );
+          // En caso de error al cargar la imagen, también se incrementa el contador de personajes cargados para no bloquear el código
+          loadedCharacters++;
 
-      engine.ctx.font = '8px "Press Start 2P"';
-      engine.ctx.fillStyle = "black";
-      const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
-      // engine.ctx.textAlign = "center";
-      // engine.ctx.fillText(charactername, charactersImageZone.x + 200, charactersImageZone.y + 210);
-
-      // Ajustar las coordenadas X e Y para centrar el nombre dentro de la zona
-      const nameX = charactersNameZone.x + (160 / 2);
-      const nameY = charactersNameZone.y + 10; // Ajuste para centrar verticalmente
-
-      // Dibujar el nombre del personaje dentro de la zona de nombre
-      engine.ctx.fillText(charactername, nameX, nameY);
-  
-      // Verificar si todos los personajes se han cargado
-      if (loadedCharacters === characters.length) {
-          console.log("¡Todos los personajes han sido cargados!");
-          // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
-          engine.canvas.addEventListener("click", engine.drawMap, { once: true });
-      }
-  };
-
-  characterImage.onerror = () => {
-      console.log("Error al cargar la imagen del personaje:", characterData.image);
-      // En caso de error al cargar la imagen, también se incrementa el contador de personajes cargados para no bloquear el código
-      loadedCharacters++;
-
-      // Verificar si todos los personajes se han cargado
-      if (loadedCharacters === characters.length) {
-          console.log("¡Todos los personajes han sido cargados!");
-          // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
-          engine.canvas.addEventListener("click", engine.drawMap, { once: true });
-      }
-  };
-});
-});
-}
+          // Verificar si todos los personajes se han cargado
+          if (loadedCharacters === characters.length) {
+            console.log("¡Todos los personajes han sido cargados!");
+            // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
+            engine.canvas.addEventListener("click", engine.drawMap, {
+              once: true,
+            });
+          }
+        };
+      });
+    });
+  }
 
   // Mapa juego
   drawMap(event) {
@@ -358,7 +392,7 @@ export class Engine{
       engine.colisiones();
       player.draw();
       player.update();
-    
+
       // Verificar colisiones del jugador con las paredes
       engine.collisionDetection(player);
 
@@ -371,7 +405,7 @@ export class Engine{
       checkDoorProximity(player);
       checkAllItemsCollected(player, doorPosition);
     }
-    
+
     // Agregar los eventos de teclado para el jugador
     window.addEventListener("keydown", (event) => {
       switch (event.key) {
@@ -557,13 +591,13 @@ export class Engine{
     // Verificar colisiones del jugador con las paredes
     const playerColliding = this.checkCollision(player, this.colisiones());
     if (playerColliding) {
-        // Si hay colisión, no permitir que el jugador avance
-        player.velocity.x = 0;
-        player.velocity.y = 0;
+      // Si hay colisión, no permitir que el jugador avance
+      player.velocity.x = 0;
+      player.velocity.y = 0;
     }
-}
+  }
 
-  colisiones(){
+  colisiones() {
     //Pared vertical hab1
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 10, 22, 216);
@@ -594,7 +628,6 @@ export class Engine{
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(0, 0, 900, 65);
   }
-
 }
 
 //Class Sprite
@@ -694,7 +727,6 @@ class Player extends Sprite {
       left: this.position.x - this.margin.left,
       right: this.position.x + this.width + this.margin.right,
     };
-    
   }
 
   //Evitar que salga del marco
