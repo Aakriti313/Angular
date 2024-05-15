@@ -1,10 +1,5 @@
-  // import { Injectable } from "@angular/core";
-  // import { Injector } from "@angular/core";
 import { GetService } from "../../app/services/get.service"; 
-
 import { AppInjector } from "../../app/app.module";
-// Obtiene una instancia del servicio HttpClient
-
 
 export class Engine{
   // Variables a utilizar
@@ -18,7 +13,7 @@ export class Engine{
       x: 0,
       y: 0,
     },
-    imageSrc: "assets/img/mapaJuegoMurderofCrime.png",
+    imageSrc: "assets/img/mapaJuegoMurderofCrime2.png",
   });
   spacePressed = false;
   tutorial1_image = new Image();
@@ -220,7 +215,7 @@ export class Engine{
     engine.ctx.font = '20px "Press Start 2P"';
     engine.ctx.fillStyle = "#0b1853";
     engine.ctx.textAlign = "center";
-    engine.ctx.fillText("CHARACTERS", engine.canvas.width / 2, 80);
+    engine.ctx.fillText("CHARACTERS", engine.canvas.width / 2, 70);
 
 
     // Obtener los personajes desde el servicio en Angular
@@ -229,25 +224,25 @@ export class Engine{
       let loadedCharacters = 0; // Contador para rastrear cuántos personajes se han cargado correctamente
 
         //Characters cards
-        engine.ctx.fillStyle = "red";
-        engine.ctx.fillRect(10, 100, 160, 200);
-
-        engine.ctx.fillStyle = "blue";
-        engine.ctx.fillRect(180, 100, 160, 200);
-
-        engine.ctx.fillStyle = "green";
-        engine.ctx.fillRect(350, 100, 160, 200);
-
-        engine.ctx.fillStyle = "yellow";
-        engine.ctx.fillRect(530, 100, 160, 200);
+        engine.ctx.fillStyle = "grey";
+        engine.ctx.fillRect(20, 100, 160, 200);
 
         engine.ctx.fillStyle = "grey";
-        engine.ctx.fillRect(710, 100, 160, 200);
+        engine.ctx.fillRect(195, 100, 160, 200);
 
-        engine.ctx.fillStyle = "black";
-        engine.ctx.fillRect(40, 330, 800, 150);
+        engine.ctx.fillStyle = "grey";
+        engine.ctx.fillRect(370, 100, 160, 200);
 
+        engine.ctx.fillStyle = "grey";
+        engine.ctx.fillRect(545, 100, 160, 200);
 
+        engine.ctx.fillStyle = "grey";
+        engine.ctx.fillRect(720, 100, 160, 200);
+
+        engine.ctx.fillStyle = "grey";
+        engine.ctx.fillRect(50, 330, 800, 150);
+
+        
         characters.forEach(characterData => {
             let characterImage = new Image();
             let name = characterData.name_character;
@@ -255,6 +250,14 @@ export class Engine{
 
             // Aquí comprobamos si characterData.image es una cadena de URL o un Blob.
             if (typeof characterData.image === 'string') {
+
+
+              var image = new Image();
+              image.onload = () => { engine.ctx.drawImage(image, 0, 0) }
+              image.src = "data:image/png;base64," + characterData.image;
+
+
+
                 // Si es una cadena de URL, simplemente asignamos la URL a src.
                 characterImage.src = characterData.image;
                 
@@ -263,7 +266,7 @@ export class Engine{
                     loadedCharacters++;
 
                     // Dibujar la imagen del personaje en el lienzo cuando la imagen haya cargado
-                    engine.ctx.drawImage(characterImage, 100, 100, 50, 50);
+                    engine.ctx.drawImage(characterImage, 20, 100, 160, 200);
 
                     // engine.ctx.font = '20px "Press Start 2P"';
                     engine.ctx.fillStyle = "white";
@@ -280,14 +283,14 @@ export class Engine{
             } else {
                 // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
                 const blobUrl = URL.createObjectURL(characterData.image);
-                characterImage.src = blobUrl;
+                characterImage.src = "data:image/png;base64, "+blobUrl;
 
                 characterImage.onload = () => {
                     // Incrementar el contador de personajes cargados
                     loadedCharacters++;
 
                     // Dibujar la imagen del personaje en el lienzo cuando la imagen haya cargado
-                    engine.ctx.drawImage(characterImage, 100, 100, 50, 50);
+                    engine.ctx.drawImage(characterImage, 20, 100, 160, 200);
 
                     // engine.ctx.font = '20px "Press Start 2P"';
                     engine.ctx.fillStyle = "white";
@@ -347,14 +350,21 @@ export class Engine{
     // Función de animación del jugador
     function animate() {
       let engine = document.getElementById("canvas").engine;
-      //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       engine.background1.draw();
       engine.door(doorPosition.x, doorPosition.y);
-      //engine.paredvertical1();
-      //engine.paredvertical2();
+      engine.colisiones();
       player.draw();
       player.update();
-      window.requestAnimationFrame(animate);
+    
+      // Verificar colisiones del jugador con las paredes
+      const playerColliding = engine.checkCollision(player, engine.colisiones());
+      if (playerColliding) {
+        // Si hay colisión, no permitir que el jugador avance
+        player.velocity.x = 0;
+        player.velocity.y = 0;
+      }
+    
+      window.requestAnimationFrame(engine.animate.bind(engine));
       if (item) {
         item.draw();
         findItem();
@@ -363,7 +373,7 @@ export class Engine{
       checkDoorProximity(player);
       checkAllItemsCollected(player, doorPosition);
     }
-
+    
     // Agregar los eventos de teclado para el jugador
     window.addEventListener("keydown", (event) => {
       switch (event.key) {
@@ -545,15 +555,48 @@ export class Engine{
     this.ctx.fillRect(x, y, 15, 88, 20);
   }
 
-  paredvertical1() {
-    this.ctx.fillStyle = "red";
+  colisiones(){
+    //Pared vertical hab1
+    this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 10, 22, 216);
+
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(437, 160, 500, 65);
+
+    //Pared vertical hab2
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(437, 256, 22, 182);
+    //Pared horizontal hab2
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(437, 256, 500, 65);
+
+    //Pared izquierda
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(0, 0, 12, 440);
+    //Pared derecha
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(888, 0, 14, 438);
+    //Pared invisible
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(0, 290, 320, 14);
+    //Pared abajo
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(0, 437, 900, 10);
+    //Pared arriba
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(0, 0, 900, 65);
   }
 
-  paredvertical2() {
-    this.ctx.fillStyle = "blue";
-    this.ctx.fillRect(437, 256, 22, 182);
+  playerCollisions(player, colision) {
+    // Verificar colisión en los ejes x e y
+    const collisionX = player.sides.right > colision.left && player.sides.left < colision.right;
+    const collisionY = player.sides.bottom > colision.top && player.sides.top < colision.bottom;
+  
+    // Si hay colisión en ambos ejes, hay colisión total
+    return collisionX && collisionY;
   }
+  
+
 }
 
 // cards(widt, height) {
@@ -658,6 +701,7 @@ class Player extends Sprite {
       left: this.position.x - this.margin.left,
       right: this.position.x + this.width + this.margin.right,
     };
+    
   }
 
   //Evitar que salga del marco
