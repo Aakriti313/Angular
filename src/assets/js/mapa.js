@@ -227,49 +227,42 @@ export class Engine {
 
       // Definir las coordenadas de dibujo para cada zona gris
       const charactersZones = [
-        { x: 20, y: 100 },
-        { x: 195, y: 100 },
-        { x: 370, y: 100 },
-        { x: 545, y: 100 },
-        { x: 720, y: 100 },
+        { x: 20, y: 90 },
+        { x: 195, y: 90 },
+        { x: 370, y:  90 },
+        { x: 545, y: 90 },
+        { x: 720, y: 90 },
       ];
 
       const charactersNameZones = [
-        { x: 20, y: 310 },
-        { x: 195, y: 310 },
-        { x: 370, y: 310 },
-        { x: 545, y: 310 },
-        { x: 720, y: 310 },
+        { x: 20, y: 280 },
+        { x: 195, y: 280 },
+        { x: 370, y: 280 },
+        { x: 545, y: 280 },
+        { x: 720, y: 280 },
       ];
 
-      const characterInfoZone = { x: 50, y: 330, width: 800, height: 150 };
+      const characterInfoZone = { x: 50, y: 300, width: 800, height: 140 };
 
-      //Characters cards
-      // engine.ctx.fillStyle = "grey";
-      // engine.ctx.fillRect(20, 100, 160, 200);
-
-      // engine.ctx.fillStyle = "grey";
-      // engine.ctx.fillRect(20, 305, 160, 20);
-
-      // engine.ctx.fillStyle = "grey";
-      // engine.ctx.fillRect(370, 100, 160, 200);
-
-      // engine.ctx.fillStyle = "grey";
-      // engine.ctx.fillRect(545, 100, 160, 200);
-
-      // engine.ctx.fillStyle = "grey";
-      // engine.ctx.fillRect(720, 100, 160, 200);
+      const button = { x: 780, y: 450, width: 100, height: 30 };
+      engine.ctx.fillStyle = "grey";
+      engine.ctx.fillRect(780, 450, 100, 30);
 
       // Dibujar la zona gris
-        engine.ctx.fillStyle = "grey";
-        engine.ctx.fillRect(characterInfoZone.x, characterInfoZone.y, characterInfoZone.width, characterInfoZone.height);
+      engine.ctx.fillStyle = "#f8f3ea";
+      engine.ctx.fillRect(
+        characterInfoZone.x,
+        characterInfoZone.y,
+        characterInfoZone.width,
+        characterInfoZone.height
+      );
 
-        // Almacenar la información de los personajes
-        const charactersInfo = characters.map((character) => ({
-            name: character.name_character,
-            description: character.description_character,
-            skills: character.skills_character,
-        }));
+      // Almacenar la información de los personajes
+      const charactersInfo = characters.map((character) => ({
+        name: character.name_character,
+        description: character.description_character,
+        skills: character.skills_character,
+      }));
 
       characters.forEach((characterData, index) => {
         let characterImage = new Image();
@@ -297,7 +290,13 @@ export class Engine {
           loadedCharacters++;
 
           // Dibujar la imagen del personaje en el lienzo con las coordenadas de la zona gris
-          engine.ctx.drawImage( characterImage, charactersImageZone.x, charactersImageZone.y, 160, 200);
+          engine.ctx.drawImage(
+            characterImage,
+            charactersImageZone.x,
+            charactersImageZone.y,
+            160,
+            200
+          );
 
           engine.ctx.font = '8px "Press Start 2P"';
           engine.ctx.fillStyle = "black";
@@ -322,44 +321,58 @@ export class Engine {
               clickY >= charactersImageZone.y &&
               clickY <= charactersImageZone.y + 200
             ) {
-              // // Este personaje ha sido seleccionado
-              // selectedCharacterIndex = index;
-              // // engine.ctx.shadowColor = "white"; // Sombra exterior
-              // // engine.ctx.shadowBlur = 20;
-              // engine.ctx.strokeStyle = "white";
-              // engine.ctx.lineWidth = 2;
-              // engine.ctx.strokeRect( charactersImageZone.x, charactersImageZone.y, 160, 200);
-
-
-
-              // // Verificar si todos los personajes se han cargado
-              // if (loadedCharacters === characters.length) {
-              //   console.log("¡Todos los personajes han sido cargados!");
-              //   // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
-              //   // engine.canvas.addEventListener("click", engine.drawMap, {
-              //   //   once: true,
-              //   // });
-              // }
-
-              // Este personaje ha sido seleccionado
               selectedCharacterIndex = index;
 
               // Limpiar la zona de información del personaje
-              engine.ctx.clearRect(characterInfoZone.x, characterInfoZone.y, characterInfoZone.width, characterInfoZone.height);
+              engine.ctx.clearRect(
+                characterInfoZone.x,
+                characterInfoZone.y,
+                characterInfoZone.width,
+                characterInfoZone.height
+              );
 
               // Mostrar la información del personaje seleccionado en la zona gris
-              const selectedCharacterInfo = charactersInfo[selectedCharacterIndex];
-              engine.ctx.font = '12px "Press Start 2P"';
-              engine.ctx.fillStyle = "white";
+              const selectedCharacterInfo =
+              charactersInfo[selectedCharacterIndex];
+              engine.ctx.font = '9px "Press Start 2P"';
+              engine.ctx.fillStyle = "red";
               engine.ctx.textAlign = "left";
               let infoX = characterInfoZone.x + 10;
               let infoY = characterInfoZone.y + 20;
-              engine.ctx.fillText(selectedCharacterInfo.name, infoX, infoY);
-              infoY += 20;
-              engine.ctx.fillText(selectedCharacterInfo.description, infoX, infoY);
-              infoY += 20;
-              engine.ctx.fillText(selectedCharacterInfo.skills, infoX, infoY);
-          
+              const maxWidth = characterInfoZone.width - 20;
+              const lines = [];
+
+              // Función para dividir el texto en líneas
+              function splitTextIntoLines(text, maxWidth) {
+                const words = text.split(" ");
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                  const word = words[i];
+                  const width = engine.ctx.measureText(
+                    currentLine + " " + word
+                  ).width;
+
+                  if (width < maxWidth) {
+                    currentLine += " " + word;
+                  } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                  }
+                }
+                lines.push(currentLine);
+              }
+
+              // Dividir la información del personaje en líneas
+              // splitTextIntoLines(selectedCharacterInfo.name, maxWidth);
+              splitTextIntoLines(selectedCharacterInfo.description, maxWidth);
+              splitTextIntoLines(selectedCharacterInfo.skills, maxWidth);
+
+              // Dibujar cada línea de texto
+              lines.forEach((line) => {
+                engine.ctx.fillText(line, infoX, infoY);
+                infoY += 20; // Ajuste vertical entre líneas
+              });
             }
           });
         };
@@ -381,6 +394,23 @@ export class Engine {
             });
           }
         };
+      });
+
+      // Agregar evento de clic para avanzar a la otra vista al hacer clic en el botón
+      engine.canvas.addEventListener("click", function (event) {
+        const clickX = event.offsetX;
+        const clickY = event.offsetY;
+        if (
+          clickX >= button.x &&
+          clickX <= button.x + button.width &&
+          clickY >= button.y &&
+          clickY <= button.y + button.height
+        ) {
+          console.log("Clic en el botón");
+          engine.canvas.addEventListener("click", engine.drawMap, {
+              once: true,
+            });
+        }
       });
     });
   }
