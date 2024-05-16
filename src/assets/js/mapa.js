@@ -40,8 +40,16 @@ export class Engine {
         this.canvas.height
       );
       this.canvas.removeEventListener("click", this.init);
-      this.canvas.addEventListener("click", this.startGame, { once: true });
+      this.canvas.addEventListener("click", this.initSound,this.startGame, { once: true });
     };
+  }
+
+  initSound(){
+      // Cargar y reproducir la música de fondo
+      const backgroundMusic = new Audio('assets/sounds/audio.mp3');
+      backgroundMusic.loop = true; // Para que se repita continuamente
+      backgroundMusic.volume = 0.5; // Ajusta el volumen según lo necesites
+      backgroundMusic.play();
   }
 
   // Comprobar que se ha dado dentro del boton play
@@ -56,6 +64,7 @@ export class Engine {
     if (x >= 0 && x <= 900 && y >= 0 && y <= 500) {
       this.engine.intro(this.engine);
     }
+
   }
 
   // Intro
