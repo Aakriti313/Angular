@@ -17,7 +17,7 @@ export class GetService {
 
   //devolver info de los personajes
   getCharacters(): Observable<any> {
-    let url = "/server/characters/";
+    let url = "/server/characters";
     return this.http.get(url);
   }
 

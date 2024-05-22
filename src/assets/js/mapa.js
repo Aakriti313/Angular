@@ -18,7 +18,8 @@ export class Engine {
   spacePressed = false;
   tutorial1_image = new Image();
   tutorial2_image = new Image();
-
+  selectedCharacter = null;
+  items = [];
   // constructor() {}
 
   // Al iniciar
@@ -99,29 +100,29 @@ export class Engine {
     engine.ctx.fillStyle = "#C4C4C4";
     const playSize = 80;
     engine.playIcon(455 - playSize / 2, 250 - playSize / 2, playSize);
-    //cuadradosetting
-    engine.ctx.fillStyle = "#F8F3EA";
-    engine.roundedRect(150, 180, 150, 150, 20);
-    //sett
-    engine.ctx.fillStyle = "#C4C4C4";
-    const settSize = 80;
-    engine.playIcon(455 - settSize / 2, 250 - settSize / 2, settSize);
-    //cuadradoranking
-    engine.ctx.fillStyle = "#F8F3EA";
-    engine.roundedRect(600, 180, 150, 150, 20);
-    //ranking
-    engine.ctx.fillStyle = "#C4C4C4";
-    const rankingSize = 80;
-    engine.playIcon(455 - rankingSize / 2, 250 - rankingSize / 2, rankingSize);
+    // //cuadradosetting
+    // engine.ctx.fillStyle = "#F8F3EA";
+    // engine.roundedRect(150, 180, 150, 150, 20);
+    // //sett
+    // engine.ctx.fillStyle = "#C4C4C4";
+    // const settSize = 80;
+    // engine.playIcon(455 - settSize / 2, 250 - settSize / 2, settSize);
+    // //cuadradoranking
+    // engine.ctx.fillStyle = "#F8F3EA";
+    // engine.roundedRect(600, 180, 150, 150, 20);
+    // //ranking
+    // engine.ctx.fillStyle = "#C4C4C4";
+    // const rankingSize = 80;
+    // engine.playIcon(455 - rankingSize / 2, 250 - rankingSize / 2, rankingSize);
 
     engine.canvas.addEventListener("mousemove", (event) => {
       var x = event.clientX - engine.canvas.offsetLeft;
       var y = event.clientY - engine.canvas.offsetTop;
 
       if (
-        (x >= 350 && x <= 550 && y >= 200 && y <= 400) ||
-        (x >= 150 && x <= 300 && y >= 180 && y <= 330) ||
-        (x >= 600 && x <= 750 && y >= 180 && y <= 330)
+        (x >= 350 && x <= 550 && y >= 200 && y <= 400)
+        // (x >= 150 && x <= 300 && y >= 180 && y <= 330) ||
+        // (x >= 600 && x <= 750 && y >= 180 && y <= 330)
       ) {
         engine.canvas.style.cursor = "pointer";
       } else {
@@ -229,7 +230,7 @@ export class Engine {
       const charactersZones = [
         { x: 20, y: 90 },
         { x: 195, y: 90 },
-        { x: 370, y:  90 },
+        { x: 370, y: 90 },
         { x: 545, y: 90 },
         { x: 720, y: 90 },
       ];
@@ -276,8 +277,6 @@ export class Engine {
         //const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
 
         if (typeof characterData.image === "string") {
-          // Si es una cadena de URL, simplemente asignamos la URL a src.
-          // image.onload = () => { engine.ctx.drawImage(image, 0, 0) }
           characterImage.src = "data:image/png;base64," + characterData.image;
         } else {
           // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
@@ -321,6 +320,7 @@ export class Engine {
               clickY >= charactersImageZone.y &&
               clickY <= charactersImageZone.y + 200
             ) {
+              engine.selectedCharacter = characterData;
               selectedCharacterIndex = index;
 
               // Limpiar la zona de información del personaje
@@ -333,7 +333,7 @@ export class Engine {
 
               // Mostrar la información del personaje seleccionado en la zona gris
               const selectedCharacterInfo =
-              charactersInfo[selectedCharacterIndex];
+                charactersInfo[selectedCharacterIndex];
               engine.ctx.font = '9px "Press Start 2P"';
               engine.ctx.fillStyle = "red";
               engine.ctx.textAlign = "left";
@@ -388,10 +388,6 @@ export class Engine {
           // Verificar si todos los personajes se han cargado
           if (loadedCharacters === characters.length) {
             console.log("¡Todos los personajes han sido cargados!");
-            // Agregar evento click para pasar al mapa de juego después de que se hayan cargado todos los personajes
-            engine.canvas.addEventListener("click", engine.drawMap, {
-              once: true,
-            });
           }
         };
       });
@@ -406,11 +402,61 @@ export class Engine {
           clickY >= button.y &&
           clickY <= button.y + button.height
         ) {
-          console.log("Clic en el botón");
           engine.canvas.addEventListener("click", engine.drawMap, {
-              once: true,
-            });
+            once: true,
+          });
         }
+      });
+    });
+  }
+
+  loadItems() {
+    const itemsService = AppInjector.get(GetService);
+    let engine = document.getElementById("canvas").engine;
+    engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
+
+    // Obtener los ítems desde el servicio en Angular
+    itemsService.getItems().subscribe((items) => {
+      console.log("Cargando ítems...");
+      // let loadedItems = 0; // Contador para rastrear cuántos ítems se han cargado correctamente
+
+      // Definir las coordenadas de dibujo para cada zona
+      const itemsZones = [
+        { x: 12, y: 65, width: 424, height: 224 }, // medicina
+        { x: 12, y: 305, width: 424, height: 131 }, // entrada
+        { x: 460, y: 65, width: 427, height: 95 }, // director
+        { x: 460, y: 320, width: 427, height: 118 }, // laboratorio
+      ];
+
+      // Almacenar la información de los ítems
+      // const itemsInfo = items.map((item) => ({
+      //   name: item.name_item
+      // }));
+
+      items.forEach((itemData, index) => {
+        let item = new Item({
+          itemName: itemData.name_item,
+          img: new Image(),
+        });
+
+        item.img.src = "data:image/png;base64," + itemData.image;
+
+        item.img.onload = () => {
+          // Dibujar la imagen del ítem en el lienzo con las coordenadas de la zona
+          engine.ctx.drawImage(
+            item.img.src,
+            item.x,
+            item.y,
+            item.width,
+            item.height
+          );
+        };
+
+        itemImage.onerror = () => {
+          console.log("Error al cargar la imagen del ítem:", itemData.image);
+          // En caso de error al cargar la imagen, también se incrementa el contador de ítems cargados para no bloquear el código
+          // loadedItems++;
+        };
       });
     });
   }
@@ -424,23 +470,22 @@ export class Engine {
   startPlayerAnimation() {
     let engine = document.getElementById("canvas").engine;
     console.log("SI");
+
+    let selectedCharacterImageSrc = engine.selectedCharacter
+      ? engine.selectedCharacter.image
+      : "assets/img/fantasma.png";
+
+    let itemsImageSrc = engine.selectedCharacter
+      ? engine.selectedCharacter.image
+      : "assets/img/fantasma.png";
+    // let itemsName = engine.selectedCharacter ? engine.selectedCharacter.image : "assets/img/fantasma.png";
+
+    console.log(selectedCharacterImageSrc);
     // Crear una instancia del jugador
     let player = new Player({
-      imageSrc: "assets/img/fantasma.png",
+      imageSrc: "data:image/png;base64," + selectedCharacterImageSrc,
       engine: engine,
     });
-
-    //Crear un objeto aleatorio
-    // items(){
-    //   const itemsService = AppInjector.get(GetService);
-    // }
-
-    let item = new Item({
-      itemName: "carta",
-      imageSrc: "assets/img/items/item1_carta.png",
-    });
-
-    // this.items.getItems().draw;
 
     let doorPosition = { x: 885, y: 170 };
 
@@ -450,20 +495,22 @@ export class Engine {
       engine.background1.draw();
       engine.door(doorPosition.x, doorPosition.y);
       engine.colisiones();
-      player.draw();
+
       player.update();
-
+      player.draw();
+      // engine.loadItems();
+      // item.draw();
       // Verificar colisiones del jugador con las paredes
-      engine.collisionDetection(player);
+      // engine.collisionDetection(player);
 
-      window.requestAnimationFrame(engine.animate.bind(engine));
-      if (item) {
-        item.draw();
-        findItem();
-        checkAllItemsCollected();
-      }
-      checkDoorProximity(player);
-      checkAllItemsCollected(player, doorPosition);
+      // window.requestAnimationFrame(engine.animate.bind(engine));
+      // if (item) {
+      //   item.draw();
+      //   findItem();
+      //   checkAllItemsCollected();
+      // }
+      // checkDoorProximity(player);
+      // checkAllItemsCollected(player, doorPosition);
     }
 
     // Agregar los eventos de teclado para el jugador
@@ -482,6 +529,7 @@ export class Engine {
           player.velocity.y = 3;
           break;
       }
+      animate();
     });
 
     window.addEventListener("keyup", (event) => {
@@ -500,9 +548,6 @@ export class Engine {
           break;
       }
     });
-
-    // Iniciar la animación del jugador
-    animate();
 
     //Función recoger item
     function findItem() {
@@ -596,6 +641,9 @@ export class Engine {
       //         }
       //     }
     }
+
+    // Iniciar la animación del jugador
+    animate();
   }
 
   // Creación del botón
@@ -647,31 +695,28 @@ export class Engine {
     this.ctx.fillRect(x, y, 15, 88, 20);
   }
 
-  collisionDetection(player) {
-    // Verificar colisiones del jugador con las paredes
-    const playerColliding = this.checkCollision(player, this.colisiones());
-    if (playerColliding) {
-      // Si hay colisión, no permitir que el jugador avance
-      player.velocity.x = 0;
-      player.velocity.y = 0;
-    }
-  }
+  // collisionDetection(player) {
+  //   // Verificar colisiones del jugador con las paredes
+  //   const playerColliding = this.checkCollision(player, this.colisiones());
+  //   if (playerColliding) {
+  //     // Si hay colisión, no permitir que el jugador avance
+  //     player.velocity.x = 0;
+  //     player.velocity.y = 0;
+  //   }
+  // }
 
   colisiones() {
     //Pared vertical hab1
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 10, 22, 216);
-
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 160, 500, 65);
-
     //Pared vertical hab2
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 256, 22, 182);
     //Pared horizontal hab2
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 256, 500, 65);
-
     //Pared izquierda
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(0, 0, 12, 440);
@@ -750,8 +795,8 @@ class Player extends Sprite {
   constructor({ imageSrc, engine, frameRate }) {
     super({ imageSrc, frameRate });
     this.position = {
-      x: 100,
-      y: 100,
+      x: 30,
+      y: 275,
     };
     this.velocity = {
       x: 0,
@@ -791,6 +836,8 @@ class Player extends Sprite {
 
   //Evitar que salga del marco
   update() {
+    console.log("Player");
+    console.log("Player", this.position);
     if (
       this.position.x + this.velocity.x >= 0 + this.margin.left &&
       this.sides.right + this.velocity.x <=
@@ -818,8 +865,8 @@ class Player extends Sprite {
 
 //Clase objeto
 class Item extends Sprite {
-  constructor({ imageSrc, frameRate, itemName }) {
-    super({ imageSrc, frameRate });
+  constructor({ img, frameRate, itemName }) {
+    super({ img, frameRate });
     this.position = {
       x: Math.floor(Math.random() * this.width) + 1,
       y: Math.floor(Math.random() * this.height) + 1,
