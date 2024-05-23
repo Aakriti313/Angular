@@ -32,5 +32,11 @@ export class GetService {
     let url = "/server/user/get";
     return this.http.get(url);
   }
+
+  //devolver mensaje game over
+  getGameOver(): Observable<any> {
+    let url = "/server/message/endgame";
+    return this.http.get(url);
+  }
   
 }
