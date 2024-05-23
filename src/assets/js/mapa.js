@@ -443,30 +443,59 @@ export class Engine {
       // }));
 
       items.forEach((itemData, index) => {
+        const img = new Image();
+
+        // let item = new Item({
+        //   itemName: itemData.name_item,
+        //   img: new Image(),
+        // });
+
         let item = new Item({
           itemName: itemData.name_item,
-          img: new Image(),
+          itemImg: img,
         });
 
-        item.img.src = "data:image/png;base64," + itemData.image;
+        // item.img.src = "data:image/png;base64," + itemData.image;
 
-        item.img.onload = () => {
-          // Dibujar la imagen del ítem en el lienzo con las coordenadas de la zona
-          engine.ctx.drawImage(
-            item.img.src,
-            item.x,
-            item.y,
-            item.width,
-            item.height
-          );
-        };
+         // Asignar la fuente de la imagen correctamente
+      if (typeof itemData.image === "string") {
+        img.src = "data:image/png;base64," + itemData.image;
+      } else {
+        // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
+        const blobUrl = URL.createObjectURL(itemData.image);
+        img.src = blobUrl;
+      }
 
-        itemImage.onerror = () => {
+      img.onload = () => {
+        const zone = itemsZones[index];
+        const randomX = zone.x + Math.random() * (zone.width - img.width);
+        const randomY = zone.y + Math.random() * (zone.height - img.height);
+        const item = new Item({
+          itemName: itemData.name_item,
+          itemImg: img,
+          x: randomX,
+          y: randomY,
+          width: img.width,
+          height: img.height,
+        });
+
+        this.items.push(item);
+        this.drawItems();
+      };
+
+      
+        item.onerror = () => {
           console.log("Error al cargar la imagen del ítem:", itemData.image);
           // En caso de error al cargar la imagen, también se incrementa el contador de ítems cargados para no bloquear el código
           // loadedItems++;
         };
       });
+    });
+  }
+
+  drawItems() {
+    this.items.forEach(item => {
+      item.draw(this.ctx);
     });
   }
 
@@ -480,14 +509,7 @@ export class Engine {
     let engine = document.getElementById("canvas").engine;
     console.log("SI");
 
-    let selectedCharacterImageSrc = engine.selectedCharacter
-      ? engine.selectedCharacter.image
-      : "assets/img/fantasma.png";
-
-    let itemsImageSrc = engine.selectedCharacter
-      ? engine.selectedCharacter.image
-      : "assets/img/fantasma.png";
-    // let itemsName = engine.selectedCharacter ? engine.selectedCharacter.image : "assets/img/fantasma.png";
+    let selectedCharacterImageSrc = engine.selectedCharacter ? engine.selectedCharacter.image: "assets/img/fantasma.png";
 
     console.log(selectedCharacterImageSrc);
     // Crear una instancia del jugador
@@ -501,13 +523,15 @@ export class Engine {
     // Función de animación del jugador
     function animate() {
       let engine = document.getElementById("canvas").engine;
+
+      engine.loadItems();
+      
       engine.background1.draw();
       engine.door(doorPosition.x, doorPosition.y);
       engine.colisiones();
-
       player.update();
       player.draw();
-      // engine.loadItems();
+      
       // item.draw();
       // Verificar colisiones del jugador con las paredes
       // engine.collisionDetection(player);
@@ -625,24 +649,24 @@ export class Engine {
       //     //Si todos los items han sido recogidos
       //     if (allItemsCollected) {
 
-      //Calcular la distancia entre el jugador y la puerta final
-      var distanceX = Math.abs(player.position.x - doorPosition.position.x);
-      var distanceY = Math.abs(player.position.y - doorPosition.position.y);
-      var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      // //Calcular la distancia entre el jugador y la puerta final
+      // var distanceX = Math.abs(player.position.x - doorPosition.position.x);
+      // var distanceY = Math.abs(player.position.y - doorPosition.position.y);
+      // var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
-      //Si el jugador está cerca de la puerta final
-      if (distance < 30) {
-        // Iluminar la puerta final
-        this.ctx.save();
-        this.ctx.shadowColor = "gold";
-        this.ctx.shadowBlur = 100;
-        door(doorPosition.x, doorPosition.y);
-        this.ctx.restore();
-        console.log("hi");
-      } else {
-        // Dibujar la puerta con su apariencia normal
-        door(doorPosition.x, doorPosition.y);
-      }
+      // //Si el jugador está cerca de la puerta final
+      // if (distance < 30) {
+      //   // Iluminar la puerta final
+      //   this.ctx.save();
+      //   this.ctx.shadowColor = "gold";
+      //   this.ctx.shadowBlur = 100;
+      //   door(doorPosition.x, doorPosition.y);
+      //   this.ctx.restore();
+      //   console.log("hi");
+      // } else {
+      //   // Dibujar la puerta con su apariencia normal
+      //   door(doorPosition.x, doorPosition.y);
+      // }
       animate();
       //         }else {
       //             // Dibujar la puerta con su apariencia normal
@@ -874,8 +898,8 @@ class Player extends Sprite {
 
 //Clase objeto
 class Item extends Sprite {
-  constructor({ img, frameRate, itemName }) {
-    super({ img, frameRate });
+  constructor({ itemImg, frameRate, itemName }) {
+    super({ itemImg, frameRate });
     this.position = {
       x: Math.floor(Math.random() * this.width) + 1,
       y: Math.floor(Math.random() * this.height) + 1,
@@ -886,7 +910,7 @@ class Item extends Sprite {
   }
   draw() {
     this.ctx.drawImage(
-      this.image,
+      this.itemImg,
       this.position.x,
       this.position.y,
       this.width,
