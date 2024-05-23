@@ -41,7 +41,8 @@ export class Engine {
         this.canvas.height
       );
       this.canvas.removeEventListener("click", this.init);
-      this.canvas.addEventListener("click", this.initSound,this.startGame, { once: true });
+      this.canvas.addEventListener("click", this.startGame, { once: true });
+      this.initSound();
     };
   }
 
@@ -423,12 +424,11 @@ export class Engine {
     const itemsService = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
     engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
-
+  
     // Obtener los ítems desde el servicio en Angular
     itemsService.getItems().subscribe((items) => {
       console.log("Cargando ítems...");
-      // let loadedItems = 0; // Contador para rastrear cuántos ítems se han cargado correctamente
-
+  
       // Definir las coordenadas de dibujo para cada zona
       const itemsZones = [
         { x: 12, y: 65, width: 424, height: 224 }, // medicina
@@ -436,39 +436,53 @@ export class Engine {
         { x: 460, y: 65, width: 427, height: 95 }, // director
         { x: 460, y: 320, width: 427, height: 118 }, // laboratorio
       ];
-
-      // Almacenar la información de los ítems
-      // const itemsInfo = items.map((item) => ({
-      //   name: item.name_item
-      // }));
-
+  
       items.forEach((itemData, index) => {
-        let item = new Item({
+        console.log("entroooooo");
+  
+        // Asegúrate de que hay suficientes zonas para los ítems
+        if (index >= itemsZones.length) {
+          console.error("No hay suficientes zonas definidas para los ítems.");
+          return null;
+        }
+  
+        const zone = itemsZones[index];
+        const item = {
           itemName: itemData.name_item,
           img: new Image(),
-        });
-
-        item.img.src = "data:image/png;base64," + itemData.image;
-
-        item.img.onload = () => {
-          // Dibujar la imagen del ítem en el lienzo con las coordenadas de la zona
-          engine.ctx.drawImage(
-            item.img.src,
-            item.x,
-            item.y,
-            item.width,
-            item.height
-          );
+          x: zone.x + Math.random() * zone.width,
+          y: zone.y + Math.random() * zone.height,
+          width: 50, // Ancho del ítem, ajustar según sea necesario
+          height: 50 // Alto del ítem, ajustar según sea necesario
         };
-
-        itemImage.onerror = () => {
+  
+        // Asignar el src de la imagen
+        if (typeof itemData.image === "string") {
+          item.img.src = "data:image/png;base64," + itemData.image;
+        } else {
+          // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
+          const blobUrl = URL.createObjectURL(itemData.image);
+          item.img.src = blobUrl;
+        }
+  
+        // item.img.onload = () => {
+        //   // Dibujar la imagen del ítem en el lienzo con las coordenadas de la zona
+        //   engine.ctx.drawImage(
+        //     item.img,
+        //     item.x,
+        //     item.y,
+        //     item.width,
+        //     item.height
+        //   );
+        // };
+  
+        item.img.onerror = () => {
           console.log("Error al cargar la imagen del ítem:", itemData.image);
-          // En caso de error al cargar la imagen, también se incrementa el contador de ítems cargados para no bloquear el código
-          // loadedItems++;
         };
       });
     });
   }
+  
 
   // Mapa juego
   drawMap(event) {
@@ -481,12 +495,10 @@ export class Engine {
     console.log("SI");
 
     let selectedCharacterImageSrc = engine.selectedCharacter
-      ? engine.selectedCharacter.image
-      : "assets/img/fantasma.png";
+      ? engine.selectedCharacter.image : "assets/img/fantasma.png";
 
     let itemsImageSrc = engine.selectedCharacter
-      ? engine.selectedCharacter.image
-      : "assets/img/fantasma.png";
+      ? engine.selectedCharacter.image : "assets/img/fantasma.png";
     // let itemsName = engine.selectedCharacter ? engine.selectedCharacter.image : "assets/img/fantasma.png";
 
     console.log(selectedCharacterImageSrc);
@@ -498,16 +510,80 @@ export class Engine {
 
     let doorPosition = { x: 885, y: 170 };
 
+     // Definir las colisiones (rectángulos)
+    let collisions = [
+      { x: 437, y: 10, width: 22, height: 216 },
+      { x: 437, y: 160, width: 500, height: 65 },
+      { x: 437, y: 256, width: 22, height: 182 },
+      { x: 437, y: 256, width: 500, height: 440 },
+      { x: 0, y: 0, width: 12, height: 65 },
+      { x: 888, y: 0, width: 14, height: 438 },
+      { x: 0, y: 290, width: 320, height: 14 },
+      { x: 0, y: 437, width: 900, height: 10 },
+      { x: 0, y: 0, width: 900, height: 65 }
+  ];
+
+  // Función de detección de colisiones
+  function checkCollisions(player) {
+      for (let i = 0; i < collisions.length; i++) {
+          let collision = collisions[i];
+          if (player.position.x < collision.x + collision.width &&
+              player.position.x + player.width > collision.x &&
+              player.position.y < collision.y + collision.height &&
+              player.position.y + player.height > collision.y) {
+              return true;
+          }
+      }
+      return false;
+  }
+
     // Función de animación del jugador
     function animate() {
       let engine = document.getElementById("canvas").engine;
+
+      player.update();
+      if (checkCollisions(player)) {
+        // Detener al jugador si hay una colisión
+        player.velocity.x = 0;
+        player.velocity.y = 0;
+      }
+
       engine.background1.draw();
       engine.door(doorPosition.x, doorPosition.y);
       engine.colisiones();
-
-      player.update();
       player.draw();
-      // engine.loadItems();
+
+      
+      // items.forEach((item) => {
+      //   engine.ctx.drawImage(
+      //     item.img,
+      //     item.x,
+      //     item.y,
+      //     item.width,
+      //     item.height
+      //   );
+      // });
+
+
+      // const button = { x: 780, y: 450, width: 100, height: 30 };
+      // engine.button.src = "assets/img/Ajustes/questionMark.png";
+      // engine.src.fillRect(780, 450, 100, 30);
+
+          // Agregar evento de clic para avanzar a la otra vista al hacer clic en el botón
+          engine.canvas.addEventListener("click", function (event) {
+            const clickX = event.offsetX;
+            const clickY = event.offsetY;
+            if (
+              clickX >= button.x &&
+              clickX <= button.x + button.width &&
+              clickY >= button.y &&
+              clickY <= button.y + button.height
+            ) {
+              engine.canvas.addEventListener("click", engine.tutorial1, {
+                once: true,
+              });
+            }
+          });
       // item.draw();
       // Verificar colisiones del jugador con las paredes
       // engine.collisionDetection(player);
@@ -625,12 +701,33 @@ export class Engine {
       //     //Si todos los items han sido recogidos
       //     if (allItemsCollected) {
 
-      //Calcular la distancia entre el jugador y la puerta final
+      // //Calcular la distancia entre el jugador y la puerta final
+      // var distanceX = Math.abs(player.position.x - doorPosition.position.x);
+      // var distanceY = Math.abs(player.position.y - doorPosition.position.y);
+      // var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+      // //Si el jugador está cerca de la puerta final
+      // if (distance < 30) {
+      //   // Iluminar la puerta final
+      //   this.ctx.save();
+      //   this.ctx.shadowColor = "gold";
+      //   this.ctx.shadowBlur = 100;
+      //   door(doorPosition.x, doorPosition.y);
+      //   this.ctx.restore();
+      //   console.log("hi");
+      // } else {
+      //   // Dibujar la puerta con su apariencia normal
+      //   door(doorPosition.x, doorPosition.y);
+      // }
+      // animate();
+    }
+
+     //Calcular la distancia entre el jugador y la puerta final
       var distanceX = Math.abs(player.position.x - doorPosition.position.x);
       var distanceY = Math.abs(player.position.y - doorPosition.position.y);
       var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-      //Si el jugador está cerca de la puerta final
+      
+    //Si el jugador está cerca de la puerta final
       if (distance < 30) {
         // Iluminar la puerta final
         this.ctx.save();
@@ -644,13 +741,6 @@ export class Engine {
         door(doorPosition.x, doorPosition.y);
       }
       animate();
-      //         }else {
-      //             // Dibujar la puerta con su apariencia normal
-      //             door();
-      //         }
-      //     }
-    }
-
     // Iniciar la animación del jugador
     animate();
   }
@@ -804,15 +894,15 @@ class Player extends Sprite {
   constructor({ imageSrc, engine, frameRate }) {
     super({ imageSrc, frameRate });
     this.position = {
-      x: 30,
-      y: 275,
+      x: -3,
+      y: 299,
     };
     this.velocity = {
       x: 0,
       y: 0,
     };
-    this.width = 100;
-    this.height = 100;
+    this.width = 64;
+    this.height = 64;
     this.margin = {
       top: 0,
       bottom: 26,
@@ -845,8 +935,6 @@ class Player extends Sprite {
 
   //Evitar que salga del marco
   update() {
-    console.log("Player");
-    console.log("Player", this.position);
     if (
       this.position.x + this.velocity.x >= 0 + this.margin.left &&
       this.sides.right + this.velocity.x <=
