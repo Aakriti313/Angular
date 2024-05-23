@@ -1,17 +1,14 @@
 nav{
     background-color: #f8f3ea !important;
     box-shadow: 0px 1px 5px 0px rgb(196 192 187);
-
-
 }
 
-ul.navbar-nav li{
-    margin-right: 2ex;
+.navbar-nav .nav-link {
+    margin-right: 1em !important;
 }
-
 .navbar-nav .nav-item .nav-link.active .navbar-text {
     color: #9eccfa !important; 
-    
+    margin-right: 2ex;
 }
 
 .footer{
@@ -21,4 +18,24 @@ ul.navbar-nav li{
     background-color: #f8f3ea !important;
     box-shadow: 0px -1px 5px 0px rgb(196 192 187);
 
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        width: 30%; /* Reducir el tamaño del logo en pantallas pequeñas */
+    }
+
+    ul.navbar-nav li {
+        margin-right: 1ex; /* Reducir el margen entre elementos de la barra de navegación en pantallas pequeñas */
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-nav {
+        flex-direction: row; /* Alinear elementos horizontalmente en pantallas grandes */
+    }
+
+    .navbar-nav li {
+        margin-right: 2ex; /* Restablecer el margen entre elementos de la barra de navegación en pantallas grandes */
+    }
 }

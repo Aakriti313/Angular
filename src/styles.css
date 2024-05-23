@@ -2,6 +2,9 @@ body{
     background-color: #f8f3ea;
     font-family: 'Press Start 2P', cursive!important;
     overflow-x: hidden;
+    margin: 0; /* Eliminar el margen del body para asegurar que el contenedor ocupe toda la altura */
+    padding: 0; /* Eliminar el padding del body */
+    height: 100vh; 
 }
 
 @font-face {
@@ -15,9 +18,32 @@ body{
 .componentsBackgrounds{
     display: flex;
     justify-content: center;
+    align-items: center; /* Centrar el contenido verticalmente */
     background: #f8f3ea;
     box-shadow: 18px 18px 30px #ede8de, -18px -18px 30px #ede8de;
-    margin: 2%;
-    padding: 2%;
+    padding: 2%; /* Añadir padding interno */
     border-radius: 5px;
+    margin: 2%; /* Margen superior e inferior del 2%, sin margen izquierdo ni derecho */
+    box-sizing: border-box; /* Incluir padding y borde en el cálculo de la altura */
+    overflow: auto; /* Agregar desplazamiento interno */
+
+}
+
+.divComponent{
+    max-width: 90%;
+    text-align: center; /* Centrar el texto horizontalmente */
+}
+
+/* Estilos específicos para pantallas grandes */
+@media (min-width: 768px) {
+    .componentsBackgrounds {
+        height: 70%; /* Ancho del 70% en pantallas grandes */
+    }
+}
+
+/* Estilos específicos para pantallas pequeñas */
+@media (max-width: 768px) {
+    .componentsBackgrounds {
+        height: 90%; /* Ancho del 90% en pantallas pequeñas */
+    }
 }
