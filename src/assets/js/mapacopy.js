@@ -422,7 +422,7 @@ export class Engine {
   loadItems() {
     const itemsService = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
-    engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
+    //engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
 
     // Obtener los ítems desde el servicio en Angular
     itemsService.getItems().subscribe((items) => {
@@ -457,6 +457,8 @@ export class Engine {
           itemName: itemData.name_item,
           imageSrc: "data:image/png;base64," + itemData.image,
         });
+        
+        console.log("draw",item.draw())
 
         // item.img.src = "data:image/png;base64," + itemData.image;
 
@@ -526,20 +528,53 @@ export class Engine {
     });
 
     let doorPosition = { x: 885, y: 170 };
+    let doorSize = { width: 50, height: 100 };
 
     // Función de animación del jugador
     function animate() {
       let engine = document.getElementById("canvas").engine;
-
-      engine.loadItems();
-      
       engine.background1.draw();
       engine.door(doorPosition.x, doorPosition.y);
       engine.colisiones();
       player.update();
       player.draw();
+      // engine.loadItems();
 
-      console.log("entra todo")      
+      console.log("entra todo")
+      
+      // Calcular la distancia entre el jugador y la puerta
+      const playerCenterX = player.position.x + player.width / 2;
+      const playerCenterY = player.position.y + player.height / 2;
+      const doorCenterX = doorPosition.x + doorSize.width / 2;
+      const doorCenterY = doorPosition.y + doorSize.height / 2;
+
+      const distanceX = Math.abs(playerCenterX - doorCenterX);
+      const distanceY = Math.abs(playerCenterY - doorCenterY);
+      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+      if (distance < 50) { // Ajusta este valor según necesites
+          // Guardar el estado actual del contexto
+          engine.ctx.save();
+          // Configurar el efecto de resplandor
+          engine.ctx.shadowColor = "gold";
+          engine.ctx.shadowBlur = 20;
+          // Dibujar la puerta con el efecto de resplandor
+          engine.door(doorPosition.x, doorPosition.y);
+          // Restaurar el estado del contexto
+          engine.ctx.restore();
+          console.log('Game Over');
+          window.addEventListener("keydown", (event) => {
+            if (event.code === "Space") {
+                engine.endGame();
+
+                //Enviar datos al back de la partida
+             }
+          });
+
+      } else {
+          // Dibujar la puerta con su apariencia normal
+          engine.door(doorPosition.x, doorPosition.y);
+      }
       // engine.items.forEach(item => {
       //   item.draw(this.ctx);
       // });
@@ -691,6 +726,54 @@ export class Engine {
     animate();
   }
 
+// Método para mostrar el final del juego
+endGame() {
+  const endGameservice = AppInjector.get(GetService);
+  let engine = document.getElementById("canvas").engine;
+  engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
+
+  // Obtener los mensajes desde el servicio en Angular
+  endGameservice.getGameOver().subscribe((response) => {
+    console.log("Cargando mensages...");
+
+    // Almacenar la información del mensaje
+    const bodyMessage = response.body_message;
+
+    console.log(bodyMessage);
+
+    // Mostrar mensaje de fin de partida
+    engine.ctx.font = '20px "Press Start 2P"';
+    engine.ctx.fillStyle = "white";
+    engine.ctx.textAlign = "center";
+    engine.ctx.fillText(bodyMessage, engine.canvas.width / 2, 120);
+
+    //button
+    const button = { x: 780, y: 450, width: 100, height: 30 };
+    engine.ctx.fillStyle = "grey";
+    engine.ctx.fillRect(button.x, button.y, button.width, button.height);
+
+    // Agregar evento de clic para avanzar a la otra vista al hacer clic en el botón
+      engine.canvas.addEventListener("click", function (event) {
+        const clickX = event.offsetX;
+        const clickY = event.offsetY;
+          if (
+            clickX >= button.x &&
+            clickX <= button.x + button.width &&
+            clickY >= button.y &&
+            clickY <= button.y + button.height
+          ) {
+            engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
+            engine.canvas.addEventListener("click", engine.init(), {
+              once: true,
+            });
+          }
+        });
+  }, error => {
+    console.error('Error al obtener el juego terminado:', error);
+  });
+}
+
+
   // Creación del botón
   roundedRect(x, y, width, height, radius, engine) {
     // Poner sombra
@@ -786,6 +869,7 @@ class Sprite {
     this.position = position;
     this.image = new Image();
     this.image.onload = () => {
+      console.log("Loaded Sprite")
       this.loaded = true;
       this.width = this.image.width / this.frameRate;
       this.height = this.image.height;
@@ -881,8 +965,6 @@ class Player extends Sprite {
 
   //Evitar que salga del marco
   update() {
-    console.log("Player");
-    console.log("Player", this.position, this.width, this.height);
     if (
       this.position.x + this.velocity.x >= 0 + this.margin.left &&
       this.sides.right + this.velocity.x <=
@@ -919,8 +1001,25 @@ class Item extends Sprite {
       x: Math.floor(Math.random() * this.width) + 1,
       y: Math.floor(Math.random() * this.height) + 1,
     };
+    this.image.onload = () => {
+      console.log("Loaded Sprite")
+      this.loaded = true;
+      this.width = this.image.width / this.frameRate;
+      this.height = this.image.height;
+      this.draw();
+    };
+ 
 
-
+  }
+  draw() {
+    let engine = document.getElementById("canvas").engine;
+    engine.ctx.drawImage(
+      this.image,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
   }
   // draw() {
   //   this.ctx.drawImage(
