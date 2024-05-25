@@ -28,7 +28,6 @@ export class Engine {
     this.canvas.engine = this;
     this.canvas.setAttribute("tabindex", 0);
     this.ctx = this.canvas.getContext("2d");
-
     this.canvas.style.cursor = "pointer";
     this.logo.src = "/assets/img/logo_pantalla_completa_dark.png";
     this.logo.onload = () => {
@@ -46,13 +45,13 @@ export class Engine {
     };
   }
 
-  initSound(){
+  initSound() {
     // Cargar y reproducir la música de fondo
-    const backgroundMusic = new Audio('assets/sounds/audio.mp3');
+    const backgroundMusic = new Audio("assets/sounds/audio.mp3");
     backgroundMusic.loop = true; // Para que se repita continuamente
     backgroundMusic.volume = 0.5; // Ajusta el volumen según lo necesites
     backgroundMusic.play();
-}
+  }
 
   // Comprobar que se ha dado dentro del boton play
   startGame(event) {
@@ -129,7 +128,7 @@ export class Engine {
       var y = event.clientY - engine.canvas.offsetTop;
 
       if (
-        (x >= 350 && x <= 550 && y >= 200 && y <= 400)
+        x >= 350 && x <= 550 && y >= 200 && y <= 400
         // (x >= 150 && x <= 300 && y >= 180 && y <= 330) ||
         // (x >= 600 && x <= 750 && y >= 180 && y <= 330)
       ) {
@@ -156,9 +155,11 @@ export class Engine {
 
   // Método para mostrar el primer tutorial
   tutorial1() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar el canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.canvas.style.cursor = "default";
     this.tutorial1_image.src = "assets/img/tutorial1.png";
+    const button = { x: 780, y: 430, width: 35, height: 30 };
+
     this.tutorial1_image.onload = () => {
       this.ctx.drawImage(
         this.tutorial1_image,
@@ -167,10 +168,24 @@ export class Engine {
         this.canvas.width,
         this.canvas.height
       );
-      this.canvas.removeEventListener("click", this.tutorial1);
-      this.canvas.addEventListener("click", this.tutorial2.bind(this), {
-        once: true,
-      }); // Al hacer clic, mostrar el segundo tutorial
+
+    // Guardar referencia a this
+    const self = this;
+
+    // Agregar evento de clic para avanzar a la otra vista al hacer clic en el botón
+    this.canvas.addEventListener("click", function handleClick(event) {
+      const clickX = event.offsetX;
+      const clickY = event.offsetY;
+      if (
+        clickX >= button.x &&
+        clickX <= button.x + button.width &&
+        clickY >= button.y &&
+        clickY <= button.y + button.height
+      ) {
+        self.canvas.removeEventListener("click", handleClick);
+        self.tutorial2();
+      }
+    });
     };
   }
 
@@ -178,6 +193,9 @@ export class Engine {
   tutorial2() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar el canvas
     this.tutorial2_image.src = "assets/img/tutorial2.png";
+    const start = { x: 742, y: 430, width: 100, height: 30 };
+    const button = { x: 700, y: 430, width: 35, height: 30 };
+
     this.tutorial2_image.onload = () => {
       this.ctx.drawImage(
         this.tutorial2_image,
@@ -186,21 +204,40 @@ export class Engine {
         this.canvas.width,
         this.canvas.height
       );
-      this.canvas.removeEventListener("click", this.tutorial2);
-      this.canvas.addEventListener("click", this.characters, { once: true });
-    };
-  }
 
-  //Función para pasar al siguiente tutorial o al mapa de juego
-  nextTutorial(event) {
-    // Obtener coordenadas del clic.
-    var x = event.clientX - this.offsetLeft;
-    var y = event.clientY - this.offsetTop;
+    // Guardar referencia a this
+    const self = this;
 
-    // Verificar que el clic se ha hecho dentro del área del botón siguiente.
-    if (x >= this.width - 100 && y >= this.height - 50) {
-      this.engine.tutorial2();
+    // Agregar evento de clic para gestionar ambas áreas (botón y start)
+    function handleClick(event) {
+      const clickX = event.offsetX;
+      const clickY = event.offsetY;
+
+      // Verificar si se hizo clic en el botón
+      if (
+        clickX >= button.x &&
+        clickX <= button.x + button.width &&
+        clickY >= button.y &&
+        clickY <= button.y + button.height
+      ) {
+        self.canvas.removeEventListener("click", handleClick);
+        self.tutorial1();
+      }
+
+      // Verificar si se hizo clic en start
+      if (
+        clickX >= start.x &&
+        clickX <= start.x + start.width &&
+        clickY >= start.y &&
+        clickY <= start.y + start.height
+      ) {
+        self.canvas.removeEventListener("click", handleClick);
+        self.characters();
+      }
     }
+
+    this.canvas.addEventListener("click", handleClick);
+    };
   }
 
   start(event) {
@@ -220,7 +257,7 @@ export class Engine {
     let engine = document.getElementById("canvas").engine;
     engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
 
-    //change backgroundcolor
+    //change canvas backgroundcolor
     engine.ctx.fillStyle = "#f8f3ea";
     engine.ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -233,7 +270,6 @@ export class Engine {
     // Obtener los personajes desde el servicio en Angular
     charactersService.getCharacters().subscribe((characters) => {
       console.log("Cargando personajes...");
-      let loadedCharacters = 0; // Contador para rastrear cuántos personajes se han cargado correctamente
 
       // Definir las coordenadas de dibujo para cada zona gris
       const charactersZones = [
@@ -252,11 +288,23 @@ export class Engine {
         { x: 720, y: 280 },
       ];
 
-      const characterInfoZone = { x: 50, y: 300, width: 800, height: 140 };
+      const characterInfoZone = { x: 50, y: 310, width: 800, height: 140 };
 
-      const button = { x: 780, y: 450, width: 100, height: 30 };
-      engine.ctx.fillStyle = "grey";
-      engine.ctx.fillRect(780, 450, 100, 30);
+      //button
+      const button = { x: 780, y: 460, width: 100, height: 30 };
+      engine.ctx.fillStyle = "#f8f3ea";
+      engine.ctx.fillRect(button.x, button.y, button.width, button.height);
+
+      // Text properties
+      const text = "¡Start!";
+      engine.ctx.fillStyle = "#86b7fe";
+      engine.ctx.font = '18px "Press Start 2P"';
+      engine.ctx.textAlign = "center";
+
+      // Draw text inside the button
+      const textX = button.x + button.width / 2;
+      const textY = button.y + button.height / 2 + 5;
+      engine.ctx.fillText(text, textX, textY);
 
       // Dibujar la zona gris
       engine.ctx.fillStyle = "#f8f3ea";
@@ -266,6 +314,7 @@ export class Engine {
         characterInfoZone.width,
         characterInfoZone.height
       );
+      
 
       // Almacenar la información de los personajes
       const charactersInfo = characters.map((character) => ({
@@ -283,7 +332,6 @@ export class Engine {
         // Seleccionar las coordenadas de dibujo según el índice del personaje
         const charactersImageZone =
           charactersZones[index % charactersZones.length];
-        //const charactersNameZone = charactersNameZones[index % charactersNameZones.length];
 
         if (typeof characterData.image === "string") {
           characterImage.src = "data:image/png;base64," + characterData.image;
@@ -294,9 +342,6 @@ export class Engine {
         }
 
         characterImage.onload = () => {
-          // Incrementar el contador de personajes cargados
-          loadedCharacters++;
-
           // Dibujar la imagen del personaje en el lienzo con las coordenadas de la zona gris
           engine.ctx.drawImage(
             characterImage,
@@ -310,8 +355,6 @@ export class Engine {
           engine.ctx.fillStyle = "black";
           const charactersNameZone =
             charactersNameZones[index % charactersNameZones.length];
-          // engine.ctx.textAlign = "center";
-          // engine.ctx.fillText(charactername, charactersImageZone.x + 200, charactersImageZone.y + 210);
 
           // Ajustar las coordenadas X e Y para centrar el nombre dentro de la zona
           const nameX = charactersNameZone.x + 160 / 2;
@@ -340,11 +383,20 @@ export class Engine {
                 characterInfoZone.height
               );
 
+              // Rellenar la zona de información del personaje con el color deseado
+              engine.ctx.fillStyle = "#f8f3ea";
+              engine.ctx.fillRect(
+                characterInfoZone.x,
+                characterInfoZone.y,
+                characterInfoZone.width,
+                characterInfoZone.height
+              );
+
               // Mostrar la información del personaje seleccionado en la zona gris
               const selectedCharacterInfo =
                 charactersInfo[selectedCharacterIndex];
               engine.ctx.font = '9px "Press Start 2P"';
-              engine.ctx.fillStyle = "red";
+              engine.ctx.fillStyle = "#0b1853";
               engine.ctx.textAlign = "left";
               let infoX = characterInfoZone.x + 10;
               let infoY = characterInfoZone.y + 20;
@@ -373,7 +425,6 @@ export class Engine {
               }
 
               // Dividir la información del personaje en líneas
-              // splitTextIntoLines(selectedCharacterInfo.name, maxWidth);
               splitTextIntoLines(selectedCharacterInfo.description, maxWidth);
               splitTextIntoLines(selectedCharacterInfo.skills, maxWidth);
 
@@ -411,9 +462,7 @@ export class Engine {
           clickY >= button.y &&
           clickY <= button.y + button.height
         ) {
-          engine.canvas.addEventListener("click", engine.drawMap, {
-            once: true,
-          });
+          engine.startPlayerAnimation();
         }
       });
     });
@@ -421,13 +470,10 @@ export class Engine {
 
   loadItems() {
     const itemsService = AppInjector.get(GetService);
-    let engine = document.getElementById("canvas").engine;
-    //engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
 
     // Obtener los ítems desde el servicio en Angular
     itemsService.getItems().subscribe((items) => {
       console.log("Cargando ítems...");
-      // let loadedItems = 0; // Contador para rastrear cuántos ítems se han cargado correctamente
 
       // Definir las coordenadas de dibujo para cada zona
       const itemsZones = [
@@ -437,88 +483,33 @@ export class Engine {
         { x: 460, y: 320, width: 427, height: 118 }, // laboratorio
       ];
 
-      // Almacenar la información de los ítems
-      // const itemsInfo = items.map((item) => ({
-      //   name: item.name_item
-      // }));
-
       items.forEach((itemData, index) => {
-          // const img = new Image();
-        
-        // let item = new Item({
-        //   itemName: itemData.name_item,
-        //   img: new Image(),
-        // });
         let position = {
           x: 0,
           y: 0,
         };
-        let item = new Item({position,
+        let item = new Item({
+          position,
           itemName: itemData.name_item,
           imageSrc: "data:image/png;base64," + itemData.image,
         });
-        
-        console.log("draw",item.draw())
 
-        // item.img.src = "data:image/png;base64," + itemData.image;
+        console.log("draw", item.draw());
 
-         // Asignar la fuente de la imagen correctamente
-      // if (typeof itemData.image === "string") {
-      //   img.src = "data:image/png;base64," + itemData.image;
-      // } else {
-      //   // Si es un Blob, creamos una URL del objeto Blob y luego asignamos esa URL a src.
-      //   const blobUrl = URL.createObjectURL(itemData.image);
-      //   img.src = blobUrl;
-      // }
-
-      // item.onload = () => {
-      //   const zone = itemsZones[index];
-      //   const randomX = zone.x + Math.random() * (zone.width - img.width);
-      //   const randomY = zone.y + Math.random() * (zone.height - img.height);
-      //   this.x =randomX;
-      //   this.y =randomY;
-
-      //   // const item = new Item({
-      //   //   itemName: itemData.name_item,
-      //   //   itemImg: img,
-      //   //   x: randomX,
-      //   //   y: randomY,
-      //   //   width: img.width,
-      //   //   height: img.height,
-      //   // });
-
-      //   this.items.push(item);
-      //   console.log("a");
-      //   // this.drawItems();
-      // };
-
-      
         item.onerror = () => {
           console.log("Error al cargar la imagen del ítem:", itemData.image);
-          // En caso de error al cargar la imagen, también se incrementa el contador de ítems cargados para no bloquear el código
-          // loadedItems++;
         };
       });
     });
-  }
-
-  drawItems() {
-    this.items.forEach(item => {
-      item.draw(this.ctx);
-    });
-  }
-
-  // Mapa juego
-  drawMap(event) {
-    console.log("entra?");
-    this.engine.startPlayerAnimation();
   }
 
   startPlayerAnimation() {
     let engine = document.getElementById("canvas").engine;
     console.log("SI");
 
-    let selectedCharacterImageSrc = engine.selectedCharacter ? engine.selectedCharacter.image: "assets/img/fantasma.png";
+    let selectedCharacterImageSrc = engine.selectedCharacter
+      ? engine.selectedCharacter.image
+      : "assets/img/fantasma.png";
 
     console.log(selectedCharacterImageSrc);
     // Crear una instancia del jugador
@@ -540,8 +531,8 @@ export class Engine {
       player.draw();
       // engine.loadItems();
 
-      console.log("entra todo")
-      
+      console.log("entra todo");
+
       // Calcular la distancia entre el jugador y la puerta
       const playerCenterX = player.position.x + player.width / 2;
       const playerCenterY = player.position.y + player.height / 2;
@@ -552,33 +543,33 @@ export class Engine {
       const distanceY = Math.abs(playerCenterY - doorCenterY);
       const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
-      if (distance < 50) { // Ajusta este valor según necesites
-          // Guardar el estado actual del contexto
-          engine.ctx.save();
-          // Configurar el efecto de resplandor
-          engine.ctx.shadowColor = "gold";
-          engine.ctx.shadowBlur = 20;
-          // Dibujar la puerta con el efecto de resplandor
-          engine.door(doorPosition.x, doorPosition.y);
-          // Restaurar el estado del contexto
-          engine.ctx.restore();
-          console.log('Game Over');
-          window.addEventListener("keydown", (event) => {
-            if (event.code === "Space") {
-                engine.endGame();
+      if (distance < 50) {
+        // Ajusta este valor según necesites
+        // Guardar el estado actual del contexto
+        engine.ctx.save();
+        // Configurar el efecto de resplandor
+        engine.ctx.shadowColor = "gold";
+        engine.ctx.shadowBlur = 20;
+        // Dibujar la puerta con el efecto de resplandor
+        engine.door(doorPosition.x, doorPosition.y);
+        // Restaurar el estado del contexto
+        engine.ctx.restore();
+        console.log("Game Over");
+        window.addEventListener("keydown", (event) => {
+          if (event.code === "Space") {
+            engine.endGame();
 
-                //Enviar datos al back de la partida
-             }
-          });
-
+            //Enviar datos al back de la partida
+          }
+        });
       } else {
-          // Dibujar la puerta con su apariencia normal
-          engine.door(doorPosition.x, doorPosition.y);
+        // Dibujar la puerta con su apariencia normal
+        engine.door(doorPosition.x, doorPosition.y);
       }
       // engine.items.forEach(item => {
       //   item.draw(this.ctx);
       // });
-      
+
       // item.draw();
       // Verificar colisiones del jugador con las paredes
       // engine.collisionDetection(player);
@@ -726,53 +717,76 @@ export class Engine {
     animate();
   }
 
-// Método para mostrar el final del juego
-endGame() {
-  const endGameservice = AppInjector.get(GetService);
-  let engine = document.getElementById("canvas").engine;
-  engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
+  // Método para mostrar el final del juego
+  endGame() {
+    const endGameservice = AppInjector.get(GetService);
+    let engine = document.getElementById("canvas").engine;
+    engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
 
-  // Obtener los mensajes desde el servicio en Angular
-  endGameservice.getGameOver().subscribe((response) => {
-    console.log("Cargando mensages...");
-
-    // Almacenar la información del mensaje
-    const bodyMessage = response.body_message;
-
-    console.log(bodyMessage);
-
-    // Mostrar mensaje de fin de partida
-    engine.ctx.font = '20px "Press Start 2P"';
-    engine.ctx.fillStyle = "white";
-    engine.ctx.textAlign = "center";
-    engine.ctx.fillText(bodyMessage, engine.canvas.width / 2, 120);
-
-    //button
-    const button = { x: 780, y: 450, width: 100, height: 30 };
-    engine.ctx.fillStyle = "grey";
-    engine.ctx.fillRect(button.x, button.y, button.width, button.height);
-
-    // Agregar evento de clic para avanzar a la otra vista al hacer clic en el botón
-      engine.canvas.addEventListener("click", function (event) {
-        const clickX = event.offsetX;
-        const clickY = event.offsetY;
-          if (
-            clickX >= button.x &&
-            clickX <= button.x + button.width &&
-            clickY >= button.y &&
-            clickY <= button.y + button.height
-          ) {
-            engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
-            engine.canvas.addEventListener("click", engine.init(), {
-              once: true,
-            });
+    //change canvas backgroundcolor
+    engine.ctx.fillStyle = "#f8f3ea";
+    engine.ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+    // Obtener los mensajes desde el servicio en Angular
+    endGameservice.getGameOver().subscribe(
+      (response) => {
+        console.log("Cargando mensajes...");
+  
+        // Almacenar la información del mensaje
+        const bodyMessage = response.body_message;
+  
+        // Mostrar mensaje de fin de partida
+        engine.ctx.font = '20px "Press Start 2P"';
+        engine.ctx.fillStyle = "#0b1853";
+        engine.ctx.textAlign = "center";
+  
+        // Función para dividir el texto en líneas
+        function splitTextIntoLines(text, maxWidth) {
+          const words = text.split(" ");
+          let currentLine = words[0];
+          const lines = [];
+  
+          for (let i = 1; i < words.length; i++) {
+            const word = words[i];
+            const width = engine.ctx.measureText(
+              currentLine + " " + word
+            ).width;
+  
+            if (width < maxWidth) {
+              currentLine += " " + word;
+            } else {
+              lines.push(currentLine);
+              currentLine = word;
+            }
           }
+          lines.push(currentLine);
+          return lines;
+        }
+  
+        // Dividir la información del mensaje en líneas
+        const lines = splitTextIntoLines(bodyMessage, 800);
+  
+        // Calcular posición Y inicial para centrar verticalmente el texto
+        const startY = 80;
+  
+        // Dibujar cada línea de texto
+        lines.forEach((line, index) => {
+          engine.ctx.fillText(line, engine.canvas.width / 2, startY + index * 20);
         });
-  }, error => {
-    console.error('Error al obtener el juego terminado:', error);
-  });
-}
-
+  
+        const murderZone = { x: 100, y: 180, width: 200, height: 200 };
+        let murder = new Image();
+        murder.src = "assets/img/personajes/AsesinoSospechoso.png"
+        murder.onload = function() {
+          engine.ctx.drawImage(murder, murderZone.x, murderZone.y, murderZone.width, murderZone.height);
+        };
+      },
+      (error) => {
+        console.error("Error al obtener el juego terminado:", error);
+      }
+    );
+  }
+  
 
   // Creación del botón
   roundedRect(x, y, width, height, radius, engine) {
@@ -869,7 +883,7 @@ class Sprite {
     this.position = position;
     this.image = new Image();
     this.image.onload = () => {
-      console.log("Loaded Sprite")
+      console.log("Loaded Sprite");
       this.loaded = true;
       this.width = this.image.width / this.frameRate;
       this.height = this.image.height;
@@ -992,8 +1006,8 @@ class Player extends Sprite {
 
 //Clase objeto
 class Item extends Sprite {
-  constructor({position, imageSrc, frameRate, itemName }) {
-    super({position, imageSrc, frameRate });
+  constructor({ position, imageSrc, frameRate, itemName }) {
+    super({ position, imageSrc, frameRate });
     this.width = 100;
     this.height = 100;
     this.itemName = itemName;
@@ -1002,14 +1016,12 @@ class Item extends Sprite {
       y: Math.floor(Math.random() * this.height) + 1,
     };
     this.image.onload = () => {
-      console.log("Loaded Sprite")
+      console.log("Loaded Sprite");
       this.loaded = true;
       this.width = this.image.width / this.frameRate;
       this.height = this.image.height;
       this.draw();
     };
- 
-
   }
   draw() {
     let engine = document.getElementById("canvas").engine;
@@ -1021,13 +1033,4 @@ class Item extends Sprite {
       this.height
     );
   }
-  // draw() {
-  //   this.ctx.drawImage(
-  //     this.itemImg,
-  //     this.position.x,
-  //     this.position.y,
-  //     this.width,
-  //     this.height
-  //   );
-  // }
 }
