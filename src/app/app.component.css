@@ -1,41 +1,56 @@
-nav{
+/* Estilos generales del nav y footer */
+nav {
     background-color: #f8f3ea !important;
     box-shadow: 0px 1px 5px 0px rgb(196 192 187);
 }
 
-.navbar-nav .nav-link {
-    margin-right: 1em !important;
-}
-.navbar-nav .nav-item .nav-link.active .navbar-text {
-    color: #9eccfa !important; 
-    margin-right: 2ex;
-}
-
-.footer{
+.footer {
     position: fixed;
     bottom: 0;
     width: 100%;
     background-color: #f8f3ea !important;
     box-shadow: 0px -1px 5px 0px rgb(196 192 187);
-
 }
 
+/* Estilos para el modo oscuro */
+nav.dark-mode, .footer.dark-mode {
+    background-color: #3c3c53 !important;
+    color: #e6ebfe !important;
+}
+
+/* Estilos para el modo claro */
+nav.light-mode, .footer.light-mode {
+    background-color: #ede8de !important;
+    color: #000000 !important;
+}
+
+/* Otros estilos */
+.navbar-nav .nav-link {
+    margin-right: 1em !important;
+}
+
+.navbar-nav .nav-item .nav-link.active .navbar-text {
+    color: #9eccfa !important; 
+    margin-right: 2ex;
+}
+
+/* Estilos responsivos */
 @media (max-width: 768px) {
     .navbar-brand img {
-        width: 30%; /* Reducir el tamaño del logo en pantallas pequeñas */
+        width: 30%;
     }
 
     ul.navbar-nav li {
-        margin-right: 1ex; /* Reducir el margen entre elementos de la barra de navegación en pantallas pequeñas */
+        margin-right: 1ex;
     }
 }
 
 @media (min-width: 768px) {
     .navbar-nav {
-        flex-direction: row; /* Alinear elementos horizontalmente en pantallas grandes */
+        flex-direction: row;
     }
 
     .navbar-nav li {
-        margin-right: 2ex; /* Restablecer el margen entre elementos de la barra de navegación en pantallas grandes */
+        margin-right: 2ex;
     }
 }

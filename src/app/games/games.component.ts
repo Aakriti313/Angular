@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IsLogued } from '../services/logued.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-games',
@@ -16,7 +17,7 @@ export class GamesComponent {
     { title: 'Proximamente...', image: '../../assets/img/comingsoon.png'}
   ];
   
-  constructor(private logued : IsLogued) { 
+  constructor(private logued : IsLogued, private themeService: ThemeService) { 
 
     this.isLogued = this.logued.getIsLogued();
 
@@ -31,7 +32,13 @@ export class GamesComponent {
       game.title.toLowerCase().includes(term.toLowerCase())
     );
   }
-  
-  
+
+  isDarkMode: boolean = false;
+
+  ngOnInit(): void {
+    this.themeService.isDarkMode$.subscribe(isDarkMode => {
+      this.isDarkMode = isDarkMode;
+    });
+  }
 
 }

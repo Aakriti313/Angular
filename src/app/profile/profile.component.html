@@ -1,7 +1,6 @@
-
-<div class="p-5 row componentsBackgrounds">
+<div [class.dark-mode]="isDarkMode" [class.light-mode]="!isDarkMode" class="p-5 row componentsBackgrounds">
   <div class="row d-flex justify-content-between">
-      <div class="col-md-4 text-center">
+      <div class="col-md-4 text-center btns">
           <!-- <input type="file" name="changeImage"> -->
           <button type="button" name="profset" class="btn btn_settings">My data</button>
           <br><br>
@@ -11,6 +10,8 @@
           <br><br>
           <button type="button" (click)="delete()" [routerLink]="['/app-forms']" class="btn btn_delete">Eliminar cuenta</button>
           <br><br>
+          <button type="button" class="btn btn_modoCO" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()" (click)="toggleDarkMode()">{{ buttonText }}</button>
+
       </div>
       <div id="info" class="col-md-6">
         <img class="card-img-top" *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" style="width: 40%;" alt="profile_image"/>

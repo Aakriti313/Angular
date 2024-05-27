@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Engine } from '../../assets/js/mapa';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-enigma-of-murders',
@@ -8,10 +9,15 @@ import { Engine } from '../../assets/js/mapa';
   providers:[Engine]
 })
 export class EnigmaOfMurdersComponent implements OnInit {
+  isDarkMode: boolean = false;
 
-  constructor(private en:Engine) {}
+  constructor(private en:Engine, private themeService: ThemeService) {}
+  
   ngOnInit(): void {
     this.en.init();
+    this.themeService.isDarkMode$.subscribe(isDarkMode => {
+      this.isDarkMode = isDarkMode;
+    });
   }
 
   close() {
@@ -20,4 +26,5 @@ export class EnigmaOfMurdersComponent implements OnInit {
       close.style.display = 'none';
     }
   }
+
 }

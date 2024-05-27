@@ -3,7 +3,7 @@ import { PostService } from '../services/post.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { User } from '../clases/users';
 import { IsLogued } from '../services/logued.service';
-
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,8 +21,12 @@ export class ProfileComponent {
     private fb: FormBuilder, 
     private post: PostService, 
     private el:ElementRef,
+    private themeService: ThemeService,
     private log : IsLogued) {
     this.userData = [];
+    this.themeService.isDarkMode$.subscribe(isDarkMode => {
+          this.isDarkMode = isDarkMode;
+        });
   }
 
   UserForm = this.fb.group({
@@ -41,6 +45,11 @@ export class ProfileComponent {
     console.log('Perfil',currentUser);
 
     this.scrollToView();
+
+    this.themeService.isDarkMode$.subscribe(isDarkMode => {
+      this.isDarkMode = isDarkMode;
+      this.buttonText = isDarkMode ? 'Modo claro' : 'Modo oscuro';
+    });
   }
  
   
@@ -80,5 +89,19 @@ export class ProfileComponent {
 
     this.post.deleteUser(currentUser.nickname_user||"").subscribe((result) => {console.log(result)});
   }
-  
+
+  isDarkMode: boolean = false;
+  buttonText: string = 'Modo claro';
+
+  onMouseEnter() {
+    this.buttonText = this.isDarkMode ? 'Modo claro' : 'Modo oscuro';
+  }
+
+  onMouseLeave() {
+    this.buttonText = this.isDarkMode ? 'Modo oscuro' : 'Modo claro';
+  }
+
+  toggleDarkMode() {
+    this.themeService.toggleTheme(!this.isDarkMode);
+  }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GetService } from '../services/get.service';
 import { User } from '../clases/users';
 import { PostService } from '../services/post.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-admin-page',
@@ -10,15 +11,19 @@ import { PostService } from '../services/post.service';
 })
 export class AdminPageComponent implements OnInit{
   users: any[] = [];
-
   filteredUsers: any[] = [];
+  isDarkMode: boolean = false;
 
   constructor( 
     private get : GetService,
+    private themeService: ThemeService,
     private post : PostService){}
   
   ngOnInit(): void {
     this.getList();
+    this.themeService.isDarkMode$.subscribe(isDarkMode => {
+      this.isDarkMode = isDarkMode;
+    });
   }
 
   getList(){

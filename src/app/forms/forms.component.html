@@ -1,4 +1,4 @@
-<div class="text-center p-5 row componentsBackgrounds">
+<div [class.dark-mode]="isDarkMode" [class.light-mode]="!isDarkMode" class="text-center p-5 row componentsBackgrounds">
     <div *ngIf="isLogInFormVisible" novalidate>
         <form [formGroup]="logInForm" (ngSubmit)="onSubmitLogIn()">
             <div>

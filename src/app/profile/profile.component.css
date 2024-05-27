@@ -11,6 +11,10 @@
     border-bottom: solid 1px black;
 }
 
+.btns{
+    align-content: center;
+}
+
 .btn{
     text-align: center;
     margin-right: 2%;

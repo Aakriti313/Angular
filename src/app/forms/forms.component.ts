@@ -6,6 +6,7 @@ import { User } from '../clases/users';
 import { PostService } from '../services/post.service';
 import { IsLogued } from '../services/logued.service';
 import { ImageService } from '../services/image.service';
+import { ThemeService } from '../services/theme.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class FormsComponent {
   isLogInFormVisible = true;
   isSignUpFormVisible = false;
   selectedImage: string | null = '';
-  isLogued :any;
+  isLogued :any;isDarkMode: boolean = false;
   
   //Mostrar SignUpForm
   showSignUpForm() {
@@ -33,7 +34,8 @@ export class FormsComponent {
     private router: Router,
     private fb: FormBuilder, 
     private postService: PostService, 
-    private el: ElementRef, 
+    private el: ElementRef,
+    private themeService: ThemeService,
     private logued : IsLogued) {}
 
   logInForm = this.fb.group({
@@ -43,7 +45,9 @@ export class FormsComponent {
 
   ngOnInit(): void {
     this.scrollToView();
-
+    this.themeService.isDarkMode$.subscribe(isDarkMode => {
+      this.isDarkMode = isDarkMode;
+    });
   }
 
   signUpForm = this.fb.group({

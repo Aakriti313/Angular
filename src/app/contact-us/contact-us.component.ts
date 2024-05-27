@@ -1,4 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-contact-us',
@@ -46,11 +47,17 @@ export class ContactUsComponent {
   ]
   
   //Scroll
-  constructor(private el:ElementRef){}
+  constructor(private el:ElementRef, private themeService: ThemeService){}
   ngOnInit(): void {
     this.scrollToView();
+    this.themeService.isDarkMode$.subscribe(isDarkMode => {
+      this.isDarkMode = isDarkMode;
+    });
   }
   scrollToView(){
     this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest"});
   }
+
+  isDarkMode: boolean = false;
+  
 }

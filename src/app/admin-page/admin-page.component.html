@@ -1,5 +1,5 @@
 
-<div class="p-5 componentsBackgrounds" id="users">
+<div [class.dark-mode]="isDarkMode" [class.light-mode]="!isDarkMode" class="p-5 componentsBackgrounds" id="users">
     <div class="container text-center row divComponent">
         <form class="d-flex col-12 mb-5" role="search">
             <input class="form-control me-2" style="width: 20%;" type="search" placeholder="Search" aria-label="Search" #searchInput (input)="search(searchInput.value)">

@@ -1,18 +1,18 @@
+//Importat Servicios para utilizar el Back
 import { GetService } from "../../app/services/get.service";
 import { AppInjector } from "../../app/app.module";
 
+//Creamos la clase principal Engine
 export class Engine {
-  // Variables a utilizar
+  //Variables globales
   canvas = null;
   ctx = null;
   pause = true;
   logo = new Image();
   game_image = new Image();
+  backgroundMusic = new Audio("assets/sounds/audio.mp3");
   background1 = new Sprite({
-    position: {
-      x: 0,
-      y: 0,
-    },
+    position: { x: 0, y: 0, },
     imageSrc: "assets/img/mapaJuegoMurderofCrime.png",
   });
   spacePressed = false;
@@ -20,37 +20,42 @@ export class Engine {
   tutorial2_image = new Image();
   selectedCharacter = null;
   items = [];
-  // constructor() {}
 
-  // Al iniciar
+  //Init
   init() {
+    //Obtener referencia del canvas
     this.canvas = document.getElementById("canvas");
+    //Establecemos This como una referencia a Engine.
     this.canvas.engine = this;
+    //Permite interactuar con el canvas mediante el teclado
     this.canvas.setAttribute("tabindex", 0);
+    //Contexto del canvas
     this.ctx = this.canvas.getContext("2d");
+
     this.canvas.style.cursor = "pointer";
     this.logo.src = "/assets/img/logo_pantalla_completa_dark.png";
+
+    //Ejecutar al cargar la imagen logo
     this.logo.onload = () => {
       console.log("logo onload");
-      this.ctx.drawImage(
-        this.logo,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.height
-      );
+      this.ctx.drawImage( this.logo, 0, 0, this.canvas.width, this.canvas.height);
       this.canvas.removeEventListener("click", this.init);
       this.canvas.addEventListener("click", this.startGame, { once: true });
-      this.initSound();
+      // this.initSound();
     };
   }
 
   initSound() {
     // Cargar y reproducir la música de fondo
-    const backgroundMusic = new Audio("assets/sounds/audio.mp3");
-    backgroundMusic.loop = true; // Para que se repita continuamente
-    backgroundMusic.volume = 0.5; // Ajusta el volumen según lo necesites
-    backgroundMusic.play();
+    this.backgroundMusic.loop = true; // Para que se repita continuamente
+    this.backgroundMusic.volume = 0.5; // Ajusta el volumen según lo necesites
+    this.backgroundMusic.play();
+  }
+
+  stopSound() {
+    if (this.backgroundMusic) {
+      this.backgroundMusic.pause();
+    }
   }
 
   // Comprobar que se ha dado dentro del boton play
@@ -71,17 +76,12 @@ export class Engine {
   intro(engine) {
     console.log("intro");
     engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
+    this.initSound();
     engine.canvas.style.cursor = "wait";
     engine.game_image.src = "assets/img/IntroEnigmaOfMurders.png";
     engine.game_image.onload = () => {
       console.log("load game image");
-      engine.ctx.drawImage(
-        engine.game_image,
-        0,
-        0,
-        engine.canvas.width,
-        engine.canvas.height
-      );
+      engine.ctx.drawImage(engine.game_image, 0, 0, engine.canvas.width, engine.canvas.height);
       setTimeout(() => {
         console.log("timout intro");
         // Limpiar el canvas después de 3 segundos
@@ -153,13 +153,14 @@ export class Engine {
     }
   }
 
-  // Método para mostrar el primer tutorial
+  //Tutorial 1
   tutorial1() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.canvas.style.cursor = "default";
     this.tutorial1_image.src = "assets/img/tutorial1.png";
     const button = { x: 780, y: 430, width: 35, height: 30 };
 
+    //Mostrar imagen Tutorial1
     this.tutorial1_image.onload = () => {
       this.ctx.drawImage(
         this.tutorial1_image,
@@ -169,10 +170,10 @@ export class Engine {
         this.canvas.height
       );
 
-    // Guardar referencia a this
+     //Guardar la referencia de this
     const self = this;
 
-    // Agregar evento de clic para avanzar a la otra vista al hacer clic en el botón
+    //Evento Click de Button
     this.canvas.addEventListener("click", function handleClick(event) {
       const clickX = event.offsetX;
       const clickY = event.offsetY;
@@ -189,13 +190,16 @@ export class Engine {
     };
   }
 
-  // Método para mostrar el segundo tutorial
+  //Tutorial 2
   tutorial2() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar el canvas
+    //Limpiar canvas y añadir imagen
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.tutorial2_image.src = "assets/img/tutorial2.png";
+    //Zonas de los Botones
     const start = { x: 742, y: 430, width: 100, height: 30 };
     const button = { x: 700, y: 430, width: 35, height: 30 };
 
+    //Mostrar imagen Tutorial1
     this.tutorial2_image.onload = () => {
       this.ctx.drawImage(
         this.tutorial2_image,
@@ -205,15 +209,15 @@ export class Engine {
         this.canvas.height
       );
 
-    // Guardar referencia a this
+    //Guardar la referencia de this
     const self = this;
 
-    // Agregar evento de clic para gestionar ambas áreas (botón y start)
+    //Botones
     function handleClick(event) {
       const clickX = event.offsetX;
       const clickY = event.offsetY;
 
-      // Verificar si se hizo clic en el botón
+      //Clic en Button
       if (
         clickX >= button.x &&
         clickX <= button.x + button.width &&
@@ -224,7 +228,7 @@ export class Engine {
         self.tutorial1();
       }
 
-      // Verificar si se hizo clic en start
+      //Clic en Start
       if (
         clickX >= start.x &&
         clickX <= start.x + start.width &&
@@ -236,6 +240,7 @@ export class Engine {
       }
     }
 
+    //Evento Ciclk
     this.canvas.addEventListener("click", handleClick);
     };
   }
@@ -558,8 +563,9 @@ export class Engine {
         window.addEventListener("keydown", (event) => {
           if (event.code === "Space") {
             engine.endGame();
-
+            
             //Enviar datos al back de la partida
+            
           }
         });
       } else {
@@ -722,7 +728,7 @@ export class Engine {
     const endGameservice = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
     engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
-
+    this.stopSound();
     //change canvas backgroundcolor
     engine.ctx.fillStyle = "#f8f3ea";
     engine.ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -851,14 +857,25 @@ export class Engine {
     //Pared vertical hab1
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 10, 22, 216);
+
+    //Pared horizontal hab1
     this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(437, 160, 500, 65);
+    this.ctx.fillRect(437, 160, 153, 65);
+    //Pared horizontal hab1
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(627, 160, 300, 65);
+
     //Pared vertical hab2
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(437, 256, 22, 182);
+
     //Pared horizontal hab2
     this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(437, 256, 500, 65);
+    this.ctx.fillRect(437, 256, 57, 65);
+    //Pared horizontal hab2
+    this.ctx.fillStyle = "#ff00007d";
+    this.ctx.fillRect(532, 256, 358, 65);
+
     //Pared izquierda
     this.ctx.fillStyle = "#ff00007d";
     this.ctx.fillRect(0, 0, 12, 440);
@@ -948,14 +965,28 @@ class Player extends Sprite {
     this.width = 64;
     this.height = 64;
     this.margin = {
-      top: 0,
+      top: 12,
       bottom: 26,
-      left: -7,
+      left: -8,
       right: -3,
     };
     this.updateSides();
     this.items = [];
     this.engine = engine;
+    this.walls = [
+      { x: 437, y: 10, width: 22, height: 216 },
+      { x: 437, y: 160, width: 300, height: 65 },
+      { x: 627, y: 160, width: 300, height: 65 },
+      { x: 437, y: 256, width: 22, height: 182 },
+      { x: 437, y: 256, width: 57, height: 65 },
+      { x: 532, y: 256, width: 358, height: 65 },
+      { x: 0, y: 0, width: 12, height: 440 },
+      { x: 888, y: 0, width: 14, height: 438 },
+      { x: 0, y: 290, width: 320, height: 14 },
+      { x: 0, y: 437, width: 900, height: 10 },
+      { x: 0, y: 0, width: 900, height: 65 }
+    ];
+
   }
 
   draw() {
@@ -977,6 +1008,44 @@ class Player extends Sprite {
     };
   }
 
+  handleCollisions() {
+    for (let wall of this.walls) {
+      if (
+        this.sides.bottom > wall.y &&
+        this.sides.top < wall.y + wall.height &&
+        this.sides.right > wall.x &&
+        this.sides.left < wall.x + wall.width
+      ) {
+        const overlapX = Math.min(this.sides.right - wall.x, wall.x + wall.width - this.sides.left);
+        const overlapY = Math.min(this.sides.bottom - wall.y, wall.y + wall.height - this.sides.top);
+        
+        // Reducir la superposición en un pequeño margen para mantener al jugador más cerca de la pared
+        const adjustmentMargin = 1;
+        if (overlapX < overlapY) {
+          if (this.velocity.x > 0) {
+            this.position.x -= overlapX - adjustmentMargin;
+            console.log("Colisión a la derecha. Nueva posición x:", this.position.x);
+          } else {
+            this.position.x += overlapX - adjustmentMargin;
+            console.log("Colisión a la izquierda. Nueva posición x:", this.position.x);
+          }
+        } else {
+          if (this.velocity.y > 0) {
+            this.position.y -= overlapY - adjustmentMargin;
+            console.log("Colisión arriba. Nueva posición y:", this.position.y);
+          } else {
+            this.position.y += overlapY - adjustmentMargin;
+            console.log("Colisión abajo. Nueva posición y:", this.position.y);
+          }
+        }
+        
+        this.updateSides();
+        break;
+      }
+    }
+  }
+  
+  
   //Evitar que salga del marco
   update() {
     if (
@@ -986,6 +1055,7 @@ class Player extends Sprite {
     ) {
       this.position.x += this.velocity.x;
       this.updateSides();
+      // this.handleCollisions();
     }
 
     if (
@@ -995,6 +1065,7 @@ class Player extends Sprite {
     ) {
       this.position.y += this.velocity.y;
       this.updateSides();
+      // this.handleCollisions();
     }
   }
 
