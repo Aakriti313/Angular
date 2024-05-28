@@ -86,13 +86,15 @@ export class FormsComponent {
           // Recuperar el usuario actual
           const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
           // Recuperamos la imagen seleccionada del localStorage y la establecemos en el servicio ImageService
-          const selectedImageKey = 'selectedImage_' + currentUser.nickname;
+          const selectedImageKey = 'selectedImage_' + currentUser.nickname_user;
           const selectedImage = localStorage.getItem(selectedImageKey);
-
+        
           if (selectedImage) {
             this.imageService.setSelectedImage(selectedImage);
           }
-
+          if (this.selectedImage !== null) {
+            localStorage.setItem('selectedImage_' + currentUser.nickname_user, this.selectedImage);
+          }
           this.router.navigate(['/app-games']);          
         } else if (result = "Usuario no encontrado") {
           alert(result);
@@ -121,7 +123,9 @@ export class FormsComponent {
          this.signUpForm.patchValue({
           image_user: this.selectedImage || '' // Si selectedImage es null o undefined, asignamos una cadena vacía
         });
-
+        if (this.signUpForm.value.image_user) {
+          localStorage.setItem('selectedImage', this.signUpForm.value.image_user);
+        }
         this.postService.postUserSignUp(newUser).subscribe(
           (result) => {
             console.log('result', result)
