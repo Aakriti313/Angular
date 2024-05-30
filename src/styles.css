@@ -17,16 +17,6 @@ body.light-mode{
     color: #000000;
 }
 
-nav.dark-mode, footer.dark-mode {
-    background-color: #3c3c53 !important;
-    color: #e6ebfe !important;
-}
-
-nav.light-mode, footer.light-mode {
-    background-color: #ede8de !important;
-    color: #000000 !important;
-}
-
 @font-face {
     font-family: "Press Start 2P";
     src: url(/assets/font/PressStart2P.ttf) format('tts');
