@@ -38,5 +38,11 @@ export class GetService {
     let url = "/server/message/endgame";
     return this.http.get(url);
   }
+
+  //devolver mensaje game over
+  userPuntuation(nickname: string): Observable<any> {
+    let url = `/server/points/user/${nickname}`;
+    return this.http.get(url);
+  }
   
 }

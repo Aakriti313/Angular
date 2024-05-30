@@ -1,7 +1,7 @@
 <nav [class.dark-mode]="isDarkMode" [class.light-mode]="!isDarkMode" class="navbar navbar-expand-sm">
     <div class="container-fluid">
         <a class="navbar-brand">
-            <img class="img-fluid mx-auto" style="width:50%;" id="logo" src="../../assets/img/logo.png" alt="Studio Vila"> 
+            <img [src]="isDarkMode ? '../../assets/img/logo_pantalla_completa_dark.png' : '../../assets/img/logo.png'" class="img-fluid mx-auto" style="width:50%;" id="logo" src="../../assets/img/logo.png" alt="Studio Vila"> 
         </a>
     </div>
     <div class="container-fluid">

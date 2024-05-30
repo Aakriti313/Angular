@@ -20,7 +20,7 @@ nav.dark-mode, .footer.dark-mode {
 
 /* Estilos para el modo claro */
 nav.light-mode, .footer.light-mode {
-    background-color: #ede8de !important;
+    background-color: #f8f3ea !important;
     color: #000000 !important;
 }
 

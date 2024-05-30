@@ -1,4 +1,4 @@
-//Importat Servicios para utilizar el Back
+//Importar Servicios para utilizar el Back
 import { GetService } from "../../app/services/get.service";
 import { AppInjector } from "../../app/app.module";
 
@@ -12,14 +12,16 @@ export class Engine {
   game_image = new Image();
   backgroundMusic = new Audio("assets/sounds/audio.mp3");
   background1 = new Sprite({
-    position: { x: 0, y: 0, },
+    position: { x: 0, y: 0 },
     imageSrc: "assets/img/mapaJuegoMurderofCrime.png",
   });
   spacePressed = false;
   tutorial1_image = new Image();
   tutorial2_image = new Image();
   selectedCharacter = null;
-  items = [];
+  itemsImg = [];
+  itemsCollected = [];
+  points = 0;
 
   //Init
   init() {
@@ -38,10 +40,15 @@ export class Engine {
     //Ejecutar al cargar la imagen logo
     this.logo.onload = () => {
       console.log("logo onload");
-      this.ctx.drawImage( this.logo, 0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.drawImage(
+        this.logo,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
       this.canvas.removeEventListener("click", this.init);
       this.canvas.addEventListener("click", this.startGame, { once: true });
-      // this.initSound();
     };
   }
 
@@ -81,7 +88,13 @@ export class Engine {
     engine.game_image.src = "assets/img/IntroEnigmaOfMurders.png";
     engine.game_image.onload = () => {
       console.log("load game image");
-      engine.ctx.drawImage(engine.game_image, 0, 0, engine.canvas.width, engine.canvas.height);
+      engine.ctx.drawImage(
+        engine.game_image,
+        0,
+        0,
+        engine.canvas.width,
+        engine.canvas.height
+      );
       setTimeout(() => {
         console.log("timout intro");
         // Limpiar el canvas después de 3 segundos
@@ -128,7 +141,10 @@ export class Engine {
       var y = event.clientY - engine.canvas.offsetTop;
 
       if (
-        x >= 350 && x <= 550 && y >= 200 && y <= 400
+        x >= 350 &&
+        x <= 550 &&
+        y >= 200 &&
+        y <= 400
         // (x >= 150 && x <= 300 && y >= 180 && y <= 330) ||
         // (x >= 600 && x <= 750 && y >= 180 && y <= 330)
       ) {
@@ -170,23 +186,23 @@ export class Engine {
         this.canvas.height
       );
 
-     //Guardar la referencia de this
-    const self = this;
+      //Guardar la referencia de this
+      const self = this;
 
-    //Evento Click de Button
-    this.canvas.addEventListener("click", function handleClick(event) {
-      const clickX = event.offsetX;
-      const clickY = event.offsetY;
-      if (
-        clickX >= button.x &&
-        clickX <= button.x + button.width &&
-        clickY >= button.y &&
-        clickY <= button.y + button.height
-      ) {
-        self.canvas.removeEventListener("click", handleClick);
-        self.tutorial2();
-      }
-    });
+      //Evento Click de Button
+      this.canvas.addEventListener("click", function handleClick(event) {
+        const clickX = event.offsetX;
+        const clickY = event.offsetY;
+        if (
+          clickX >= button.x &&
+          clickX <= button.x + button.width &&
+          clickY >= button.y &&
+          clickY <= button.y + button.height
+        ) {
+          self.canvas.removeEventListener("click", handleClick);
+          self.tutorial2();
+        }
+      });
     };
   }
 
@@ -209,39 +225,39 @@ export class Engine {
         this.canvas.height
       );
 
-    //Guardar la referencia de this
-    const self = this;
+      //Guardar la referencia de this
+      const self = this;
 
-    //Botones
-    function handleClick(event) {
-      const clickX = event.offsetX;
-      const clickY = event.offsetY;
+      //Botones
+      function handleClick(event) {
+        const clickX = event.offsetX;
+        const clickY = event.offsetY;
 
-      //Clic en Button
-      if (
-        clickX >= button.x &&
-        clickX <= button.x + button.width &&
-        clickY >= button.y &&
-        clickY <= button.y + button.height
-      ) {
-        self.canvas.removeEventListener("click", handleClick);
-        self.tutorial1();
+        //Clic en Button
+        if (
+          clickX >= button.x &&
+          clickX <= button.x + button.width &&
+          clickY >= button.y &&
+          clickY <= button.y + button.height
+        ) {
+          self.canvas.removeEventListener("click", handleClick);
+          self.tutorial1();
+        }
+
+        //Clic en Start
+        if (
+          clickX >= start.x &&
+          clickX <= start.x + start.width &&
+          clickY >= start.y &&
+          clickY <= start.y + start.height
+        ) {
+          self.canvas.removeEventListener("click", handleClick);
+          self.characters();
+        }
       }
 
-      //Clic en Start
-      if (
-        clickX >= start.x &&
-        clickX <= start.x + start.width &&
-        clickY >= start.y &&
-        clickY <= start.y + start.height
-      ) {
-        self.canvas.removeEventListener("click", handleClick);
-        self.characters();
-      }
-    }
-
-    //Evento Ciclk
-    this.canvas.addEventListener("click", handleClick);
+      //Evento Ciclk
+      this.canvas.addEventListener("click", handleClick);
     };
   }
 
@@ -319,7 +335,6 @@ export class Engine {
         characterInfoZone.width,
         characterInfoZone.height
       );
-      
 
       // Almacenar la información de los personajes
       const charactersInfo = characters.map((character) => ({
@@ -475,6 +490,7 @@ export class Engine {
 
   loadItems() {
     const itemsService = AppInjector.get(GetService);
+    this.itemsCollected = [];
 
     // Obtener los ítems desde el servicio en Angular
     itemsService.getItems().subscribe((items) => {
@@ -489,9 +505,13 @@ export class Engine {
       ];
 
       items.forEach((itemData, index) => {
+        // Obtener la zona correspondiente (usamos % para manejar más ítems que zonas)
+        const zone = itemsZones[index % itemsZones.length];
+
+        // Calcular la posición dentro de la zona
         let position = {
-          x: 0,
-          y: 0,
+          x: zone.x + Math.random() * (zone.width - 80), // ajusta 50 según el tamaño del ítem
+          y: zone.y + Math.random() * (zone.height - 80), // ajusta 50 según el tamaño del ítem
         };
         let item = new Item({
           position,
@@ -499,12 +519,18 @@ export class Engine {
           imageSrc: "data:image/png;base64," + itemData.image,
         });
 
-        console.log("draw", item.draw());
-
+        //  item.draw();
+        this.itemsImg.push(item);
         item.onerror = () => {
           console.log("Error al cargar la imagen del ítem:", itemData.image);
         };
       });
+    });
+  }
+
+  printItems() {
+    this.itemsImg.forEach(function (item) {
+      item.draw();
     });
   }
 
@@ -525,16 +551,16 @@ export class Engine {
 
     let doorPosition = { x: 885, y: 170 };
     let doorSize = { width: 50, height: 100 };
-
+    engine.loadItems();
     // Función de animación del jugador
     function animate() {
-      let engine = document.getElementById("canvas").engine;
       engine.background1.draw();
+      engine.printItems();
       engine.door(doorPosition.x, doorPosition.y);
-      engine.colisiones();
+      //engine.colisiones();
+      
       player.update();
       player.draw();
-      // engine.loadItems();
 
       console.log("entra todo");
 
@@ -549,8 +575,6 @@ export class Engine {
       const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
       if (distance < 50) {
-        // Ajusta este valor según necesites
-        // Guardar el estado actual del contexto
         engine.ctx.save();
         // Configurar el efecto de resplandor
         engine.ctx.shadowColor = "gold";
@@ -563,35 +587,81 @@ export class Engine {
         window.addEventListener("keydown", (event) => {
           if (event.code === "Space") {
             engine.endGame();
-            
-            //Enviar datos al back de la partida
-            
+
+            // Enviar datos al backend mediante POST
+            const currentUser = localStorage.getItem('currentUser');
+            console.log(currentUser);
+
+            const playerData = {
+              nickname_user: JSON.parse(currentUser).nickname_user,
+              items_collected: engine.itemsCollected
+            };
+
+            if (playerData.nickname_user && playerData.items_collected) {
+              
+              fetch('/server/points/calculate', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(playerData)
+              })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+              })
+              .then(data => {
+                console.log('Datos enviados con éxito:', data);
+                // Aquí puedes manejar la respuesta del backend si es necesario
+              })
+              .catch((error) => {
+                console.error('Error al enviar los datos:', error);
+              });
+            } else {
+              console.error('Datos del jugador incompletos o inválidos:', playerData);
+            }
           }
         });
       } else {
         // Dibujar la puerta con su apariencia normal
         engine.door(doorPosition.x, doorPosition.y);
       }
-      // engine.items.forEach(item => {
-      //   item.draw(this.ctx);
-      // });
 
-      // item.draw();
-      // Verificar colisiones del jugador con las paredes
-      // engine.collisionDetection(player);
+      // Verificar la proximidad del jugador a cada ítem
+        engine.itemsImg.forEach((item, index) => {
+        const itemCenterX = item.position.x + item.width / 2;
+        const itemCenterY = item.position.y + item.height / 2;
+        const distanceX = Math.abs(playerCenterX - itemCenterX);
+        const distanceY = Math.abs(playerCenterY - itemCenterY);
+        const distanceToItem = Math.sqrt(
+          distanceX * distanceX + distanceY * distanceY
+        );
 
-      // window.requestAnimationFrame(engine.animate.bind(engine));
-      // if (item) {
-      //   item.draw();
-      //   findItem();
-      //   checkAllItemsCollected();
-      // }
-      // checkDoorProximity(player);
-      // checkAllItemsCollected(player, doorPosition);
+        if (distanceToItem < 20) {
+          // Distancia de proximidad para el resplandor
+          engine.ctx.save();
+          engine.ctx.shadowColor = "gold";
+          engine.ctx.shadowBlur = 20;
+          item.draw();
+          engine.ctx.restore();
+          
+          if (engine.spacePressed) {
+            player.collectItem(item.itemName);
+            console.log("Item recogido:", item.itemName);
+            // Opcional: eliminar el ítem del mapa después de recogerlo
+            engine.itemsImg.splice(index, 1);
+        }
+        } else {
+          item.draw();
+        }
+      });
     }
 
     // Agregar los eventos de teclado para el jugador
     window.addEventListener("keydown", (event) => {
+      console.log(event.key);
       switch (event.key) {
         case "w":
           player.velocity.y = -3;
@@ -604,6 +674,9 @@ export class Engine {
           break;
         case "s":
           player.velocity.y = 3;
+          break;
+        case " ":
+          engine.spacePressed = true;
           break;
       }
       animate();
@@ -623,141 +696,57 @@ export class Engine {
         case "s":
           player.velocity.y = 0;
           break;
+        case " ":
+          engine.spacePressed = false;
+          break;
       }
     });
-
-    //Función recoger item
-    function findItem() {
-      // Manejar eventos de teclado
-      this.canvas.addEventListener("keydown", (event) => {
-        if (event.key === " ") {
-          spacePressed = true;
-          event.preventDefault();
-        }
-      });
-
-      this.canvas.addEventListener("keyup", (event) => {
-        if (event.key === " ") {
-          spacePressed = false;
-          event.preventDefault();
-        }
-      });
-
-      // Calcular la distancia entre el jugador y el item
-      var distanceX = Math.abs(player.position.x - item.position.x);
-      var distanceY = Math.abs(player.position.y - item.position.y);
-      var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-      if (distance < 30) {
-        // Cambia este valor según qué tan cerca quieres que esté el jugador del item para resaltarlo
-        // Guardar el estado actual del contexto
-        this.ctx.save();
-        // Configurar el efecto de resplandor
-        this.ctx.shadowColor = "gold"; // Cambia el color del resplandor según sea necesario
-        this.ctx.shadowBlur = 20; // Cambia el valor del desenfoque del resplandor según sea necesario
-        // Dibujar el item con el efecto de resplandor
-        item.draw();
-        // Restaurar el estado del contexto
-        this.ctx.restore();
-      } else {
-        // Dibujar el item con su apariencia normal
-        item.draw();
-      }
-
-      if (
-        player.position.x < item.position.x + item.width &&
-        player.position.x + player.width > item.position.x &&
-        player.position.y < item.position.y + item.height &&
-        player.position.y + player.height > item.position.y
-      ) {
-        playerNearItem = true;
-        if (spacePressed) {
-          // Eliminar el item
-          player.collectItem(item.itemName);
-          item = null;
-        }
-      } else {
-        playerNearItem = false;
-      }
-    }
-
-    function checkAllItemsCollected(player) {
-      // Verificar si item es null antes de intentar acceder a itemName
-      // if (item !== null && typeof item !== 'undefined') {
-      //     //Lista de todos los nombres de los items
-      //     const allItemNames = [item.itemName];
-
-      //     //Verificar si todos los items han sido recogidos
-      //     const allItemsCollected = allItemNames.every(itemName => player.items.includes(itemName));
-
-      //     //Si todos los items han sido recogidos
-      //     if (allItemsCollected) {
-
-      // //Calcular la distancia entre el jugador y la puerta final
-      // var distanceX = Math.abs(player.position.x - doorPosition.position.x);
-      // var distanceY = Math.abs(player.position.y - doorPosition.position.y);
-      // var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-      // //Si el jugador está cerca de la puerta final
-      // if (distance < 30) {
-      //   // Iluminar la puerta final
-      //   this.ctx.save();
-      //   this.ctx.shadowColor = "gold";
-      //   this.ctx.shadowBlur = 100;
-      //   door(doorPosition.x, doorPosition.y);
-      //   this.ctx.restore();
-      //   console.log("hi");
-      // } else {
-      //   // Dibujar la puerta con su apariencia normal
-      //   door(doorPosition.x, doorPosition.y);
-      // }
-      animate();
-      //         }else {
-      //             // Dibujar la puerta con su apariencia normal
-      //             door();
-      //         }
-      //     }
-    }
 
     // Iniciar la animación del jugador
     animate();
   }
 
+
   // Método para mostrar el final del juego
   endGame() {
     const endGameservice = AppInjector.get(GetService);
+    // const puntuationservice = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
     engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
     this.stopSound();
     //change canvas backgroundcolor
     engine.ctx.fillStyle = "#f8f3ea";
     engine.ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
+    engine.ctx.fillRect(500, 150, 300, 300);
+
+    engine.points = 0;
+
     // Obtener los mensajes desde el servicio en Angular
     endGameservice.getGameOver().subscribe(
       (response) => {
         console.log("Cargando mensajes...");
-  
+
         // Almacenar la información del mensaje
         const bodyMessage = response.body_message;
-  
+
         // Mostrar mensaje de fin de partida
         engine.ctx.font = '20px "Press Start 2P"';
         engine.ctx.fillStyle = "#0b1853";
         engine.ctx.textAlign = "center";
-  
+
         // Función para dividir el texto en líneas
         function splitTextIntoLines(text, maxWidth) {
           const words = text.split(" ");
           let currentLine = words[0];
           const lines = [];
-  
+
           for (let i = 1; i < words.length; i++) {
             const word = words[i];
             const width = engine.ctx.measureText(
               currentLine + " " + word
             ).width;
-  
+
             if (width < maxWidth) {
               currentLine += " " + word;
             } else {
@@ -768,31 +757,84 @@ export class Engine {
           lines.push(currentLine);
           return lines;
         }
-  
+
         // Dividir la información del mensaje en líneas
         const lines = splitTextIntoLines(bodyMessage, 800);
-  
+
         // Calcular posición Y inicial para centrar verticalmente el texto
         const startY = 80;
-  
+
         // Dibujar cada línea de texto
         lines.forEach((line, index) => {
-          engine.ctx.fillText(line, engine.canvas.width / 2, startY + index * 20);
+          engine.ctx.fillText(
+            line,
+            engine.canvas.width / 2,
+            startY + index * 20
+          );
         });
-  
+
         const murderZone = { x: 100, y: 180, width: 200, height: 200 };
         let murder = new Image();
-        murder.src = "assets/img/personajes/AsesinoSospechoso.png"
-        murder.onload = function() {
-          engine.ctx.drawImage(murder, murderZone.x, murderZone.y, murderZone.width, murderZone.height);
+        murder.src = "assets/img/personajes/AsesinoSospechoso.png";
+        murder.onload = function () {
+          engine.ctx.drawImage(
+            murder,
+            murderZone.x,
+            murderZone.y,
+            murderZone.width,
+            murderZone.height
+          );
         };
       },
       (error) => {
         console.error("Error al obtener el juego terminado:", error);
       }
     );
+
+    // Obtener los mensajes desde el servicio en Angular
+    const currentUser = localStorage.getItem('currentUser');
+    const nicknameUser = JSON.parse(currentUser).nickname_user
+    const pointsZone = { x: 600, y: 200, width: 200, height: 200 };
+
+    console.log("cargaran los points?")
+    // Array para almacenar todas las promesas de carga de puntos
+    const promises = [];
+
+    // Realizar la petición para obtener los puntos del usuario
+    const pointsRequest = fetch(`/server/points/user/${nicknameUser}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+    },
+  })
+  .then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+});
+
+// Agregar la promesa de carga de puntos a la lista de promesas
+promises.push(pointsRequest);
+
+// Manejar todas las promesas
+Promise.all(promises)
+.then(responses => {
+    // Obtener la respuesta de la última petición de puntos
+    const data = responses[responses.length - 1];
+
+    console.log('Puntos del jugador:', data.points);
+    
+    // Dibujar los puntos en pointsZone después de recibir la respuesta
+    this.ctx.font = '20px "Press Start 2P"';
+    this.ctx.fillStyle = '#86b7fe';
+    this.ctx.fillText(`Puntos del jugador: ${data.points}`, pointsZone.x, pointsZone.y, pointsZone.width, pointsZone.height);
+})
+.catch((error) => {
+    console.error('Error al obtener los puntos del jugador:', error);
+});
+
   }
-  
 
   // Creación del botón
   roundedRect(x, y, width, height, radius, engine) {
@@ -984,9 +1026,8 @@ class Player extends Sprite {
       { x: 888, y: 0, width: 14, height: 438 },
       { x: 0, y: 290, width: 320, height: 14 },
       { x: 0, y: 437, width: 900, height: 10 },
-      { x: 0, y: 0, width: 900, height: 65 }
+      { x: 0, y: 0, width: 900, height: 65 },
     ];
-
   }
 
   draw() {
@@ -1016,18 +1057,30 @@ class Player extends Sprite {
         this.sides.right > wall.x &&
         this.sides.left < wall.x + wall.width
       ) {
-        const overlapX = Math.min(this.sides.right - wall.x, wall.x + wall.width - this.sides.left);
-        const overlapY = Math.min(this.sides.bottom - wall.y, wall.y + wall.height - this.sides.top);
-        
+        const overlapX = Math.min(
+          this.sides.right - wall.x,
+          wall.x + wall.width - this.sides.left
+        );
+        const overlapY = Math.min(
+          this.sides.bottom - wall.y,
+          wall.y + wall.height - this.sides.top
+        );
+
         // Reducir la superposición en un pequeño margen para mantener al jugador más cerca de la pared
         const adjustmentMargin = 1;
         if (overlapX < overlapY) {
           if (this.velocity.x > 0) {
             this.position.x -= overlapX - adjustmentMargin;
-            console.log("Colisión a la derecha. Nueva posición x:", this.position.x);
+            console.log(
+              "Colisión a la derecha. Nueva posición x:",
+              this.position.x
+            );
           } else {
             this.position.x += overlapX - adjustmentMargin;
-            console.log("Colisión a la izquierda. Nueva posición x:", this.position.x);
+            console.log(
+              "Colisión a la izquierda. Nueva posición x:",
+              this.position.x
+            );
           }
         } else {
           if (this.velocity.y > 0) {
@@ -1038,14 +1091,13 @@ class Player extends Sprite {
             console.log("Colisión abajo. Nueva posición y:", this.position.y);
           }
         }
-        
+
         this.updateSides();
         break;
       }
     }
   }
-  
-  
+
   //Evitar que salga del marco
   update() {
     if (
@@ -1070,9 +1122,9 @@ class Player extends Sprite {
   }
 
   collectItem(itemName) {
-    this.items.push(itemName);
-    console.log(`Item encontrado: ${itemName}`);
-  }
+    this.engine.itemsCollected.push(itemName);
+    console.log(`Item recogido: ${itemName}`);
+}
 }
 
 //Clase objeto

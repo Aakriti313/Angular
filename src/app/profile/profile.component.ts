@@ -51,7 +51,6 @@ export class ProfileComponent {
       this.buttonText = isDarkMode ? 'Modo claro' : 'Modo oscuro';
     });
   }
- 
   
   scrollToView(){
     this.el.nativeElement.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest"});

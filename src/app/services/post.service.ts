@@ -31,9 +31,16 @@ export class PostService {
 
   deleteUser(nickname: string): Observable<any> {
     let url = "/server/user/delete/"+nickname;
-    return this.http.delete(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
+    return this.http.delete(url,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
   }
 
+  // calculatePoints(nickname: string, itemsCollected: string[]): Observable<any> {
+  //   let url = "http://localhost:8000/server/points" + nickname ;
+  //   return this.http.post(url, itemsCollected,
+  //     { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
+  // }
+  
   // sendEmail(emailData: any) {
   //   let url = "/server/user/email";
   //   return this.http.post(url, emailData);
