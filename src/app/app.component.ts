@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { IsLogued } from './services/logued.service';
 import { Engine } from '../assets/js/mapa';
 import { ThemeService } from './services/theme.service';
+import { ImageService } from './services/image.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
   isDarkMode: boolean = false;
 
   constructor(
+    private imageService: ImageService,
     private formsComponent: IsLogued, 
     private en: Engine, 
     private themeService: ThemeService, 
@@ -39,15 +41,21 @@ export class AppComponent implements OnInit {
     this.themeService.isDarkMode$.subscribe(isDarkMode => {
       this.isDarkMode = isDarkMode;
     });
+
+    const storedImage = this.imageService.getSelectedImage();
+    if (storedImage) {
+      this.selectedImage = storedImage;
+    }
   }
 
   isLogued(): boolean {
-    const currentUserString = localStorage.getItem("currentUser");
-    if (currentUserString) {
-      const currentUser = JSON.parse(currentUserString);
-      this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname_user);
-      this.username = currentUser.nickname_user;
-    }
+  const currentUserString = localStorage.getItem("currentUser");
+  if (currentUserString) {
+    const currentUser = JSON.parse(currentUserString);
+    this.username = currentUser.nickname_user;
+  }
+    this.selectedImage = this.imageService.getSelectedImage();
+    
     return this.formsComponent.getIsLogued();
   }
 

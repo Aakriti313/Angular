@@ -1,7 +1,9 @@
 <div [class.dark-mode]="isDarkMode" [class.light-mode]="!isDarkMode" class="p-5 row componentsBackgrounds">
-  <div class="row d-flex justify-content-between">
-      <div class="col-md-4 text-center btns">
+  <div class="row d-md-flex justify-content-md-between align-items-center">
+      <div class="col-md-4 mb-md-3 text-center">
+        <img class="card-img-top mb-3" *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" style="width: 40%;" alt="profile_image"/>
           <!-- <input type="file" name="changeImage"> -->
+          <br><br>
           <button type="button" name="profset" class="btn btn_settings">My data</button>
           <br><br>
           <button type="button" name="profset" class="btn btn_settings">⚙️​ Settings</button>
@@ -14,8 +16,6 @@
 
       </div>
       <div id="info" class="col-md-6">
-        <img class="card-img-top" *ngIf="selectedImage" [src]="selectedImage" alt="Selected Image" style="width: 40%;" alt="profile_image"/>
-        <br><br>
           <form class="row" [formGroup]="UserForm" id="user">
             <div class="form-group col-md-12 mb-3">
               <label for="name_user" class="col-md-4">Nombre:</label>

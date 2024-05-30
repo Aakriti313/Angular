@@ -897,42 +897,42 @@ Promise.all(promises)
 
   colisiones() {
     //Pared vertical hab1
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(437, 10, 22, 216);
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(437, 10, 22, 216);
 
-    //Pared horizontal hab1
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(437, 160, 153, 65);
-    //Pared horizontal hab1
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(627, 160, 300, 65);
+    // //Pared horizontal hab1
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(437, 160, 153, 65);
+    // //Pared horizontal hab1
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(627, 160, 300, 65);
 
-    //Pared vertical hab2
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(437, 256, 22, 182);
+    // //Pared vertical hab2
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(437, 256, 22, 182);
 
-    //Pared horizontal hab2
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(437, 256, 57, 65);
-    //Pared horizontal hab2
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(532, 256, 358, 65);
+    // //Pared horizontal hab2
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(437, 256, 57, 65);
+    // //Pared horizontal hab2
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(532, 256, 358, 65);
 
-    //Pared izquierda
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(0, 0, 12, 440);
-    //Pared derecha
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(888, 0, 14, 438);
-    //Pared invisible
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(0, 290, 320, 14);
-    //Pared abajo
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(0, 437, 900, 10);
-    //Pared arriba
-    this.ctx.fillStyle = "#ff00007d";
-    this.ctx.fillRect(0, 0, 900, 65);
+    // //Pared izquierda
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(0, 0, 12, 440);
+    // //Pared derecha
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(888, 0, 14, 438);
+    // //Pared invisible
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(0, 290, 320, 14);
+    // //Pared abajo
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(0, 437, 900, 10);
+    // //Pared arriba
+    // this.ctx.fillStyle = "#ff00007d";
+    // this.ctx.fillRect(0, 0, 900, 65);
   }
 }
 

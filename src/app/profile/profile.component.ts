@@ -44,6 +44,12 @@ export class ProfileComponent {
     this.selectedImage = localStorage.getItem('selectedImage_' + currentUser.nickname_user);
     console.log('Perfil',currentUser);
 
+      // Verificar si hay una imagen seleccionada en el almacenamiento local
+    const storedImage = localStorage.getItem('selectedImage');
+    if (storedImage) {
+      this.selectedImage = storedImage;
+    }
+
     this.scrollToView();
 
     this.themeService.isDarkMode$.subscribe(isDarkMode => {
