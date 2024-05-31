@@ -1134,10 +1134,11 @@ class Item extends Sprite {
     this.width = 100;
     this.height = 100;
     this.itemName = itemName;
-    this.position = {
-      x: Math.floor(Math.random() * this.width) + 1,
-      y: Math.floor(Math.random() * this.height) + 1,
-    };
+    // this.position = {
+    //   x: Math.floor(Math.random() * this.width) + 1,
+    //   y: Math.floor(Math.random() * this.height) + 1,
+    // };
+    this.position = position; // Usar la posición proporcionada
     this.image.onload = () => {
       console.log("Loaded Sprite");
       this.loaded = true;
@@ -1157,3 +1158,32 @@ class Item extends Sprite {
     );
   }
 }
+
+window.onload = function() {
+  // Configuración inicial del canvas y contexto
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.engine = { ctx: ctx };
+
+  // Posiciones específicas para los ítems
+  const itemPositions = [
+    { x: 100, y: 100 },
+    { x: 300, y: 200 },
+    { x: 500, y: 300 },
+    { x: 700, y: 400 }
+  ];
+
+  // Crear ítems en posiciones específicas
+  const items = itemPositions.map((position, index) => {
+    return new Item({
+      position: position,
+      imageSrc: `assets/img/items/item${index + 1}.png`,
+      frameRate: 1,
+      itemName: `Item${index + 1}`
+    });
+  });
+
+  // Dibujar los ítems en el canvas
+  items.forEach(item => item.draw());
+};
+
