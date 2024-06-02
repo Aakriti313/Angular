@@ -274,11 +274,12 @@ export class Engine {
   }
 
   characters() {
+    //Acceder al servicio
     const charactersService = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
-    engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height); // Limpiar el canvas
+    engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
 
-    //change canvas backgroundcolor
+    //Cambiar el fondo del canvas
     engine.ctx.fillStyle = "#f8f3ea";
     engine.ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -538,27 +539,30 @@ export class Engine {
     let engine = document.getElementById("canvas").engine;
     console.log("SI");
 
-    let selectedCharacterImageSrc = engine.selectedCharacter
-      ? engine.selectedCharacter.image
-      : "assets/img/fantasma.png";
+    //Imagen del personaje escogido anteriormente por el jugador
+    let selectedCharacterImageSrc = engine.selectedCharacter ? engine.selectedCharacter.image : "assets/img/fantasma.png";
 
     console.log(selectedCharacterImageSrc);
-    // Crear una instancia del jugador
+    //Crear Player
     let player = new Player({
       imageSrc: "data:image/png;base64," + selectedCharacterImageSrc,
       engine: engine,
     });
 
+    //Puerta
     let doorPosition = { x: 885, y: 170 };
     let doorSize = { width: 50, height: 100 };
+    //Cargar Items
     engine.loadItems();
     // Función de animación del jugador
     function animate() {
+      //Dibujar mapa
       engine.background1.draw();
+      //Dibujar Items
       engine.printItems();
+      //Dibujar puerta
       engine.door(doorPosition.x, doorPosition.y);
-      //engine.colisiones();
-      
+      //Actualizar y pintat Payer
       player.update();
       player.draw();
 
@@ -574,6 +578,8 @@ export class Engine {
       const distanceY = Math.abs(playerCenterY - doorCenterY);
       const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
+      let scoreSent = false;
+
       if (distance < 50) {
         engine.ctx.save();
         // Configurar el efecto de resplandor
@@ -585,8 +591,9 @@ export class Engine {
         engine.ctx.restore();
         console.log("Game Over");
         window.addEventListener("keydown", (event) => {
-          if (event.code === "Space") {
-            engine.endGame();
+          if (event.code === "Space" && !scoreSent) {
+            // engine.endGame();
+            scoreSent = true;
 
             // Enviar datos al backend mediante POST
             const currentUser = localStorage.getItem('currentUser');
@@ -619,6 +626,8 @@ export class Engine {
               .catch((error) => {
                 console.error('Error al enviar los datos:', error);
               });
+
+              engine.endGame();
             } else {
               console.error('Datos del jugador incompletos o inválidos:', playerData);
             }
@@ -709,17 +718,16 @@ export class Engine {
 
   // Método para mostrar el final del juego
   endGame() {
+    //Acceder al servicio
     const endGameservice = AppInjector.get(GetService);
-    // const puntuationservice = AppInjector.get(GetService);
     let engine = document.getElementById("canvas").engine;
     engine.ctx.clearRect(0, 0, engine.canvas.width, engine.canvas.height);
     this.stopSound();
-    //change canvas backgroundcolor
+    //Cambiar fondo del canvas
     engine.ctx.fillStyle = "#f8f3ea";
     engine.ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     engine.ctx.fillRect(500, 150, 300, 300);
-
     engine.points = 0;
 
     // Obtener los mensajes desde el servicio en Angular

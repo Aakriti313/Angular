@@ -120,7 +120,7 @@ export class FormsComponent {
           this.signUpForm.value.password_user as string,
         );
          // Guardamos la URL de la imagen seleccionada en el formulario de registro
-         this.signUpForm.patchValue({
+        this.signUpForm.patchValue({
           image_user: this.selectedImage || '' // Si selectedImage es null o undefined, asignamos una cadena vacía
         });
         if (this.signUpForm.value.image_user) {
